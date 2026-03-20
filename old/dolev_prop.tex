@@ -1,0 +1,166 @@
+\section*{Research Proposal}
+
+\subsection*{Title}
+Machine-learning identification of grain-boundary line defects and their role in back-stress hardening in molecular-dynamics simulations of crystal plasticity
+
+\subsection*{Abstract}
+Plastic deformation in crystalline metals is governed primarily by the nucleation, motion, interaction, and storage of dislocations. In polycrystals, grain boundaries (GBs) are not passive obstacles: they can block, absorb, transmit, and emit dislocations, leaving residual interfacial defect content and generating geometrically necessary dislocation (GND) storage and back stress near the boundary. These processes are central to grain-size strengthening and are widely invoked in explanations of the Bauschinger effect in ultrafine-grained and heterogeneous materials. Molecular dynamics (MD) is uniquely suited to resolving these mechanisms, but its nanometre grain sizes and very high strain rates amplify GB-mediated deformation modes relative to most laboratory conditions. A major bottleneck is measurement: classical tools such as DXA are highly effective for bulk lattice dislocations, but they are incomplete for general high-angle GBs, where the relevant plastic carriers may be interfacial dislocations or disconnections embedded in a structurally disordered, non-crystalline boundary core. This project proposes a machine-learning framework to identify and quantify GB line defects from MD trajectories by combining strong bulk supervision from DXA, interface-aware weak supervision from ILDA and curated bicrystal cases, and short-time motion-correlation descriptors. The resulting defect metrics will then be linked to slip transmission, absorption, and back-stress/Bauschinger behavior under monotonic and reversal loading. The scientific goal is to determine when MD plasticity is controlled by conventional intragranular dislocation flow and when it is controlled by GB-mediated mechanisms, thereby improving the interpretation and extrapolation of MD plasticity to real polycrystalline materials.
+
+\subsection*{Background and motivation}
+Conventional crystal plasticity is mediated mainly by dislocation creation and motion, but in polycrystals the details of plastic flow are strongly shaped by interactions between dislocations and grain boundaries \cite{Cordero2016,Javaid2021}. Grain boundaries are well known to strengthen metals by impeding slip transfer, which contributes to Hall--Petch-type behavior, yet they also act as sinks, sources, and transformation sites for lattice dislocations \cite{Cordero2016,Javaid2021}. Recent theoretical and computational work emphasizes that dislocation pile-up against a boundary, absorption by the boundary, transfer through the boundary, and activation of sources in the neighboring grain are competing pathways whose balance depends on grain size, boundary character, and local stress state \cite{Piao2022,Liu2020}.
+
+This balance is also central to back-stress hardening and the Bauschinger effect. In ultrafine-grained pure aluminum, Gao \emph{et al.} reported that the Bauschinger effect can be interpreted in terms of back stress arising from dislocation pile-up against grain boundaries \cite{Gao2022}. In gradient nanograined constitutive and dislocation-dynamics studies, back stress associated with pile-up GNDs near grain boundaries was found to contribute substantially to flow stress and strain hardening, in one case by about 35\% \cite{Zhao2020,WuDDD2022}. At the theory level, Piao and Le showed within a thermodynamic framework that work hardening depends strongly on whether a GB is impermeable, allows transfer without absorption, or absorbs dislocations and releases them later \cite{Piao2022}. Complementary micromechanical analysis by Liu \emph{et al.} showed that the critical transmission stress and the critical activation stress for a source in the adjacent grain compete in a misorientation- and grain-size-dependent way \cite{Liu2020}. Taken together, these studies support the idea that back stress and Bauschinger-type asymmetry are not merely bulk forest-hardening phenomena: they are intimately connected to GB interaction modes and to the stresses required for dislocation absorption, storage, transmission, and re-emission.
+
+This motivates the central scientific merit of the proposed work. If the movement modes of the \emph{structurally disordered GB core} can be identified directly from atomistic data, then one can move beyond qualitative statements such as ``the GB blocked slip'' and toward quantitative descriptors of how a given boundary stores, transmits, or emits plastic carriers. That, in turn, may enable predictive links between GB defect activity and back-stress hardening under forward and reverse loading.
+
+Molecular dynamics is well suited to this problem because it directly resolves atomic trajectories, local stresses, and defect evolution. However, MD does not probe the same regime as most experiments. Typical MD studies of nanocrystalline metals employ grain sizes of only a few to a few tens of nanometres and strain rates around $10^{8}$--$10^{10}\,\mathrm{s^{-1}}$, conditions under which GB-mediated processes such as GB sliding, GB rotation, and dislocation emission from interfaces can become unusually prominent \cite{Materials2020,Huang2019}. For example, a recent MD study of nanocrystalline 316L found a transition from dislocation-dominated to grain-boundary-dominated plasticity as grain size decreased into the few-nanometre regime \cite{Materials2020}. Therefore, a mechanism-aware decomposition of MD plasticity is needed if MD results are to be extrapolated responsibly to real microstructures.
+
+\subsection*{Problem statement}
+The methodological obstacle is that the most established dislocation-identification tool, the Dislocation Extraction Algorithm (DXA), is designed for lattice dislocations in crystalline environments. OVITO's documentation explicitly notes that while DXA is powerful for ordinary dislocations and some special secondary GB dislocations, it recovers only a fraction of the interfacial defect content in general grain boundaries and should not be treated as a complete measure of GB line defects \cite{OVITODXA}. Interfacial Line Defect Analysis (ILDA) was introduced specifically to identify interfacial dislocations and disconnections from atomistic data, but it is not yet a universal trajectory-scale solution for noisy, dynamically evolving GB plasticity \cite{Deka2023}. As a result, there is still no standard, widely usable tool for measuring the evolving density and activity of grain-boundary line defects throughout an MD trajectory.
+
+\subsection*{Research question and hypothesis}
+The central research question is:
+
+\begin{quote}
+Can a machine-learning model identify and quantify grain-boundary line defects from MD trajectories in regimes where crystal-reference-based methods are incomplete, and can those inferred GB defect metrics explain back-stress hardening and Bauschinger behavior better than bulk dislocation density alone?
+\end{quote}
+
+The working hypothesis is that bulk dislocation labels are useful for \emph{representation learning} but are not sufficient by themselves. A successful GB detector must combine: (i) strong bulk supervision from DXA; (ii) interface-aware weak supervision from ILDA, stress-field templates, and curated bicrystal cases; and (iii) short-time motion descriptors that capture correlated, non-affine rearrangements associated with blocking, absorption, transmission, emission, and interfacial migration. A secondary hypothesis is that these GB-specific descriptors will improve the prediction of back stress and transient reverse-yield softening under loading reversal, compared with models based only on bulk dislocation density or average grain size.
+
+\subsection*{Prior use of AI in dislocation and GB research}
+Artificial intelligence has already been used in several adjacent areas of defect mechanics. Noh and Chew trained a convolutional neural network (CNN) to localize grain-boundary dislocations in low- and high-angle Cu boundaries from atomistic stress fields, showing that GB dislocation signatures can be learned from MD-derived fields even when classical geometrical identification is difficult \cite{Noh2024}. Sharp \emph{et al.} used machine learning to construct a ``softness'' field that predicts local rearrangements at grain boundaries, demonstrating that GB plastic activity can be forecast from local structural environments and their connection to rearrangements \cite{Sharp2018}. At the level of lattice dislocation dynamics, Tian \emph{et al.} developed a physics-informed graph neural network to learn dislocation mobility laws directly from high-throughput MD data \cite{Tian2024}. These studies establish that AI can already extract useful information about dislocation motion, GB rearrangements, and interfacial defect signatures from atomistic data.
+
+The present proposal is therefore \emph{not} innovative simply because it uses machine learning. Its novelty lies in combining bulk-supervised pretraining, interface-specific weak supervision, and time-resolved motion-correlation features to produce a \emph{quantitative, trajectory-scale measure of GB line-defect density and activity}, and then using that measure to interpret back-stress hardening and the Bauschinger effect.
+
+\subsection*{Objectives}
+The project has four objectives.
+
+\begin{enumerate}
+    \item Develop a curated MD dataset for one FCC model material (preferably Cu) covering bulk crystals, low-angle bicrystals, high-angle bicrystals, and selected small polycrystals under monotonic and reversal loading.
+    \item Build a machine-learning model that identifies grain-boundary line defects---including interfacial dislocations and disconnections---from atomistic trajectories using structure, stress, and motion features.
+    \item Define measurable GB activity metrics, including line length per unit GB area, event counts for absorption/transmission/emission, and localized activity maps within the GB core.
+    \item Test whether these GB-specific metrics improve the prediction and interpretation of back stress, Bauschinger asymmetry, and MD-to-experiment extrapolation beyond bulk dislocation density alone.
+\end{enumerate}
+
+\subsection*{Methodology}
+\paragraph{1. Simulation campaign.}
+The project will begin with FCC Cu bicrystals because they provide a controlled environment for dislocation--GB interaction and are already the basis of recent MD and ML studies \cite{Noh2024,DGI2025}. Bulk single-crystal simulations with isolated and interacting lattice dislocations will provide high-quality pretraining data. Low-angle bicrystals will be used as an intermediate regime in which both bulk and interfacial defect descriptions remain interpretable. High-angle bicrystals and selected nanocrystalline samples will form the target domain for the final model. Both monotonic and tension--compression or shear-reversal load paths will be included in order to connect defect activity to back-stress and Bauschinger metrics.
+
+\paragraph{2. Ground truth and weak supervision.}
+Bulk crystalline regions will be labeled with DXA. Interface regions will be analyzed with ILDA wherever applicable. In challenging high-angle GB cases, labels will be supplemented by manually curated gold-standard cases, stress-field-based surrogates, and known interaction outcomes such as absorption, transmission, and re-emission. This multi-tiered strategy acknowledges that there is generally no unique, noise-free atomwise ground truth for the defect content of a structurally disordered GB core \cite{OVITODXA,Deka2023}.
+
+\paragraph{3. Feature construction.}
+The model input will combine static and dynamic descriptors. Static descriptors will include local atomic positions in a grain-local frame, grain orientation and misorientation, local centrosymmetry or PTM/CNA class, potential energy, local stress tensor, and distance to the GB plane or interface mesh. Dynamic descriptors will include non-affine motion measures such as $D^2_{\min}$, short-time neighbor-change statistics, displacement-correlation tensors, and local motion-coherence measures over short windows. The emphasis on motion is deliberate: many GB plastic carriers are not clean bulk-like dislocation cores but rather collective interfacial rearrangements with line-defect character \cite{Sharp2018}.
+
+\paragraph{4. Model architecture.}
+A CNN will be used as the initial baseline for planar, interface-centered field representations because CNNs have already shown promise for GB-dislocation localization from atomistic stress fields \cite{Noh2024}. However, because atomistic neighborhoods are not naturally grid-based and rotational structure matters, the main model class will be a geometry-aware point-cloud or graph-based architecture. Bulk-pretrained weights will be transferred to the interface task and fine-tuned using GB-specific supervision. The primary output will be a probability field over at least three classes: bulk lattice dislocation, generic GB region, and GB line defect/disconnection.
+
+\paragraph{5. Defect-density and event extraction.}
+Predicted GB-defect regions will be skeletonized into line objects to estimate a GB line-defect density, naturally expressed as total line length per unit GB area. In parallel, event statistics will be extracted for arrival of a lattice dislocation at the boundary, absorption into the boundary, transfer to the neighboring grain, emission from the boundary, and persistent interfacial motion. These quantities will be compared against classical measures such as bulk dislocation density and near-boundary GND accumulation.
+
+\paragraph{6. Linking GB activity to back stress and Bauschinger behavior.}
+The final stage of the project will relate the inferred GB metrics to macroscopic or mesoscopic response observables under forward and reverse loading: flow-stress asymmetry, transient reverse-yield softening, stress--strain hysteresis, and unloading/reloading slopes. The aim is not to replace constitutive theory, but to test whether the identified GB movement modes provide predictive value for back-stress hardening. If successful, this would support a new interpretation in which GB plasticity is characterized not only by whether dislocations are blocked, but by \emph{how} the boundary stores, transmits, transforms, and re-emits them.
+
+\subsection*{Expected outcomes and merit}
+The project is expected to deliver:
+\begin{enumerate}
+    \item a validated machine-learning workflow for identifying GB line defects in MD trajectories;
+    \item a quantitative descriptor of GB line-defect density and activity;
+    \item a mechanism-based decomposition of MD plasticity into bulk lattice-dislocation flow versus GB-mediated accommodation; and
+    \item an interpretable link between GB defect activity and back-stress/Bauschinger behavior under loading reversal.
+\end{enumerate}
+
+The scientific merit is twofold. First, the work addresses a real measurement gap at the interface between atomistic simulation and crystal-plasticity theory. Second, it targets a specific mechanistic question of broad importance: whether the back stress and Bauschinger effect can be predicted more faithfully once GB movement modes are measured explicitly rather than lumped into coarse variables such as grain size or total dislocation density. Because MD necessarily emphasizes very small grains and very high strain rates, such a tool would also improve the \emph{extrapolation motive} of atomistic plasticity studies by clarifying which observed features are robust indicators of polycrystal mechanics and which are artifacts of the MD operating regime \cite{Materials2020,Huang2019}.
+
+\subsection*{Innovation}
+The proposal is innovative in a precise, not generic, sense. It is not the first to use AI for defects, and it is not the first to use ML around grain boundaries. Rather, it is one of the first attempts to use AI as an \emph{uncertainty-aware measurement tool} for grain-boundary line defects in atomistic trajectories, with explicit transfer learning from bulk dislocation labels and explicit use of motion-correlation features. Its second innovation is scientific rather than algorithmic: it seeks to connect those inferred GB movement modes directly to back-stress hardening and Bauschinger asymmetry, which are often discussed qualitatively but are rarely tied to time-resolved interfacial defect measurements.
+
+\subsection*{Risks and mitigation}
+The main risk is domain shift: bulk dislocation signatures are not identical to interfacial dislocations or disconnections. This will be mitigated by treating bulk labels as a representation-learning stage rather than as the final target, and by fine-tuning on low-angle and curated high-angle GB cases. A second risk is that the model may learn generic GB disorder rather than true line-defect activity. This will be mitigated by including dynamic features, by post-processing predictions into line objects, and by validating against actual absorption/transmission/emission events rather than only static segmentation. A third risk is scope creep. To manage this, the project will proceed in stages: monotonic bicrystals first, reversal loading second, polycrystals only after the bicrystal methodology is validated.
+
+\subsection*{Milestones}
+\begin{itemize}
+    \item \textbf{Months 1--4:} construct bulk and bicrystal datasets; extract DXA labels; define curated GB validation cases.
+    \item \textbf{Months 5--8:} build feature pipeline; train CNN baseline; benchmark against structure-only and stress-only heuristics.
+    \item \textbf{Months 9--12:} incorporate motion-correlation features and interface-aware weak supervision; compare against ILDA and curated bicrystals.
+    \item \textbf{Months 13--16:} extract GB line-defect density and event statistics; extend to reversal loading and back-stress/Bauschinger analysis.
+    \item \textbf{Months 17--20:} assess which MD-observed mechanisms are likely to extrapolate to larger grains and lower rates; finalize mechanism maps and thesis outputs.
+\end{itemize}
+
+\begin{thebibliography}{99}
+
+\bibitem{Cordero2016}
+Z. C. Cordero, B. E. Knight, and C. A. Schuh.
+\newblock Six decades of the Hall--Petch effect: a survey of grain-size strengthening studies on pure metals.
+\newblock \emph{International Materials Reviews} \textbf{61} (2016) 495--512.
+
+\bibitem{Javaid2021}
+F. Javaid, H. Pouriayevali, and K. Durst.
+\newblock Dislocation--grain boundary interactions: recent advances on the underlying mechanisms studied via nanoindentation testing.
+\newblock \emph{Journal of Materials Research} \textbf{36} (2021) 2545--2557.
+
+\bibitem{Gao2022}
+S. Gao, K. Yoshino, D. Terada, Y. Kaneko, and N. Tsuji.
+\newblock Significant Bauschinger effect and back stress strengthening in an ultrafine grained pure aluminum fabricated by severe plastic deformation process.
+\newblock \emph{Scripta Materialia} \textbf{212} (2022) 114503.
+
+\bibitem{Piao2022}
+Y. Piao and K. C. Le.
+\newblock Thermodynamic theory of dislocation/grain boundary interaction.
+\newblock \emph{Continuum Mechanics and Thermodynamics} \textbf{34} (2022) 763--780.
+
+\bibitem{Liu2020}
+W. Liu, Y. Liu, H. Sui, L. Chen, L. Yu, X. Yi, and H. Duan.
+\newblock Dislocation-grain boundary interaction in metallic materials: competition between dislocation transmission and dislocation source activation.
+\newblock \emph{Journal of the Mechanics and Physics of Solids} \textbf{145} (2020) 104158.
+
+\bibitem{Zhao2020}
+J. Zhao, X. Lu, F. Yuan, Q. Kan, S. Qu, G. Kang, and X. Zhang.
+\newblock Multiple mechanism based constitutive modeling of gradient nanograined material.
+\newblock \emph{International Journal of Plasticity} \textbf{125} (2020) 314--330.
+
+\bibitem{WuDDD2022}
+S. Lu, J. Zhao, M. Huang, Z. Li, G. Kang, and X. Zhang.
+\newblock Multiscale discrete dislocation dynamics study of gradient nano-grained materials.
+\newblock \emph{International Journal of Plasticity} (2022), article 103356.
+
+\bibitem{Materials2020}
+Molecular Dynamics as a Means to Investigate Grain Size and Strain Rate Effect on Plastic Deformation of 316 L Nanocrystalline Stainless-Steel.
+\newblock \emph{Materials} \textbf{13} (2020) 3223.
+
+\bibitem{Huang2019}
+C. Huang.
+\newblock Rationalizing the Grain Size Dependence of Strength and Strain-Rate Sensitivity of Nanocrystalline fcc Metals.
+\newblock \emph{Metallurgical and Materials Transactions A} \textbf{50} (2019) 2198--2207.
+
+\bibitem{OVITODXA}
+OVITO User Manual.
+\newblock \emph{Dislocation analysis (DXA)}.
+\newblock Available at: \texttt{https://docs.ovito.org/reference/pipelines/modifiers/dislocation\_analysis.html}.
+
+\bibitem{Deka2023}
+N. Deka, A. Stukowski, and R. B. Sills.
+\newblock Automated extraction of interfacial dislocations and disconnections from atomistic simulation data.
+\newblock \emph{Acta Materialia} \textbf{256} (2023) 119062.
+
+\bibitem{Noh2024}
+S.-J. Noh and H. B. Chew.
+\newblock Dislocation descriptors of low and high angle grain boundaries with machine learning.
+\newblock \emph{Materials Today Communications} \textbf{39} (2024).
+
+\bibitem{Sharp2018}
+T. A. Sharp, S. L. Thomas, E. D. Cubuk, S. S. Schoenholz, D. J. Srolovitz, and A. J. Liu.
+\newblock Machine learning determination of atomic dynamics at grain boundaries.
+\newblock \emph{Proceedings of the National Academy of Sciences} \textbf{115} (2018) 10943--10947.
+
+\bibitem{Tian2024}
+Y. Tian, S. Bagchi, L. Myhill, G. Po, E. Martinez, Y. T. Lin, N. Mathew, and D. Perez.
+\newblock Data-driven modeling of dislocation mobility from atomistics using physics-informed machine learning.
+\newblock \emph{npj Computational Materials} \textbf{10} (2024) 1--12.
+
+\bibitem{DGI2025}
+Dislocation-Grain Boundary Interaction Dataset for FCC Cu.
+\newblock \emph{Scientific Data} (2025).
+\newblock Dataset describing 5234 unique dislocation--grain-boundary interactions across 587 symmetric tilt boundaries in FCC Cu.
+
+\end{thebibliography}
