@@ -1,0 +1,215 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,urlcolor=blue,citecolor=black,linkcolor=black]{hyperref}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize Grain boundaries and machine learning in MD}
+\fancyfoot[R]{\footnotesize March 2026 \textbar\ \thepage}
+\let\oldbibliography\thebibliography
+\renewcommand{\thebibliography}[1]{\oldbibliography{#1}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}}
+\newcommand{\add}[1]{#1}
+
+\setstretch{1.0}
+\setlist[itemize]{noitemsep, topsep=2pt}
+\setlist[enumerate]{noitemsep, topsep=2pt}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{4pt}{2pt}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{3pt}{1pt}
+
+\begin{document}
+
+\begin{center}
+{\Large \textbf{Learning to read grain-boundary plasticity in atomistic simulations}}\\
+\vspace{0.2em}
+{\large \textbf{Machine-learning descriptors of line defects and slip transfer at interfaces in MD}}\\
+\vspace{0.4em}
+{\normalsize PI: Dr.\ Menahem Krief}\\
+\vspace{0.3em}
+\end{center}
+
+\section*{Background, research question, and innovation}
+
+\subsection*{Correlated motion as the language of crystal plasticity}
+Crystal plasticity is mediated by the nucleation, motion, and interaction of dislocations.
+Understanding how dislocations move \emph{collectively}---through correlated displacement of atoms along slip planes---has been central to every advance in our understanding of bulk plastic deformation, from forest hardening to work-hardening laws \cite{Cordero2016}.
+In a single crystal, these correlated movement modes are well characterised: edge dislocations sweep planar surfaces, screw segments cross-slip, and Shockley partials create stacking-fault ribbons.
+The Dislocation Extraction Algorithm (DXA) reliably identifies all of these motifs because the surrounding lattice provides a clean crystallographic reference \cite{OVITODXA}.
+
+In polycrystals, however, a decisive share of plastic activity occurs \emph{at} grain boundaries (GBs).
+Dislocations approaching a GB may pile up, be absorbed, transmit into the neighbouring grain, or trigger emission of new defects on the far side \cite{Piao2022,Liu2020,DGI2025}.
+The outcome of each event shapes macroscopic properties: Hall--Petch strengthening arises from pile-up impedance \cite{Cordero2016}; back stress and the Bauschinger effect reflect dislocation storage and re-emission at the interface \cite{Gao2022,LeBauschinger2018,Piao2022}; and the balance between transmission and source activation controls ductility \cite{Liu2020}.
+Analytical models of these phenomena---such as the thermodynamic dislocation theory (TDT) of Le and co-workers---parametrise the GB's role through impedance-like boundary conditions (impermeable, transfer-permitting, or absorbing--re-emitting) and predict that the resulting work hardening, back stress, and Bauschinger asymmetry are qualitatively different for each case \cite{Piao2022,LeBauschinger2018}.
+
+\subsection*{Why grain-boundary plasticity is hard to measure}
+Despite this rich theoretical picture, \emph{measuring} what actually happens inside a GB core during MD simulation remains an open problem.
+DXA, the workhorse tool for dislocation analysis in atomistic data, relies on constructing Burgers circuits in regions of recognisable crystal order.
+Inside high-angle GBs, the structure is heavily distorted: the algorithm cannot reliably close circuits, and the OVITO documentation explicitly notes that DXA recovers ``partial dislocations and certain secondary grain boundary dislocations'' but should not be treated as a complete measure of interfacial defect content \cite{OVITODXA}.
+Interfacial Line Defect Analysis (ILDA) was developed specifically for this gap \cite{Deka2023}, but it requires bicrystal reference states and is not yet a turnkey trajectory-scale solution for noisy, dynamically evolving polycrystalline simulations.
+
+The problem is particularly acute in nanocrystalline metals, where the grain-size dependence of strength and strain-rate sensitivity shifts the dominant deformation mechanisms from intragranular slip to GB-mediated processes \cite{Huang2019}, and the high strain rates of MD ($10^{8}$--$10^{10}\,\mathrm{s^{-1}}$) further amplify these interfacial modes relative to laboratory conditions.
+Recent work by Dimanstein Firman \emph{et al.}\ showed that even \emph{identifying which dislocations are moving} in a nanocrystalline sample requires going beyond DXA: their Common Motion Grouping (CMG) method detects moving dislocations by correlating the displacements of individual atoms between time frames, finding that the vast majority of mobile dislocations reside \emph{within} the GB and are invisible to DXA \cite{Firman2024}.
+That work established that correlated atomic motion---the same fingerprint that defines a dislocation in the bulk---persists inside the disordered GB, but it did not attempt to classify the character of these modes or link them to slip-transfer physics.
+
+\subsection*{Correlated motion inside the grain boundary}
+There is growing evidence that GB plasticity is not amorphous noise but involves recognisable collective rearrangements.
+Chesser and Mishin discovered that self-diffusion in metallic GBs at intermediate temperatures proceeds through \emph{point-defect avalanches}: thermally activated cascades of string-like, highly correlated atomic displacements that span 10--20\,nm along the boundary and are mediated by facilitated dynamics of Frenkel-pair chains \cite{Chesser2022}.
+These avalanches---not random individual hops---dominate atomic transport in the GB core, and their spatial extent explains the finite-size dependence of GB diffusion coefficients.
+Sharp \emph{et al.}\ showed with machine learning that a scalar ``softness'' field, trained on whether atoms rearrange, captures local energy barriers and attempt frequencies for rearrangements throughout a polycrystalline GB network, demonstrating that GB dynamics can be predicted from local structural descriptors alone \cite{Sharp2018}.
+
+Together with the CMG observation that dislocation-like correlated displacement patterns pervade the GB under mechanical loading \cite{Firman2024}, these findings motivate a central hypothesis:
+
+\begin{quote}
+\textbf{Hypothesis.} The plastically relevant activity inside a grain boundary under mechanical loading takes the form of \emph{correlated atomic movement modes} that share structural and kinematic features with lattice dislocations.
+A model trained to recognise dislocation motion in the grain interior---where DXA provides reliable supervision---can therefore generalise to detect analogous modes inside the GB core, where DXA fails.
+\end{quote}
+
+\subsection*{What machine learning has already demonstrated}
+Four recent studies provide direct methodological support for this hypothesis.
+
+\textbf{CNN recognition of GB dislocation fields.} Noh and Chew trained a convolutional neural network (CNN) on the interatomic stress fields of Cu bicrystals and showed that the network can localise GB dislocations in both low- and high-angle boundaries, even when geometrical (DXA-type) identification breaks down \cite{Noh2024}.
+This demonstrates that the \emph{mechanical signature} of a dislocation persists at the interface and is learnable from gridded field data.
+
+\textbf{Softness and rearrangement prediction.} Sharp \emph{et al.}\ \cite{Sharp2018} used support vector machines on structure functions (angular and radial descriptors within ${\sim}2$ interatomic spacings) to predict atomic rearrangements in polycrystalline Al.
+Their key finding---that rearrangement probability is nearly Arrhenius at fixed softness---shows that a single learned scalar can encode the relevant activation physics of a GB site.
+
+\textbf{GNN mobility laws from MD.} Bertin \emph{et al.}\ trained a graph neural network (GNN) on dislocation trajectories extracted from massive MD simulations of BCC W and used the learned mobility function to drive discrete dislocation dynamics (DDD), accurately reproducing the tension/compression asymmetry of plastic flow \cite{Bertin2024}.
+This establishes the paradigm of \emph{learning a mesoscale constitutive law from atomistic correlated-motion data}, which is precisely what we propose to do at the GB level.
+
+\textbf{ML prediction of GB transmission stress.} Kedharnath \emph{et al.}\ used XGBoost and SHAP analysis on 64 dislocation--GB interaction simulations in BCC Ta and showed that a combination of MD-derived parameters (critical dislocation--GB distance, shear-stress drop upon absorption) and the geometric slip-transmission factor $m'$ best predicts the yield stress of individual GB configurations \cite{Kedharnath2024}.
+This demonstrates that ML can already resolve long-standing ambiguity in which parameters govern slip transmission---but it relies on pre-computed, hand-crafted features that are undefined inside a disordered high-angle GB core, motivating the representation-learning approach we propose.
+
+\subsection*{Research question}
+\begin{quote}
+Can a machine-learning model, trained on correlated atomic motion patterns in the grain interior (where DXA supervision is reliable) and at well-characterised low-angle boundaries (where ILDA applies), generalise to detect and classify the correlated movement modes inside high-angle GBs---and can the resulting descriptors provide physically grounded GB--dislocation interaction parameters for mesoscale models of back-stress hardening, Bauschinger asymmetry, and Hall--Petch behaviour?
+\end{quote}
+
+\subsection*{Innovation}
+The proposal is innovative in three specific ways:
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Transfer of correlated-motion supervision from grain to boundary.}
+Existing work either analyses bulk dislocations (DXA), individual atomic rearrangements (softness \cite{Sharp2018}), or hand-crafted correlated-motion metrics (CMG \cite{Firman2024}).
+We propose to learn the \emph{features} of dislocation-type correlated motion where they are classifiable (grain interior, near-GB crystalline zone) and apply the learned representation inside the disordered GB core, exploiting the hypothesis that the relevant modes share structural elements with lattice dislocations.
+
+\item \textbf{From detection to constitutive parameters.}
+Prior ML studies detect or classify; we aim to \emph{extract physically interpretable GB interaction terms}---absorption/transmission rates, effective impedance, line-defect density per unit GB area---analogous to the DDD mobility correction learned by Bertin \emph{et al.}\ from MD \cite{Bertin2024} and extending the transmission-stress prediction of Kedharnath \emph{et al.}\ \cite{Kedharnath2024} to the disordered GB core where hand-crafted slip-transmission parameters are undefined.
+Such terms can feed directly into TDT-style analytical models \cite{Piao2022,LeBauschinger2018} and discrete dislocation dynamics frameworks \cite{Bertin2024}.
+
+\item \textbf{Connecting avalanche-type GB dynamics to mechanical response.}
+Point-defect avalanches \cite{Chesser2022} and dislocation-driven correlated motion at GBs \cite{Firman2024} have been studied separately from stress--strain behaviour.
+We will explicitly link the learned GB activity metrics to back-stress hardening and Bauschinger asymmetry under load reversal, testing whether these metrics outperform bulk dislocation density or grain size as predictors of mesoscale mechanical response.
+\end{enumerate}
+
+\section*{Approach}
+
+\subsection*{Systems and data}
+We focus on \textbf{FCC Cu} and generate all training data in-house using LAMMPS, leveraging the group's established MD infrastructure.
+Bicrystal cells (low- and high-angle symmetric tilt, selected asymmetric and general boundaries) are constructed with EAM potentials; a smaller set of nanocrystalline cells provides transfer-testing targets.
+Full control over GB geometry, loading protocol, strain rate, and dump cadence lets us tailor the dataset to the ML pipeline---in particular, saving per-atom stress, velocity, and energy at the sub-picosecond resolution needed to capture dislocation motion events.
+Bulk single-crystal simulations supply strong DXA-labelled dislocation data for supervised pre-training.
+Monotonic and tension--compression (or shear reversal) loading connect defect evolution to Bauschinger-related observables \cite{Gao2022}.
+Community datasets such as the recently released DGI dislocation--GB interaction collection for FCC Cu \cite{DGI2025} confirm growing interest in this problem and may serve as additional test cases in future extensions of this work.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{graphs/pipeline.pdf}
+\caption{Training and application pipeline. \textbf{Top:} the CNN is trained on grain-interior data where DXA provides ground-truth dislocation maps; the loss is the discrepancy between CNN predictions and DXA labels. \textbf{Bottom:} the trained CNN is applied to GB regions where DXA cannot operate, predicting dislocation-like activity from the same per-atom features.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection*{Training: CNN supervised by DXA}
+In the grain interior, DXA reliably identifies dislocations---their locations, Burgers vectors, and line characters.
+We use these DXA outputs as ground-truth labels.
+The CNN receives per-atom features---local stress tensor, per-atom velocity, and potential energy---and is trained to reproduce the DXA dislocation map.
+Velocities are essential: dislocation \emph{movement} is the quantity of interest, and consecutive-frame velocity fields capture exactly which atoms participate in correlated motion events.
+The loss function is the per-atom discrepancy between the CNN prediction and the DXA label.
+This framing follows Noh and Chew \cite{Noh2024}, who showed that a CNN can learn to locate GB dislocations from interatomic stress fields.
+
+\subsection*{Application: transfer to the GB core}
+Once trained, the CNN is applied to atoms inside the disordered GB, where DXA cannot operate.
+Because the network has learned which per-atom patterns of stress, velocity, and energy correspond to dislocation activity, it can flag atoms in the GB that exhibit the same signatures---even though no crystallographic reference frame exists.
+The output is an atom-wise dislocation-activity map across the full simulation cell, extending continuously from the grain interior (where it agrees with DXA) into the GB core (where it provides new information).
+
+\subsection*{Evaluation}
+In the grain interior, the CNN is evaluated against held-out DXA labels (precision, recall, F1).
+In the GB, where no automated ground truth exists, we compare against manually curated frames on selected boundaries.
+For the mechanical connection, we test whether CNN-derived GB activity metrics (e.g.\ active area fraction, event count) correlate with macroscopic observables---flow stress, reverse yield stress, hysteresis area---beyond what bulk dislocation density alone can explain.
+
+\section*{Twelve-month work plan}
+\begin{center}
+\small
+\begin{tabular}{|l|p{0.72\linewidth}|}
+\hline
+\textbf{When} & \textbf{Focus} \\
+\hline
+M1--3 & Design and run LAMMPS simulation campaign (bulk single-crystals, bicrystals spanning low- to high-angle tilt); build DXA labelling scripts; extract per-atom features and validate dump outputs. \\
+ \hline
+M4--6 & Train CNN on grain-interior data with DXA ground truth; tune loss function and architecture; first quantitative evaluation on held-out grain-interior frames. \\
+ \hline
+M7--9 & Apply trained CNN to GB regions; compare against ILDA on low-angle boundaries; evaluate on high-angle GBs with curated manual labels. \\
+ \hline
+M10--11 & Load-reversal study; correlation and regression analysis (mechanics vs.\ CNN-derived GB activity metrics); interpretability (attention maps, ablation). \\
+ \hline
+M12 & Reproducibility package (code, configs, example trajectories); draft manuscript / thesis chapter. \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{Deliverables, risk, and novelty}
+\textbf{Deliverables:} documented pipeline; trained models; benchmark metrics on Cu bicrystals; clear statement of where ML adds value over DXA-only analysis.
+
+\textbf{Risks:} domain shift from bulk to interface (mitigated by staged training and low-angle bridges); confounding GB disorder with line defects (mitigated by motion features and line-like post-processing); scope creep (mitigated by fixed material system and fixed loading modes in year~1).
+
+\textbf{Novelty:} not ``ML for materials'' in the abstract, but a \emph{targeted measurement tool}: time-resolved GB plasticity readouts tied to slip-transfer physics, building on recent atomistic ML for GBs and dislocations \cite{Noh2024,Sharp2018}.
+
+\section*{Applicants and principal investigator}
+
+All team members are from the Racah Institute of Physics, The Hebrew University of Jerusalem.
+\textbf{PI:} Dr.\ Menahem Krief
+\textbf{Co-I:} Prof.\ Yinon Ashkenazy
+\textbf{M.Sc.\ student:} Dolev Ronen.
+
+\section*{Requested budget and justification}
+
+We request \textbf{100,000~NIS} for 12 months:
+\begin{itemize}
+    \item \textbf{Graduate student scholarship} --- Dolev Ronen (M.Sc.): \textbf{84,000~NIS} (12 months $\times$ 7,000~NIS/month).
+    \item \textbf{Travel}: \textbf{16,000~NIS}. To present initial results and explore research cooperation at US institutions.
+\end{itemize}
+GPU time and computational resources are provided through the PI's membership in the \href{http://icpl.huji.ac.il}{ICPL}; no compute budget is requested.
+
+\section*{Future plans for subsequent research proposals}
+
+This 12-month project is a feasibility study: can machine learning reliably detect correlated movement modes inside disordered grain boundaries from standard MD outputs?
+The broader vision is that just as understanding correlated dislocation motion in bulk crystals was the key to quantitative models of single-crystal plasticity, understanding the analogous correlated modes \emph{inside} grain boundaries will unlock predictive models of multigrain plasticity.
+A positive outcome opens several natural extensions.
+
+\textbf{From detection to constitutive laws:} the primary follow-up would close the loop between the learned GB activity descriptors and mesoscale models.
+Specifically, the detected correlated modes would be used to construct physically grounded GB--dislocation interaction terms---absorption rates, transmission probabilities, effective impedance---that can replace phenomenological rules in DDD simulations and provide boundary conditions for TDT-style continuum theories.
+The ultimate test is whether these learned parameters predict macroscopic observables---back-stress hardening, Bauschinger asymmetry, Hall--Petch scaling---more accurately than current empirical parametrisations.
+
+\textbf{Material breadth:} the pipeline developed for FCC Cu can be transferred to BCC metals (W, Ta, Fe), where dislocation core structure and GB chemistry differ qualitatively and new mobility physics must be learned.
+
+\textbf{Experimental connection:} high-resolution EBSD and in-situ TEM observations of slip transfer could provide independent validation targets for the model's event-level predictions.
+
+The project will also establish machine-learning methodology and infrastructure within the group, positioning it for larger-scale computational materials science proposals.
+
+
+{\footnotesize
+\bibliographystyle{unsrt}
+\bibliography{references}
+}
+
+\end{document}
