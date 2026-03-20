@@ -40,7 +40,7 @@
 
 Dislocations carry plastic deformation by moving collectively along slip planes \cite{Cordero2016}.
 In single crystals the Dislocation Extraction Algorithm (DXA) tracks them reliably \cite{Stukowski2012}, but in polycrystals much of the plastic activity occurs at grain boundaries (GBs), where dislocations pile up, get absorbed, or transmit \cite{Piao2022,Liu2020,DGI2025}.
-These processes control Hall-Petch strengthening, back stress, and ductility \cite{Cordero2016,Gao2022,LeBauschinger2018}.
+These processes control Hall-Petch strengthening, back stress hardening, and ductility \cite{Cordero2016,Gao2022,LeBauschinger2018}.
 Continuum models such as Le's thermodynamic dislocation theory parametrise the GB through impedance-like boundary conditions (impermeable, transfer-permitting, or absorbing/re-emitting) and predict different work hardening for each case \cite{Piao2022,LeBauschinger2018}, but the parameters remain phenomenological because GB activity has not been directly measured.
 In prior work, the PI and Co-I mapped local elastic moduli in nanocrystalline Cu and Ta, revealing mechanical heterogeneity concentrated at GBs \cite{Krief2024}; that study established the per-atom extraction methodology on which this proposal builds.
 DXA fails inside high-angle GBs because Burgers circuits do not close in the disordered core \cite{Stukowski2012}, and Interfacial Line Defect Analysis (ILDA) \cite{Deka2023} still requires bicrystal reference states.
@@ -107,7 +107,7 @@ Bulk single-crystal & 6 & $2\!\times\!10^{5}$ & DXA-supervised training \\
 Bicrystal (6 GBs $\times$ 2 protocols) & 12 & $3\!\times\!10^{5}$ & Transfer \& reversal \\
 Nanocrystalline & 2 & $10^{6}$ & Polycrystal stress test \\
 \hline
-\multicolumn{4}{|l|}{Total: ${\sim}\!20$ runs, ${\sim}\!300$\,GB data, ${\sim}\!300$ core-h MD (CPU cluster, ${\leq}\!2048$ cores) $+$ ${\sim}\!100$ GPU-h (CNN)} \\
+\multicolumn{4}{|l|}{Total: ${\sim}\!20$ runs, ${\sim}\!300$\,GiB, ${\sim}\!300$ core-h MD (CPU cluster, ${\leq}\!2048$ cores) $+$ ${\sim}\!100$ GPU-h (CNN)} \\
 \hline
 \end{tabular}
 \end{center}
@@ -139,7 +139,7 @@ We request \textbf{100,000~NIS} for 12 months:
     \item \textbf{Scholarship}, Dolev Ronen (M.Sc.): \textbf{84,000~NIS} (12 $\times$ 7,000~NIS/month).
     \item \textbf{Travel}: \textbf{16,000~NIS} for conference presentation and US collaboration visits.
 \end{itemize}
-GPU time provided by \href{http://icpl.huji.ac.il}{ICPL}; no compute budget requested.
+CPU cluster and GPU time provided by \href{http://icpl.huji.ac.il}{ICPL}; no compute budget requested.
 
 \section*{Future plans}
 
