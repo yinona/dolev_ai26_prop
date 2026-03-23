@@ -1,0 +1,716 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+Modelling and\par
+Simulation in Materials\par
+Science and\par
+Engineering\par
+\par
+\par
+PAPER                                                                                                 You may also like\par
+                                                                                                        - Signal quality in cardiorespiratory\par
+Detection of dislocation motion in atomistic                                                              monitoring\par
+                                                                                                          Gari D Clifford and George B Moody\par
+simulations of nanocrystalline materials                                                                - Multiple Face Detection Using Haar -\par
+                                                                                                          AdaBoosting, LBP-AdaBoosting and\par
+                                                                                                          Neural Networks\par
+To cite this article: Noya Dimanstein Firman et al 2024 Modelling Simul. Mater. Sci. Eng. 32 055003       B.Thirumaleshwari Devi and S. Shitharth\par
+\par
+                                                                                                        - Effects of vacancy concentration on the\par
+                                                                                                          edge dislocation motion in copper by\par
+                                                                                                          atomic simulations\par
+                                                                                                          Wenjin Chen, Run Li, Songlin Yao et al.\par
+View the article online for updates and enhancements.\par
+\par
+\par
+\par
+\par
+                              This content was downloaded from IP address 132.64.99.15 on 10/09/2025 at 13:59\par
+                                                            Modelling and Simulation in Materials Science and Engineering\par
+\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003 (15pp)                          https://doi.org/10.1088/1361-651X/ad437c\par
+\par
+\par
+\par
+\par
+Detection of dislocation motion in atomistic\par
+simulations of nanocrystalline materials\par
+                    Noya Dimanstein Firman1, Eliyahu Zvi Engelberg2,\u8727?\u59865?\par
+                    and Yinon Ashkenazy1,\u8727?\u59865?\par
+                    1\par
+                      Racah Institute of Physics and the Center of Nanoscience and Nanotechnology,\par
+                    The Hebrew University of Jerusalem, Jerusalem 9190401, Israel\par
+                    2\par
+                      Azrieli College of Engineering Jerusalem, Jerusalem 9103501, Israel\par
+\par
+                    E-mail: elien@jce.ac.il and yinona@phys.huji.ac.il\par
+\par
+                    Received 12 December 2023; revised 6 April 2024\par
+                    Accepted for publication 25 April 2024\par
+                    Published 8 May 2024\par
+\par
+                    Abstract\par
+                    A method for identifying dislocation motion in atomistic simulations is presen-\par
+                    ted. While identifying static and moving dislocations within a single crystal or\par
+                    a combination of such is well established, the method described here is tailored\par
+                    to identify dislocation motion by correlating the displacements of individual\par
+                    atoms. This facilitates the identification of dislocation motion in complex struc-\par
+                    tural arrangements, and allows the specific contribution to plastic deformation,\par
+                    due to dislocation motion, to be separated from that of other mechanisms. The\par
+                    method is applied to test cases in crystals and grain boundaries (GBs), in which\par
+                    irradiation-induced creep (IIC) was induced. It is shown that the method singles\par
+                    out the moving dislocations from among the dislocation forest at GBs, thus\par
+                    identifying the specific reactions driving the distortion at any given time. This\par
+                    enables the study of dislocation processes in the presence of realistic obstacles,\par
+                    and the study of the effects of microstructure on dislocation mobility. As an\par
+                    example of such a study, the method is applied to rule out intragranular slip, and\par
+                    to estimate the contribution of dislocation motion to strain, in a NC undergoing\par
+                    IIC.\par
+\par
+                    Keywords: dislocations, molecular dynamics, graphs, nanocrystals\par
+\par
+1. Introduction\par
+\par
+Dislocation dynamics often control the plastic response of metals. These dynamics depend\par
+on material properties, reactions among dislocations, and their response to ambient condi-\par
+tions such as stress and strain [1]. Therefore, analyzing these dynamics lies at the core of\par
+understanding various plastic processes. In most cases, however, direct observation of the\par
+\par
+\u8727?\par
+    Authors to whom any correspondence should be addressed.\par
+\par
+\u169? 2024 IOP Publishing Ltd                                                                                                1\par
+All rights, including for text and data mining, AI training, and similar technologies, are reserved.\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                            N Dimanstein Firman et al\par
+\par
+\par
+\par
+development of dislocation complexes is impossible [2, 3]. One alternative to direct obser-\par
+vation is to run molecular dynamics (MD) simulations to study the plastic response of metals.\par
+These can provide information regarding the details of the relations between atomistic arrange-\par
+ments and the dislocation processes occurring in metals [4].\par
+    At present, it is computationally feasible to run direct MD simulations of nanocrystals\par
+(NCs) containing a few tens or hundreds of grains, each of a size of a few tens of nanometers\par
+[5]. Such a simulation, with appropriate boundary conditions (periodic or simulating an\par
+external load), represents a small part of a macroscopic metal. MD simulations of three-\par
+dimensional periodic NC structures have been widely used to study detailed deformation\par
+mechanisms under stress [6, 7]. These simulations, together with transmission electron micro-\par
+scope observations, suggest that heterogeneous microstrain evolution in NCs originates in dis-\par
+locations at the grain boundaries (GBs) [8]. It was shown that, during deformation, partial\par
+dislocations are emitted from GBs, leading to the plastic deformation of NCs [9, 10]. Thus,\par
+identifying dislocations in GBs, and especially moving dislocations, has become pivotal in the\par
+study of the plasticity of NCs.\par
+    The classical method used to identify dislocations is Burgers circuit construction, in which\par
+paths connecting atoms in the deformed crystal, which is being inspected, are compared to\par
+paths in a reference crystalline structure. Algorithms based on this method proved to be\par
+extremely robust, but they require the identification, and therefore the existence, of a well-\par
+defined reference local crystalline order [11\u8211?13]. As such, the effectivity of these algorithms\par
+is limited at highly distorted regions, and specifically near GBs and other large-scale defects.\par
+    Variation of the underlying structure of the crystal is accounted for in the dislocation extrac-\par
+tion algorithm (DXA) [13, 14]. This method can identify dislocations even in large complexes\par
+and near GBs, and was used to identify large static distributions of dislocations [13\u8211?17]. In\par
+some cases, however, the plastic activity of a metal is determined by the motion of only a small\par
+number of these dislocations. In such cases, following the changes in the static distribution of\par
+all dislocations may be computationally prohibitive, and does not provide enough information\par
+to understand the processes driving the plastic activity. This is exacerbated by the fact that the\par
+accuracy of tracking all the dislocations in a complex environment is limited. In these cases, to\par
+study plastic activity, it is imperative to single out the dislocations driving it, i.e. those which\par
+are in motion.\par
+    In this paper, we describe a method to identify dislocations that have moved in a crystal.\par
+This method utilizes the highly-correlated displacements of individual atoms characterizing\par
+dislocation motion. The method, which we call the common motion grouping (CMG) method,\par
+singles out moving dislocations, does not assume any underlying crystal structure, and is not\par
+computationally intensive. It is, therefore, well adapted to the study of plasticity driven by the\par
+generation of dislocations at GBs.\par
+\par
+\par
+2. Description of the CMG method\par
+\par
+The CMG algorithm is based on identifying the correlation of the displacements of individual\par
+atoms between consecutive time frames. This is done in two steps:\par
+   First, atoms whose displacement, relative to their local environment, exceeds rmin are identi-\par
+fied. This minimal value is determined to eliminate atoms whose displacement is due to normal\par
+thermal Gaussian motion (see appendix A).\par
+   Next, the non-thermally displaced atoms are organized as nodes of a binary graph. An edge\par
+connects every two atoms that moved in a correlated manner, which is defined as fulfilling two\par
+conditions:\par
+\par
+                                                     2\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                           N Dimanstein Firman et al\par
+\par
+\par
+\par
+ 1. The two atoms are within distance d of each other, where the value of d is between the\par
+    nearest-neighbor and the next-nearest-neighbor distances in the lattice (see appendix A).\par
+ 2. The cosine of the angle between their relative displacements has an absolute value that is\par
+    greater than cos \u952?max , meaning that their displacements were directionally correlated. For\par
+    details of how cos \u952?max is determined, see appendix A.\par
+\par
+    The atoms are grouped into connected components, i.e. groups of atoms that are all con-\par
+nected, either directly or via other connected nodes [18].\par
+    Nonthermal atomic motion can be caused by defects other than dislocations, but will not, in\par
+general, involve the correlated motion of several atoms in the same direction. Thus, to differen-\par
+tiate between moving dislocations and atomic motion caused by other defects, only groups that\par
+consist of at least N atoms (see appendix A) that moved in a correlated manner are identified\par
+as loci of valid moving dislocations.\par
+\par
+\par
+3. Validation\par
+\par
+ To validate the CMG algorithm presented in section 2, we examine its performance when\par
+ applied to the results of the MD simulations of two geometrically simple cases. In both cases,\par
+ simulations of single fcc Cu grains were performed using LAMMPS [19], and employing the\par
+ widely-used embedded atom method (EAM) potential [20]. In each simulation, two perfect\par
+ dislocations were introduced. The displacements of atoms due to the motion of these disloca-\par
+ tions were then analyzed using the CMG method, and were shown to be consistent with the\par
+ results of the commonly-used DXA algorithm [14].\par
+    In reference simulation A, an fcc lattice was created with dimensions Lx = 358 \u197?,\par
+ Ly = 501 \u197?, and Lz = 27 \u197?, oriented along the axes shown in figure 1, and with periodic\par
+ boundaries. Two straight edge dislocations with opposite Burgers vectors parallel to the x axis,\par
+\u8407?b1 = [110] and \u8407?b2 = [110], were inserted into the lattice at a distance of \u8710?y = 100 \u197? from each\par
+ other. The dislocations were oriented along the z ([112]) axis. Such a dislocation dipole has\par
+ a lower long-range elastic field, thus allowing simulations to produce convergent results in\par
+ relatively small systems [21].\par
+    Initial relaxation was carried out by simulating the system in an isothermal-isobaric (NPT)\par
+ ensemble [22] at a temperature of 300 K. In the first 10 ps, a shear stress \u963? xy was ramped from\par
+ 0 to 0.2 kbar. Each of the two dislocations initially dissociated in its corresponding glide plane\par
+ into two Shockley partials, separated by a stacking-fault ribbon, as follows:\par
+\par
+                  1[ ]           1[    ] 1[   ]\par
+                    110 \u8594?           121 + 211\par
+                  2              6       6\par
+                  1[ ]           1[    ] 1[   ]\par
+                    110 \u8594?           211 + 121 .                                                   (1)\par
+                  2              6       6\par
+\par
+The distance between each two partials fluctuated between 20 and 25 \u197?. Following this period\par
+of relaxation, the stress was held constant at 0.2 kbar for another 10 ps, during which the\par
+dissociated dislocations moved away from each other along their glide planes.\par
+    The DXA was employed using Ovito [23] to detect the dislocations at ti = 14 ps and\par
+tf = 20 ps. The CMG method was then applied to detect dislocations that moved between these\par
+two time frames. As seen in figure 2, each of the four partial dislocations swept along a surface\par
+roughly situated on its xz slip plane. The dislocations detected by the DXA are situated at either\par
+side of this surface. The CMG method identified atoms on or close to this surface as proximate\par
+atoms with a common direction of motion, thus belonging to one distinct dislocation. Note that\par
+\par
+                                                     3\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                                   N Dimanstein Firman et al\par
+\par
+\par
+\par
+\par
+                  Figure 1. A sketch of the cell of reference simulation A. The lines a, b, c, and d indicate\par
+                  the partial Shockley dislocations, with the stacking-fault ribbon marked in gray.\par
+\par
+\par
+\par
+\par
+                  Figure 2. Dislocation map of reference simulation A, looking along the [001] direction.\par
+                  The initial and final positions of the partial dislocations detected by the DXA are shown,\par
+                  with an arrow pointing in the direction of motion. The atoms shown in between were\par
+                  identified by the CMG method as atoms that were displaced due to the motion of the\par
+                  dislocations. This image and others in this manuscript were produced with the help of\par
+                  the Ovito program [23].\par
+\par
+\par
+\par
+ the method is designed to detect the atoms that changed their position due to the motion of\par
+ each dislocation, rather than the dislocation line itself.\par
+    Similar results were obtained when reference simulation A was repeated at a temperature of\par
+ 700 K (see appendix B), indicating that the CMG method can be applied across a wide range\par
+ of temperatures.\par
+    In reference simulation B a similar lattice was created, with dimensions Lx = 27 \u197?,\par
+ Ly = 501 \u197?, and Lz = 358 \u197?, see figure 3. This time, two straight screw dislocations were\par
+ inserted into the lattice at the same distance as in reference simulation A. The dislocations\par
+ were oriented along the x axis ([110]) with Burger vectors opposite each other, \u8407?b3 = [110] and\par
+\u8407?b4 = [110]. The simulation was run for the same period of time, with a shear stress \u963? xy ramped\par
+ from 0 to 0.2 kbar in the first 10 ps, and then held at 0.2 kbar for another 10 ps. Initially, each of\par
+ the screw dislocations dissociated into two Shockley partials (equation (1)). The ratio of equi-\par
+ librium separations of partials from a screw dislocation, vs. partials from an edge dislocation,\par
+ is 3:7 [24]. Therefore, the partial dislocations stayed closer together than those of reference\par
+ simulation A, at distances between 10 and 15 \u197?.\par
+\par
+                                                      4\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                                   N Dimanstein Firman et al\par
+\par
+\par
+\par
+\par
+                  Figure 3. A sketch of the cell of reference simulation B. The lines e, f, g, and h indicate\par
+                  the partial Shockley dislocations, with the stacking-fault ribbon marked in gray.\par
+\par
+\par
+\par
+\par
+                  Figure 4. Dislocation map of reference simulation B, looking along the [201] direction.\par
+                  The initial and final positions of the partial dislocations detected by the DXA are shown,\par
+                  with an arrow pointing in the direction of motion. The atoms shown in between were\par
+                  identified by the CMG method as atoms that were displaced due to the motion of the\par
+                  dislocations.\par
+\par
+\par
+    Because of the small dissociation length of the dislocations in reference simulation B, the\par
+motion of the Shockley pairs was identified as that of a single complex. The identified dis-\par
+placements, together with the DXA detection of the initial and final partial arrangements at ti\par
+= 1 picosecond and tf = 5 picoseconds respectively, are shown in figure 4. It is seen that the\par
+partial dislocations traveled different distances between the two time frames. This is expected,\par
+because the width of a dissociated screw dislocation oscillates periodically [21].\par
+    Also in contrast with reference simulation A, in which the shifted atoms were close to the\par
+slip plane, here atoms farther away from the slip plane were affected, too. This is a result of the\par
+different displacement fields of screw and edge dislocations. See for example figure 5, which\par
+compares the magnitude of the change in displacement, due to the motion of a screw and edge\par
+dislocation in an isotropic elastic medium, calculated from the displacement fields of infinite\par
+straight dislocations [24]. Atoms within the black line in figure 5 are displaced by more than\par
+0.7 \u197? (= rmin ).\par
+    The time frames used for the CMG analysis, in both reference simulations, were chosen so\par
+that all four partial dislocations moved between them (i.e. that at least N atoms were displaced\par
+\par
+                                                      5\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                                    N Dimanstein Firman et al\par
+\par
+\par
+\par
+\par
+                  Figure 5. The magnitude of change in displacement in an isotropic elastic medium when\par
+                  a (a) screw and (b) edge dislocation line in the x direction (perpendicular to the plane of\par
+                  the graph) moves from position (y = 0, z = 0) to (y = 0, z = 5 \u197?). The magnitude of\par
+                  the Burgers vector is 2.56 \u197?, and its direction is along the x axis in (a), and the z axis in\par
+                  (b). In the areas within the black lines, the change in displacement is greater than 0.7 \u197?\par
+                  ( = rmin )\par
+\par
+\par
+\par
+due to the motion of each dislocation between the two time frames). On the other hand, they\par
+were chosen closely enough so that the motion of the dislocations swept along relatively small\par
+areas, and thus it is easy to see the connection between their initial and final positions (found by\par
+the DXA), and the groups of atoms that were displaced due to their motion. The comparison\par
+of any two time frames, however, yields results that are consistent with the premises of the\par
+method.\par
+\par
+\par
+\par
+4. Implementations and performance\par
+\par
+With the CMG method validated using the reference simulations of section 3, we examine its\par
+performance in a complex realistic configuration of GBs of a NC undergoing creep, for which\par
+it is primarily intended. A cubic NC sample of fcc Cu, 224 \u197? long and composed of seventeen\par
+grains, was produced using the method of Voronoi tessellation [25]. GBs were then modified\par
+to contain V atoms by switching some of the Cu atoms, using a combined grand canonical\par
+Monte-Carlo simulation and MD relaxation, as implemented in LAMMPS [26]. By setting an\par
+effective reservoir temperature of 300 K and a chemical potential of 2.8 eV, a metastable state\par
+with a solute concentration of 0.9% was created. Due to the high miscibility, V atoms were\par
+inserted only at GBs, and at this concentration they stabilized the crystal against spontaneous\par
+grain growth. The interactions between atoms was calculated using the EAM potential of [27].\par
+    To demonstrate the utility of the method, irradiation-induced creep (IIC) was induced by\par
+switching Cu atoms at the GBs and at the monolayers adjacent to them [28], i.e. by removing\par
+each atom to create a vacancy and reinserting it as an interstitial atom. The CMG method is\par
+particularly useful in such a case, because it differentiates between displacements caused by\par
+dislocation motion and those due to the irradiation-induced point-defect flux. Seventy atoms\par
+were removed and reinserted at a time, after which the sample was allowed to relax for 80 ps.\par
+(The insertion of 140 defects at a time was possible because the relaxation process was found\par
+to be local.) This was repeated for 1300 cycles to bring the sample to second-stage creep, and\par
+then for another 500 cycles, during which measurements were taken. Throughout this process,\par
+the sample was subjected to a constant compressive stress of 4 kbar in the [001] direction (z\par
+axis) of the simulation box, using the LAMMPS NPT command.\par
+\par
+                                                       6\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                               N Dimanstein Firman et al\par
+\par
+\par
+\par
+\par
+                  Figure 6. GBs and dislocations in a 10 \u197?-wide slab along the (111) plane of a Voronoi-\par
+                  tessellated 0.9% solute Cu-V NC, subjected to IIC. A total of 3789 dislocations were\par
+                  detected in the whole NC.\par
+\par
+\par
+\par
+    The sample was inspected at the early part of second stage creep, i.e. at tf = 106.16 ns from\par
+the beginning of the simulation. At this time frame, the DXA detected 3789 dislocations in the\par
+GBs [29]. Figure 6 shows the GBs and dislocations detected by the DXA in a 10 \u197?-wide slab\par
+along the (111) plane of the simulation box.\par
+    The CMG method was then applied to detect moving dislocations at the GBs, by analyz-\par
+ing the displacement of atoms during one cycle (of 80 ps). Seventy moving dislocations were\par
+identified in the NC by this method. Eight of these moving dislocations were found in the\par
+10 \u197?-wide slab around the (111) plane, see figure 7 [30]. The isolation of these dislocations\par
+allows direct study of the dislocation dynamics in the NC. Furthermore, as most of the moving\par
+dislocations were embedded within the highly distorted regions of the GBs, they were identi-\par
+fied only by the CMG method and not by the DXA, because the DXA relies on a well-defined\par
+local crystalline structure. The motion of these dislocations can be studied in connection with\par
+the yield-stress response of the sample in question.\par
+    As an example of such an analysis, the moving dislocations detected in the 500 irradiation\par
+cycles of second-stage creep were examined. Each moving dislocation displaced a group of\par
+atoms. The greatest of these displacements, for each moving dislocation, was saved. In addi-\par
+tion, the direction of each dislocation was estimated by finding the direction of the vector con-\par
+necting the two atoms in the group that were farthest apart. The angles between the dislocation\par
+lines and the displacement direction, for the moving dislocations detected by the CMG method\par
+at the end of all 500 cycles, were collected into a histogram, shown in figure 8. It is seen that\par
+these angles are mostly less than 30\u9702? . This is characteristic of dislocations with a dominant\par
+screw-type component (see figure 5), including pure and dissociated screw dislocations.\par
+    Additionally, the locations of the moving dislocations in the 500 cycles of second-stage\par
+creep were analyzed. All 32 183 moving dislocations, with no exception, were found to be\par
+within or adjacent to GBs, rather than moving across a grain. We conclude that creep in the\par
+simulated sample was affected by GB mobility, with no contribution of intragranular disloca-\par
+tion activity. This finding is in line with previous studies of NC Cu which suggested, based on\par
+measured dislocation densities within grains, that GB mobility is the dominant mechanism of\par
+plastic deformation when the grains are smaller than \u8764?10 nm [10, 31\u8211?35].\par
+\par
+                                                     7\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                                  N Dimanstein Firman et al\par
+\par
+\par
+\par
+\par
+                  Figure 7. GBs and moving dislocations in a 10 \u197? wide slab along the (111) plane of a\par
+                  Voronoi-tessellated 0.9% solute Cu-V NC, subjected to IIC. The black atoms belong to\par
+                  the eight moving dislocations within this slab, out of a total of 70 moving dislocations\par
+                  in the whole NC.\par
+\par
+\par
+\par
+\par
+                  Figure 8. Histogram of the angle between the estimated dislocation orientation and the\par
+                  direction of greatest displacement in the dislocation, in all dislocations detected by the\par
+                  CMG algorithm in 500 cycles of IIC. The histogram contains 40 bins.\par
+\par
+\par
+\par
+    Finally, the contribution of the moving dislocations to the linear strain of the sample was\par
+estimated, by summing the atoms within the groups, and comparing the result to the change\par
+in the dimensions of the simulation box. It was found that, after the first 250 cycles of second-\par
+stage creep, there was a strong correlation between the displacements and the box dimensions.\par
+Figure 9 shows the cumulative sum of atom displacements as a function of the elongation of\par
+the simulation box in the z-axis direction, along which compressive stress was applied. The\par
+Pearson correlation coefficient of the two data sets is 0.946, and the p-value under the null\par
+hypothesis is 3 \u215? 10\u8722?123 . Initial local relaxation can lead to the formation of back stress, dis-\par
+placing atoms in directions other than the compressive axis. This can explain the fact that the\par
+correlation begins only after the first 250 cycles. The complete mechanism, by which disloca-\par
+tion motion within GBs is translated into global deformation, can be studied further.\par
+\par
+                                                     8\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                                N Dimanstein Firman et al\par
+\par
+\par
+\par
+\par
+                  Figure 9. Cumulative sum of atom displacements as a function of the elongation of a\par
+                  Voronoi-tessellated 0.9% solute Cu-V NC, subjected to IIC, along the [001] (z axis)\par
+                  direction. The sum is divided by the number of atoms in each plane perpendicular to the\par
+                  z-axis direction.\par
+\par
+\par
+5. Limitations\par
+\par
+As shown in the previous sections, the CMG method can be used to detect moving disloca-\par
+tions both within grains and at GBs. Its ability to single out the moving dislocations at GBs is\par
+significant, because it allows the analysis of NC plasticity near GBs. The method works, fur-\par
+thermore, without assuming an underlying crystal structure, thus making it flexible and robust.\par
+In this section we list and discuss a few of the limitations of the CMG method. Some of these\par
+limitations are inherent, and others remain because the method is still in development.\par
+    Slow-moving dislocations. By design, the CMG method only detects moving dislocations.\par
+If a dislocation moves slowly, the displacement of atoms between two close time frames might\par
+be less than the threshold of detection. The sampling rate of the CMG method must correspond,\par
+therefore, to the typical speed of dislocations in the system under inspection.\par
+    Dislocation forests. As seen in reference simulation B of section 3 (in which a dissociated\par
+screw dislocation was identified as one screw dislocation rather than two partials), the CMG\par
+method identifies the motion of proximate dislocations as that of one complex dislocation. This\par
+is an inherent feature of the method since it analyzes the displacements of groups of atoms.\par
+If the motion of a group of atoms is correlated, they will all belong to the same connected\par
+component of the CMG graph. Conversely, if at least N atoms are affected by one dislocation\par
+and not others, they will belong to a separate connected component, and will thus be identified\par
+as a separate dislocation.\par
+    Burgers vector. The CMG method represents atoms as nodes of a binary graph, connected by\par
+edges if they are nearby and move in the same (or opposite) direction. If the path on the graph\par
+between two atoms is long, their direction of motion might be very different, even though\par
+they belong to the same dislocation, see figure 5. The magnitudes of the displacements of\par
+atoms, too, vary within one dislocation. Therefore, the detection of a dislocation does not\par
+automatically yield its Burgers vector, as is the case, for example, in the DXA. Such analysis\par
+is in fact possible, but requires a more detailed study of the specific displacement vectors, and\par
+is left for future extension.\par
+    Dislocation lines. The CMG method identifies groups of atoms whose positions shift due\par
+to moving dislocations, rather than tracing the dislocation lines themselves. In other words,\par
+the method will not pinpoint the regions of the crystal lattice around which Burgers circuits\par
+\par
+                                                     9\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                           N Dimanstein Firman et al\par
+\par
+\par
+\par
+fail to close. This can be an advantage when studying the effect of multiple dislocations on\par
+the lattice and grain structure of a sample, but might be a disadvantage when studying the\par
+velocities of isolated dislocations [28, 36\u8211?38]. The method can be developed to support such\par
+studies by improving the accuracy of the identification of the edges of the areas swept by\par
+the moving dislocations and incorporating improved static structure criteria. In the current\par
+implementation, the velocity of a dislocation might be estimated by calculating the rate of\par
+propagation of the center of mass of the atoms that are shifted by its motion.\par
+    Misidentification of deformations as dislocations. In metastable scenarios with high ener-\par
+gies, the ensuing dynamics may involve correlated motion of chunks of matter, which is not\par
+driven by the motion of dislocations. The CMG method does not differentiate between chunks\par
+of matter moving together and moving dislocations. This type of scenario can include the ini-\par
+tial steps of some simulations, in which the system has not yet relaxed into a low-energy state,\par
+and situations in which failure is incipient.\par
+\par
+\par
+6. Conclusions\par
+\par
+Detailed local study of plasticity in NCs and other structures, containing large populations\par
+of defects and dislocations, requires the identification of a small number of moving disloca-\par
+tions in complex environments. The CMG method, introduced here, facilitates such studies by\par
+identifying correlated displacements due to moving dislocations. This is done by comparing\par
+atomic positions at consecutive time frames. The method was applied to quantify and char-\par
+acterize displacements due to moving dislocations in a NC undergoing creep, and to estimate\par
+the contribution of these dislocations to the NC strain. Using this method, it was shown that\par
+all dislocation activity was identified within the GB, with no significant contribution due to\par
+intragranular activity.\par
+    Although the method now compares two specific time frames, it can be extended to examine\par
+multiple time steps. This will allow the calculation of properties such as dislocation drag and\par
+velocity, and better filtering of specific dislocation mechanisms. Also, tools can be developed\par
+to determine the Burgers vectors of the detected dislocations, to facilitate the study of the types\par
+of dislocations that drive plasticity in various settings.\par
+    In addition to the study of plasticity in NCs, the CMG method can be used in other settings\par
+in conjunction with static structural methods, to discern among dislocations that moved and\par
+those that remained stationary. This can include situations in which sessile dislocations become\par
+mobile, as a result of reactions induced by stress or radiation. The identification of the onset\par
+of dislocation-based displacements, in such settings, can provide information regarding the\par
+activation energies and volumes of different types of yield mechanisms.\par
+\par
+\par
+Data availability statement\par
+\par
+The data that support the findings of this study are openly available at the following URL/DOI:\par
+https://doi.org/10.5281/zenodo.10356082.\par
+\par
+\par
+Acknowledgments\par
+\par
+Computational resources for this study were provided through the ICPL (http://icpl.huji.ac.il).\par
+N D F acknowledges support from the Israeli Ministry of Science, Eshkol scholarship 313258.\par
+\par
+\par
+                                                     10\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                         N Dimanstein Firman et al\par
+\par
+\par
+\par
+Appendix A. Determining the parameters of the algorithm\par
+\par
+Table 1 lists the parameters used in the current implementation of the CMG algorithm, and\par
+their values in the simulations presented in this manuscript (except in the simulation described\par
+in appendix B). In this appendix, we detail how these values were derived.\par
+    rmin is used to identify atoms that changed their position between two time frames under\par
+comparison. Its value was calculated using the atomic positions at ti = 106.08 ns and tf =\par
+106.16 ns from the beginning of the GB simulation of section 4. The magnitudes of the atomic\par
+displacements between these time frames were arranged in a histogram and fitted to a \u967? dis-\par
+tribution with three degrees of freedom, see figure 10, under the assumption that thermal dis-\par
+placements lead to a normal distribution in each spatial dimension. Thus, rmin = 0.7 \u197?, where\par
+the displacements noticeably diverge from the \u967?3 distribution, was chosen as the threshold of\par
+non-Gaussian motion.\par
+    Although the value of rmin can be determined separately for every simulated sample (at\par
+every point of time), its calculation yields similar values for a given material and temperature.\par
+Thus, the value yielded by the calculation above was used in all the simulations described in\par
+this paper, except in that of appendix B.\par
+    The next parameter in the CMG algorithm, d, is used to determine the correlation length of\par
+atoms moving due to one dislocation. We expect dislocations to affect contiguous groups of\par
+atoms, at adjacent positions along the crystal lattice. Therefore, to determine d, we examine a\par
+histogram of distances among pairs of atoms in the simulated NC at tf = 106.16 ps, produced\par
+by Ovito\u8217?s pair distribution function [23]. d is any value between the two leftmost peaks of\par
+the histogram. In our case, as shown in figure 11, it can be d = 3 \u197?. (Once again, choosing a\par
+different time frame from the NC simulation, or from the reference simulations, yields similar\par
+results.) In general, in fairly ordered crystals, d should have a value between the distances\par
+among nearest and next-nearest neighbors.\par
+    To estimate the next parameter, cos \u952?max , we consider that two atoms, displaced by the pas-\par
+sage of a moving dislocation, should be displaced in the same direction. Typically, for the\par
+fcc crystals simulated in this work, the magnitude   \u8730? of this displacement will be equal to the\par
+Burgers vector of a partial dislocation, i.e. b = a/ 6 = 1.48 \u197?, where a is the lattice constant\par
+in Cu. Thermal motion, however, can cause the directions of the displacements to diverge. This\par
+will be most pronounced when the thermal motions of the atoms are in opposite directions,\par
+perpendicular to the motion due to the passage of the moving dislocation. We estimated the\par
+maximum displacement of thermal motion as rmin , so the maximum angle between the direc-\par
+tions of motion of two atoms will be \u952?max = arctan(rmin /b). Therefore, the minimum cosine\par
+of the angle between the displacement vectors will be cos \u952?max = 0.9.\par
+    The reasoning applied to estimate cos \u952?max assumes an fcc lattice structure with fairly con-\par
+sistent atomic spacing, and where partial Shockley dislocations are common. Similar reasoning\par
+can be developed in other settings, too, as long as interatomic distances are greater than the\par
+typical thermal displacement of atoms. Along these lines, the CMG method may be extended\par
+to highly complex systems such as high-entropy alloys.\par
+    The last parameter of the CMG algorithm is N, the minimum amount of moving atoms that\par
+indicates the passage of a moving dislocation. A large value for this parameter would lead to the\par
+misdetection of small moving dislocations. A small value would lead to the false identification\par
+of moving point defects as moving dislocations, since there is a motion of atoms around point\par
+defects due to relaxation. Under the assumption that not all of the nearest neighbors around a\par
+point defect will move in a common direction, we chose N = 12 as the optimal value for the\par
+fcc lattices in this work.\par
+\par
+\par
+                                                     11\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                                   N Dimanstein Firman et al\par
+\par
+\par
+\par
+                  Table 1. List of parameters of the CMG algorithm.\par
+\par
+                  Parameter                Description                                                 Value\par
+\par
+                  rmin                     Threshold of non-Gaussian displacement                      0.7 \u197?\par
+                  d                        Maximum distance of nearby atoms                            3\u197?\par
+                  cos \u952?max                 Minimum cosine of angle for common motion                   0.9\par
+                  N                        Minimum number of atoms in group                            12\par
+\par
+\par
+\par
+\par
+                  Figure 10. Frequency histogram of the magnitude of the displacement of atoms during\par
+                  80 ps, in a simulation of a Cu NC with 0.9% V solute (circles), fitted to a \u967?3 distribution\par
+                  (line).\par
+\par
+\par
+\par
+\par
+                  Figure 11. Pair distribution function of one time frame in a simulation of a Cu NC with\par
+                  0.9% V solute.\par
+\par
+\par
+Appendix B. Reference simulation A at 700 K\par
+\par
+To test the validity of the CMG method at higher temperatures, reference simulation A (see\par
+section 3) was rerun at a temperature of 700 K. First, using the procedure described in\par
+appendix A and comparing the atomic positions at two different time frames of the simulation,\par
+it was found that rmin = 0.9 \u197? and, therefore, cos \u952?max = 0.85. The other two parameters of\par
+the algorithm (see table 1) were not changed. Next, the CMG algorithm was run. Figure 12\par
+shows the atoms identified as belonging to moving dislocations, when comparing the atomic\par
+\par
+                                                         12\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                                     N Dimanstein Firman et al\par
+\par
+\par
+\par
+\par
+                  Figure 12. Dislocation map of reference simulation A rerun at a temperature of 700 K,\par
+                  looking along the [001] direction. The initial and final positions of the partial dislocations\par
+                  detected by the DXA are shown, with an arrow pointing in the direction of motion.\par
+                  The atoms shown in between were identified by the CMG method as atoms that were\par
+                  displaced due to the motion of the dislocations.\par
+\par
+\par
+positions at ti = 11 ps and tf = 20 ps from the beginning of the simulation. As in section 3,\par
+these time frames were chosen due to the visual clarity of the results of the DXA and the CMG\par
+method.\par
+    The CMG method singles out atoms that have shifted by more than rmin between time\par
+frames, to examine if their motion is due to moving dislocations. rmin itself is determined stat-\par
+istically per sample. As the temperature increases, thus widening the \u967?3 distribution of the\par
+thermal motion of atoms, the concept of singling out atoms by comparing two frames will\par
+become less effective. It can be expected to break down when there is a statistically significant\par
+likelihood for atoms to be shifted by a magnitude greater than that of the Burgers vector of\par
+the dislocations of interest. We see, however, that at 700 K in the scenarios in this study, this\par
+concept continues to be effective. At even higher temperatures, the algorithm might be mod-\par
+ified by inspecting the mean coordinates of the atoms of the sample over the time period of\par
+interest, thus reducing the effect of Brownian motion on the CMG method.\par
+\par
+\par
+ORCID iDs\par
+\par
+Eliyahu Zvi Engelberg \u59865? https://orcid.org/0000-0002-1591-4273\par
+Yinon Ashkenazy \u59865? https://orcid.org/0000-0002-7976-4534\par
+\par
+\par
+References\par
+\par
+ [1] Deiter G E Jr 1961 Mechanical Metallurgy (Mcgraw-Hill)\par
+ [2] Crimp M A 2006 Scanning electron microscopy imaging of dislocations in bulk materials, using\par
+       electron channeling contrast Microsc. Res. Tech. 69 374\par
+ [3] Mohamadnejad S, Basti A and Ansari R 2020 Analyses of dislocation effects on plastic deformation\par
+       Multiscale Sci. Eng. 2 69\par
+ [4] Bertin N, Sills R B and Cai W 2020 Frontiers in the simulation of dislocations Annu. Rev. Mater.\par
+       Res. 50 437\par
+ [5] Kedharnath A, Kapoor R and Sarkar A 2021 Classical molecular dynamics simulations of the\par
+       deformation of metals under uniaxial monotonic loading: a review Comput. Struct. 254 106614\par
+\par
+                                                      13\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                                N Dimanstein Firman et al\par
+\par
+\par
+\par
+ [6] Lau D, Jian W, Yu Z and Hui D 2018 Nano-engineering of construction materials using molecular\par
+        dynamics simulations: prospects and challenges Composites B 143 282\par
+ [7] Wolf D, Yamakov V, Phillpot S R, Mukherjee A and Gleiter H 2005 Deformation of nanocrystalline\par
+        materials by molecular-dynamics simulation: relationship to experiments Acta Mater. 53 1\par
+ [8] Malygin G A 2007 Plasticity and strength of micro- and nanocrystalline materials Phys. Solid State\par
+        49 1013\par
+ [9] Zhang Z, O\u769?dor E\u769?, Farkas D, J\u243?ni B, Rib\u225?rik G, Tichy G, Nandam S-H, Ivanisenko J, Preuss M and\par
+        Ung\u225?r T 2020 Dislocations in grain boundary regions: the origin of heterogeneous microstrains\par
+        in nanocrystalline materials Metall. Mater. Trans. A 51 513\par
+[10] Van Swygenhoven H and Weertman J R 2006 Deformation in nanocrystalline metals Mater. Today\par
+        9 24\par
+[11] Kelchner C L, Plimpton S J and Hamilton J C 1998 Dislocation nucleation and defect structure\par
+        during surface indentation Phys. Rev. B 8 11085\par
+[12] Zimmerman J A, Kelchner C L, Klein P A, Hamilton J C and Foiles S M 2001 Surface step effects\par
+        on nanoindentation Phys. Rev. Lett. 81 085001\par
+[13] Stukowski A and Albe K 2010 Extracting dislocations and non-dislocation crystal defects from\par
+        atomistic simulation data Modelling Simul. Mater. Sci. Eng. 18 085001\par
+[14] Stukowski A, Bulatov V V and Arsenlis A 2012 Automated identification and indexing of disloca-\par
+        tions in crystal interfaces Modelling Simul. Mater. Sci. Eng. 20 085007\par
+[15] Stukowski A 2020 Dislocation analysis tool for atomistic simulations Handbook of Materials\par
+        Modeling: Methods: Theory and Modeling ed W Andreoni and S Yip (Springer International\par
+        Publishing) pp 1545\u8211?58\par
+[16] Bin X, Xinyu W, Yongsheng F and Ruizhi L 2022 Atomistic investigation on the strengthening\par
+        mechanism of single crystal ni-based superalloy under complex stress states Metals 12 889\par
+[17] Fang C, Zhang J and Pan F 2019 First-principles study on solute-basal dislocation interaction in\par
+        Mg alloys J. Alloys Compd. 785 911\par
+[18] Clark J and Holton D A 1991 A First Look at Graph Theory (World Scientific Publishing)\par
+[19] Thompson A P et al 2022 LAMMPS\u8212?a flexible simulation tool for particle-based materials mod-\par
+        eling at the atomic, meso and continuum scales Comput. Phys. Commun. 271 108171\par
+[20] Mishin Y, Mehl M J, Papaconstantopoulos D A, Voter A F and Kress J D 2001 Structural stability\par
+        and lattice defects in copper: ab initio, tight-binding and embedded-atom calculations Phys. Rev.\par
+        B 63 224106\par
+[21] Mordehai D, Ashkenazy Y, Kelson I and Makov G 2003 Dynamic properties of screw dislocations\par
+        in CU: a molecular dynamics study Phys. Rev. B 67 024112\par
+[22] Shinoda W, Shiga M and Mikami M 2004 Rapid estimation of elastic constants by molecular\par
+        dynamics simulation under constant stress Phys. Rev. B 69 134103\par
+[23] Stukowski A 2010 Visualization and analysis of atomistic simulation data with OVITO-the Open\par
+        Visualization Tool Modelling Simul. Mater. Sci. Eng. 18 015012\par
+[24] Anderson P M, Hirth J P and Lothe J 2017 Theory of Dislocations 3rd edn (Cambridge University\par
+        Press)\par
+[25] Du Q, Faber V and Gunzburger M 1999 Centroidal Voronoi tessellations: applications and\par
+        algorithms SIAM Rev. 41 637\par
+[26] Frenkel D and Smit B 2008 Understanding Molecular Simulation (Academic)\par
+[27] Demkowicz M J, Bhattacharyya D, Usov I, Wang Y Q, Nastasi M and Misra A 2010 The effect of\par
+        excess atomic volume on He bubble formation at fcc\u8211?bcc interfaces Appl. Phys. Lett. 97 161903\par
+[28] Ashkenazy Y and Averback R S 2012 Irradiation induced grain boundary flow\u8212?a new creep mech-\par
+        anism at the nanoscale Nano Lett. 12 4084\par
+[29] This includes 562 perfect dislocations, 1619 Shockley dislocations, 60 stair-rod dislocations, 61\par
+        Frank dislocations, and 29 Hirth dislocations\par
+[30] These results, and those of the DXA, are typical of all the time frames and cycles in which meas-\par
+        urements were taken. The CMG method identified an average of 64.3 moving dislocations over\par
+        all cycles\par
+[31] Schi\u248?tz J, Vegge T, Di Tolla F D and Jacobsen K W 1999 Atomic-scale simulations of the mech-\par
+        anical deformation of nanocrystalline metals Phys. Rev. B 60 11971\par
+[32] Van Swygenhoven H, Caro A and Farkas D 2001 A molecular dynamics study of polycrystalline\par
+        fcc metals at the nanoscale: grain boundary structure and its influence on plastic deformation\par
+        Mater. Sci. Eng. A 309\u8211?310 440\par
+\par
+\par
+\par
+                                                     14\par
+Modelling Simul. Mater. Sci. Eng. 32 (2024) 055003                             N Dimanstein Firman et al\par
+\par
+\par
+\par
+[33] Schi\u248?tz J 2004 Atomic-scale modeling of plastic deformation of nanocrystalline copper Scr. Mater.\par
+       51 837\par
+[34] Farkas D and Curtin W A 2005 Plastic deformation mechanisms in nanocrystalline columnar grain\par
+       structures Mater. Sci. Eng. A 412 316\par
+[35] Farkas D, Mohanty S and Monk J 2008 Strain-driven grain boundary motion in nanocrystalline\par
+       materials Mater. Sci. Eng. A 493 33\par
+[36] Olmsted D L, Hector L G Jr, Curtin W A and Clifton R J 2005 Atomistic simulations of dislocation\par
+       mobility in Al, Ni and Al/Mg alloys Modelling Simul. Mater. Sci. Eng. 13 371\par
+[37] Dang K, Bamney D, Bootsita K, Capolungo L and Spearot D E 2019 Mobility of dislocations\par
+       in aluminum: faceting and asymmetry during nanoscale dislocation shear loop expansion Acta\par
+       Mater. 168 426\par
+[38] Shen Y and Spearot D E 2021 Mobility of dislocations in FeNiCrCoCu high entropy alloys\par
+       Modelling Simul. Mater. Sci. Eng. 29 085017\par
+\par
+\par
+\par
+\par
+                                                     15\par
+
+}

@@ -1,0 +1,837 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+                                                                  Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+                                                                   Contents lists available at ScienceDirect\par
+\par
+\par
+                                                              Extreme Mechanics Letters\par
+                                                           journal homepage: www.elsevier.com/locate/eml\par
+\par
+\par
+\par
+\par
+Dislocation descriptors of low and high angle grain boundaries with\par
+convolutional neural networks\par
+William Noh , Huck Beng Chew *\par
+Department of Aerospace Engineering, University of Illinois at Urbana-Champaign, Urbana, IL 61801, USA\par
+\par
+\par
+\par
+\par
+A R T I C L E I N F O                                     A B S T R A C T\par
+\par
+Keywords:                                                 Multiscale modeling of plasticity in polycrystalline metals is a long-standing challenge in part because of the lack\par
+Grain boundary dislocation                                of an accepted grain boundary descriptor, which has hindered the bridging of scales between atomistic simu\u173?\par
+Dislocation core                                          lations and meso-scale discrete dislocation dynamics (DDD) models. While grain boundary dislocations (GBDs)\par
+Atomistic stress\par
+                                                          for low angle grain boundaries can be ascertained by Burgers circuit analyses, the dislocation structures of high\par
+Machine learning\par
+Molecular dynamics\par
+                                                          angle grain boundaries have remained elusive because of overlapping dislocation core fields. Here, we use\par
+                                                          convolutional neural networks (CNNs) to establish the locations of GBDs responsible for the misorientations of\par
+                                                          <001> symmetrical-tilt Cu grain boundaries, from the local atomistic stress fields modeled with molecular\par
+                                                          dynamics (MD) simulations. We achieve accurate CNN predictions of GBDs with sub-angstrom resolution across\par
+                                                          an extensive set of low- to high-tilt-angle grain boundaries through a training dataset, generated from super\u173?\par
+                                                          posing continuum-representations of the MD stress fields of single dislocations that consider the contributions of\par
+                                                          both the Volterra and dislocation core fields. The approach paves the way for dislocation representations of the\par
+                                                          atomistic grain boundary structures modeled by MD simulations or density functional theory (DFT) calculations\par
+                                                          in mesoscale DDD models to elucidate multiscale plasticity effects.\par
+\par
+\par
+\par
+\par
+1. Introduction                                                                                crystalline lattices are fundamentally created by arrays of intrinsic grain\par
+                                                                                               boundary dislocations (GBDs) adjoining the boundary [20,21]. Such\par
+    Grain boundaries of polycrystalline metals are among the most well                         dislocation-based grain boundary descriptors, however, are problematic\par
+studied but least understood material interfaces. It is now well accepted                      for higher angle grain boundaries. While the atomistic structures of low\par
+that plasticity at the macroscale originates from the motion and inter\u173?                        angle grain boundaries are reasonably well-defined by their linear\par
+action of dislocations across grains through atomistic mechanisms, such                        elastic displacement fields, the close proximity between GBDs in higher\par
+as dislocation absorption, transmission, emission or pile-up at the grain                      angle grain boundaries results in overlapping cores, which cloud the\par
+boundaries [1\u8211?3]. Each of these mechanisms is highly sensitive to the                          relationship between the linear elastic fields and the dislocation struc\u173?\par
+atomistic structure of the grain boundary, and the structure of the                            ture of the boundary [19]. In addition, resolution of the net or resultant\par
+boundary is in turn altered by the ensuing dislocation-grain boundary                          Burgers vector about these high angle grain boundaries into Burgers\par
+interactions [4\u8211?10]. Molecular dynamics (MD) simulations can capture                           vectors of discrete dislocations is not unique, since one could potentially\par
+this continuously evolving atomistic structure of the grain boundary, but                      achieve the same misorientation angle with alternative sets of GBDs [20,\par
+upscaling these simulations to the meso-scale through discrete disloca\u173?                        21]. Because of these issues, later studies have described the grain\par
+tion dynamics (DDD) models poses a significant challenge since treat\u173?                          boundary as a combination of building blocks or structural units (SUs),\par
+ment of the dislocation-grain boundary interactions often rely on a                            with each SU representing particular arrangements of a limited number\par
+predefined set of phenomenological rules [11\u8211?16].                                              of atoms [22\u8211?26]. Fundamental properties of the boundary have been\par
+    Studies show that the evolving atomistic structure of the grain                            linked to the presence of certain SUs \u8211? for example, the propensity to\par
+boundary with dislocation emission, absorption or transmission can be                          emit Shockley partials under tension and compression has been attrib\u173?\par
+attributed to its evolving dislocation content [17\u8211?19]. This supports the                      uted to the presence of E- and A-type SUs, respectively, along\par
+early notion that the tilt and twist misorientation between two                                symmetrical-tilt <110> grain boundaries [27,28]. More recently,\par
+\par
+\par
+\par
+ * Corresponding author.\par
+   E-mail address: hbchew@illinois.edu (H.B. Chew).\par
+\par
+https://doi.org/10.1016/j.eml.2024.102138\par
+Received 8 December 2023; Received in revised form 6 February 2024; Accepted 19 February 2024\par
+Available online 22 February 2024\par
+2352-4316/\u169? 2024 The Author(s). Published by Elsevier Ltd. This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/).\par
+W. Noh and H.B. Chew                                                                                                        Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+studies have established the local atomistic stress state along a grain              the grain boundary located along the x1 -axis. We displace the top crystal\par
+boundary as a representation of the Cauchy stress tensor for the calcu\u173?              laterally with respect to the bottom crystal in 1% increments of the unit\par
+lation of continuum traction fields, which ultimately governs the ability            structural length of the grain boundary along the x1 direction, and\par
+of grain boundaries to emit, absorb, or transmit dislocations [28\u8211?30].               remove any overlapping atoms. This process is iteratively repeated to\par
+Nevertheless, tracking the continuously evolving SUs or traction signa\u173?              generate a multiplicity of possible metastable grain boundary states with\par
+tures along each boundary poses a challenge in DDD simulations. In                   the same \u968? .\par
+contrast, a dislocation-based descriptor provides a representation of the                Each resulting grain boundary configuration is subjected to energy\par
+grain boundary in terms of fundamental entities (i.e., dislocations)                 minimization in MD, and the model configuration with the lowest en\u173?\par
+already explicitly modeled in DDD simulations.                                       ergy is selected as the representative Cu grain boundary structure with\par
+    In the presence of a dislocation, the distortion resulting from                  that particular tilt angle. A total of 18 minimum energy grain boundary\par
+displacement of atoms in a crystal from their perfect lattice sites pro\u173?             structures are generated through this process, with tilt angles varying\par
+duces an elastic Volterra stress field outside the core of the dislocation           from \u968? = 3.28\u9702? to 53.13\u9702? , to cover the spectrum of low- (\u968? \u8804? 14.25\u9702? ),\par
+[31,32]. Within a radius of ~10\u8211?50 burgers vector, b, from the dislo\u173?                moderate- (16.26\u9702? \u8804? \u968? \u8804? 22.62\u9702? ), and high-tilt-angle (\u968? \u8805? 28.06\u9702? )\par
+cation line, nonlinear dislocation core configurations give rise to an               grain boundaries (Fig. 1). Additionally, a grain boundary structure with\par
+additional linear elastic dislocation core field, which is superposed onto           a very low tilt angle of \u968? = 0.818\u9702? is also created, and is considered as an\par
+the Volterra field [33,34]. Although the core-field is shorter range than            \u8220?isolated\u8221? edge dislocation structure \u8211? the periodic spacing between\par
+the Volterra field, it significantly influences the forces between dislo\u173?            these \u8220?isolated\u8221? edge dislocations is ~25 nm, which is sufficiently far for\par
+cations at close range, such as during dislocation pile-up, and is                   the MD stress fields of these periodic dislocation images (constructed\par
+conceivably the dominant component in high angle grain boundaries                    from virial theorem) to be treated as non-interacting (see Fig. S1 of the\par
+with closely-spaced GBDs. By extension, a GBD therefore acts as a source             Supplementary Materials).\par
+of internal stress along the grain boundary, with its stress signature\par
+arising from its core and Volterra fields. The combined interaction of an            3. Convolution neural network\par
+array of GBDs constituting a grain boundary is ultimately responsible for\par
+the internal stress field (\u963? ij ) near a grain boundary [28\u8211?30].                        The dislocation content of a grain boundary with tilt rotation \u968? can\par
+    Elucidating the dislocation structure of a grain boundary from its               be quantified by the classical Frank-Bilby equation [51],\par
+atomistic stress field is a non-trivial inverse problem, particularly in the               /     \u968?\par
+presence of overlapping dislocation core fields. Recent studies in ma\u173?               dp = b (2sin )                                                      (1)\par
+                                                                                                  2\par
+chine learning show that deep neural network architectures are capable\par
+of solving a wide variety of inverse problems. For example, neural net\u173?              where dp is the mean separation between dislocations along the\par
+works have been used to predict phase diagrams and phase transitions                 boundary, and b is the magnitude of a Burgers vector of a perfect\par
+[35], grain boundary energy [36], grain boundary segregations [37],                  dislocation in the crystal. This equation suggests that the tilt angle of\par
+grain boundary damage [38], atomistic stresses [39], deformation                     each grain boundary must be partitioned among several sets of parallel\par
+constitutive behavior of materials [40\u8211?44], as well as the potential en\u173?             edge dislocations. In atomistic simulations and microscopy experiments,\par
+ergy and atomic force of metals modeled in density functional theory                 one can perform a Burgers circuit analysis (black circles in Fig. 1b-top)\par
+(DFT) [45]. Here, we adopt a convolutional neural network (CNN) for                  to confirm the Burgers vector and hence the presence of individual\par
+machine learning to detect the presence, and predict the locations, of               GBDs. By constructing multiple non-overlapping Burgers circuits, and\par
+GBDs (output) from atomistic stress information (input) across an                    identifying those that contain a dislocation, one can further pinpoint the\par
+extensive range of low to high angle <001> symmetrical-tilt grain                    location of individual GBDs with atomic precision. Analysis tools based\par
+boundaries. Section 2 details the modeling of the grain boundaries with              on this approach, such as the dislocation extraction algorithm (DXA) and\par
+MD simulations. Section 3 describes the CNN architecture, along with                 the on-the-fly dislocation detection algorithm (ODDA), are able to\par
+the training datasets of the neural network generated from the super\u173?                quantify the approximate dislocation locations from atomic position\par
+position of single (isolated) dislocation stress fields. We present results          information [52,53]. We include the DXA-predicted GBD locations along\par
+for our neural network predictions of GBDs in Section 4, and introduce a             our low- to moderate-tilt-angle grain boundaries in Fig. 1a,b. Predictions\par
+continuum representation of the stress fields of discrete dislocations to            from the Burgers circuit analysis, however, fall short for high angle grain\par
+improve training of our neural network for high-tilt-angle boundaries. In            boundaries (e.g. Fig. 1c) \u8211? the GBDs are no longer distinct defects due to\par
+Section 5, we discuss the implications of our neural network in obtaining            overlapping dislocation cores and the absence of perfect FCC crystal\par
+dislocation representations of grain boundaries, especially in the                   lattice separating the disordered regimes. Nevertheless, since the GBDs\par
+bridging of scales between atomistic (MD, DFT) simulations and DDD                   are fundamental elements of a grain boundary structure that create the\par
+models at the meso-scale. Section 6 concludes with a summary.                        tilt (and twist) misorientation between two crystalline lattices adjoining\par
+                                                                                     the boundary, the observed atomistic grain boundary field stresses and\par
+2. Grain boundary modeling                                                           associated grain boundary tractions [28,29] should originate from these\par
+                                                                                     intrinsic GBDs. Here, we detail the training, validation and testing of a\par
+    While edge dislocations tend to dissociate to form partial dislocations          convolutional neural network (CNN) to establish the dislocation struc\u173?\par
+along <110> grain boundaries [28], dislocations along <001> grain                    tures of low- to high-tilt-angle grain boundaries (output) from the grain\par
+boundaries retain their distinctive edge character and have Burgers                  boundary field stresses (input).\par
+vector perpendicular to the plane of the grain boundary. We create a\par
+series of <001> symmetrical-tilt Cu grain boundary model structures                  3.1. Neural network architecture\par
+using the classical MD simulator LAMMPS [46], where the Embedded\par
+Atom Method (EAM) potential governs the interatomic interactions                         The nonlinear stress fields (\u963?11 , \u963?12 , \u963?22 ) near the grain boundaries\par
+between Cu atoms [47]. This potential closely reproduces the bulk lat\u173?               are fed to a CNN to detect the presence of a GBD within the input images\par
+tice (3.615 \u197?) and elastic constants (C11 = 167 GPa, C12 = 124 GPa, C44              and to predict its (x1 ,x2 ) location. In between the input and output layers\par
+= 76 GPa) of Cu, which are comparable to experimental measurements                   are the hidden layers starting with a convolutional tool made up of many\par
+and tight-binding calculations [48\u8211?50]. We create each bicrystal model               repeated convolution, ReLU activation, and max pooling layers for\par
+structure by first rotating two perfect face-centered-cubic (FCC) Cu                 feature extraction, as depicted in Fig. 2. Similar to previously employed\par
+single crystals by a tilt angle \u177?\u968?2 about the [001] direction (x3 -axis), with       CNNs for image classification [54], each convolution layer is a filter\par
+                                                                                     represented by a matrix of weights, which convolves over the mappings\par
+\par
+                                                                                 2\par
+W. Noh and H.B. Chew                                                                                                      Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+\par
+\par
+Fig. 1. Atomistic configurations of low- (a), moderate- (b), and high-tilt-angle (c) <001> Cu grain boundaries constructed by MD simulations. Atoms are colored\par
+according to the common neighbor analysis: green \u8211? FCC, white \u8211? other coordination structure. Outlined atoms in (b-top) depict example of a Burgers circuit.\par
+Dislocation symbols in (a) and (b) denote predicted dislocation locations from DXA analysis.\par
+\par
+\par
+\par
+\par
+Fig. 2. Architecture of a convolutional neural network (CNN) to detect the presence or absence of dislocations with probability p0 or p1 = 1 \u8722? p0 and predict its\par
+corresponding (x1 , x2 ) location, from the atomistic (\u963? 11 , \u963?12 , \u963? 22 ) stress images within the sliding detection window (red outline).\par
+\par
+\par
+\par
+\par
+Fig. 3. Training of a CNN with pseudo GBD structures. Top: instantiation of randomly-spaced edge dislocations along a grain boundary. Bottom: pseudo grain\par
+boundary stress field from superposing the discrete stress fields of isolated edge dislocations from MD simulations.\par
+\par
+                                                                                3\par
+W. Noh and H.B. Chew                                                                                                               Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+in the previous layer. The ReLU activation layer after each convolution                  dislocation line, but the stress distributions are very different within the\par
+enables the CNN to learn complex functions more efficiently by intro\u173?                    core region.\par
+ducing nonlinearities to the numerical mappings, while the maxpool                           Prior studies have represented the contribution of core effects using\par
+layers reduce the spatial dimensions of the mappings by selecting the                    linear anisotropic elasticity theory with force and dislocation dipoles;\par
+maximum values and provide the translation invariance characteristic of                  this contribution is superposed on the Volterra field to describe the\par
+the CNN. In the final layer of the convolutional tool, we forgo the                      overall dislocation field stresses and strains [33,34]. Here, we directly\par
+maxpool layer because of the limited spatial dimensions of its preceding                 account for both the core and Volterra fields using the MD stress field of\par
+input, and separately connect the final ReLU activation layer to two                     an isolated edge dislocation computed from Virial theorem (Fig. S1b of\par
+parallel and independent fully-connected (FC) layers for dimensionality                  the Supplementary Materials), with Voronoi tessellation cells over each\par
+                                                                                                                                                        2\par
+reduction and feature combination. The first FC layer is subjected to a                  atom. We subdivide this Voronoi stress field into 0.5 \u215? 0.5\u197? pixels, and\par
+softmax activation function, which provides a probabilistic interpreta\u173?                  average the \u963?ij stresses within each pixel. For each 200 \u215? 200\u197? simu\u173?\par
+                                                                                                                                                                    2\par
+\par
+tion of output values through a 2\u215?1 vector with probabilities denoting                   lated \u8220?grain boundary\u8221? structure represented by random spatial distri\u173?\par
+the presence (p0 ) and absence (p1 ) of a dislocation (p0 + p1 = 1). The                 butions of edge dislocations along the x1 -axis (Fig. 3-top), we superpose\par
+second FC layer outputs a 2\u215?1 vector representing the (x1 ,x2 ) location of              the pixelated stresses centered about each edge dislocation to obtain the\par
+the detected GBD; its output is set to a location of (0,0) and ignored in                \u8220?grain boundary\u8221? stress field (Fig. 3-bottom). We train our CNN to\par
+the absence of a dislocation. During training of the CNN, the initially                  predict the presence of a dislocation, and its subsequent location, if the\par
+randomized weights of the model are optimized through back\u173?                                                                                                                2\par
+                                                                                         center core of the dislocation lies within a 20 \u215? 20pixel2 (10 \u215? 10\u197? )\par
+propagation using the Adam\u8217?s optimizer to minimize a two-part loss\par
+                                                                                         sample representing a detection window (Fig. 3-bottom). We also ensure\par
+function, comprising of a cross-entropy loss for the classification prob\u173?\par
+                                                                                         that no more than one dislocation is present within each detection\par
+lem of dislocation detection from the first FC layer, and a smooth L1 loss\par
+                                                                                         window in our training dataset. We remark that the pixel size selected\par
+for the (x1 ,x2 ) dislocation location prediction from the second FC layer,\par
+                                                                                         has to be sufficiently small to capture the features of the object (GBD)\par
+with equal weights assigned to the respective loss components.\par
+                                                                                         being detected, since too large of a pixel would average out the het\u173?\par
+                                                                                         erogeneous stress distributions and cause issues with localization of the\par
+3.2. Training dataset generation\par
+                                                                                         GBDs. However, too small of a pixel would significantly increase the\par
+                                                                                         computational expense to train the CNN. Our heuristic choice of a pixel\par
+    Our input-output training dataset for the CNN is generated by su\u173?\par
+                                                                                         size of 0.5\u215?0.5 \u197?2, which is several-folds smaller than the Voronoi cell\par
+perposing the stress field of individual edge dislocations with random\par
+                                                                                         area, allows the large stress field variations within the core of each GBD\par
+spatial arrangements along the x1 -axis (Fig. 3-top) to create multiple\par
+                                                                                         to be adequately captured. The localization predictions are expected to\par
+instantiations of possible \u8220?grain boundary\u8221? stress fields (Fig. 3-bottom).\par
+                                                                                         have an intrinsic uncertainty of ~0.5\u197?.\par
+The analytical expression for the linear elastic Volterra stress field of\par
+isolated edge dislocations is commonly used to describe dislocation in\u173?\par
+teractions in DDD simulations [31,32]. Aside from the Volterra field,                    3.3. Hyperparameter testing\par
+however, dislocations possess a core field, which can be significant up to\par
+a distance of ten Burgers vector from the dislocation line [33]. We note                     We generate 9000 samples, with an equal split between samples with\par
+that the periodic spacing between GBDs, dp , falls below twice this dis\u173?                 and without dislocations to ensure a balanced dataset. We subdivide\par
+tance even for very low angle grain boundaries (Table 1), suggesting the                 60%, 20%, and 20% of these samples into training, validation, and\par
+importance of core field effects. We further illustrate this by comparing                testing datasets, respectively. To optimize the CNN architecture, we\par
+the stress distributions associated with the Volterra field versus MD field              perform hyperparameter testing by systematically varying the learning\par
+(which incorporates core effects) of an isolated edge dislocation,                       rate, number of convolutional layers, and the type of activation layers;\par
+centered along the x3 -axis, in Figs. S1 and S2 of the Supplementary                     we also perform a limited study on the effects of the max pooling layer\par
+Materials. We observe that the stress contours are generally                             by changing the default kernel (size 2 \u215? 2 and stride 2) only for the third\par
+well-described by the Volterra field after a certain distance from the                   convolution layer (if applicable). We quantify the CNN performance\par
+\par
+Table 1\par
+Detection and localization testing accuracies across grain boundaries with various tilt-angles (\u968? ) of a CNN trained on (a) superposed discrete dislocation stress field and\par
+(b) superposed continuum dislocation stress field.\par
+ \u968? (\u9702? )     dp (\u197?)     Train: Discrete Dislocation Stress Field                                   Train: Continuum Dislocation Stress Field\par
+\par
+                       Detect (%)                         Localize                                Detect (%)                         Localize\par
+\par
+                       True positive    True negative                     \u916?x1 (\u197?)     \u916?x2 (\u197?)     True positive    True negative                       \u916?x1 (\u197?)     \u916?x2 (\u197?)\par
+                                                          \u177?1 \u197? Box (%)                                                               \u177?1 \u197? Box (%)\par
+\par
+ 3.28       63.3       100              81                95              -0.24        0.32       100              99                100                0.26       -0.11\par
+ 3.95       52.4       100              82                95              -0.24        0.33       100              99                100                0.26       -0.11\par
+ 4.24       48.8       100              81                95              -0.24        0.33       100              99                100                0.26       -0.10\par
+ 5.45       38.0       100              81                86              -0.02       -0.14        99              99                 81                0.12       -0.16\par
+ 5.73       36.2       100              82                85              -0.06       -0.08        97              99                 83                0.14       -0.05\par
+ 6.73       30.8       100              84                85              -0.05       -0.21        99              98                 86                0.14       -0.06\par
+ 8.17       25.4       100              83                86              -0.02       -0.13        98              98                 85                0.14       -0.05\par
+ 8.80       23.6       100              83                90               0.03       -0.09       100              98                 85                0.07       -0.10\par
+ 10.39      20.0       100              82                90               0.03       -0.10        95              99                 86                0.19       -0.14\par
+ 11.42      18.2       100              83                90               0.09       -0.02        96              99                 84                0.16       -0.10\par
+ 12.68      16.4       100              84                91               0.14        0.03        96              99                 86                0.10       -0.02\par
+ 14.25      14.6       100              85                96               0.20        0.01        92              99                 85                0.21       -0.12\par
+ 16.26      12.8       100              86                94               0.23        0.01        84              99                 81                0.18       -0.20\par
+ 18.93      11.0       100              89                89               0.08        0.22        87              99                 80                0.10       -0.01\par
+ 22.62       9.2       100              91                89               0.24        0.22        95              98                 80                0.20       -0.01\par
+ 28.06       7.5       100              93                93              -0.27       -0.14       100              97                 95                0.34        0.08\par
+ 36.86       5.7       100              97                 2              -2.01       -1.30       100              97                 94               -0.04       -0.21\par
+ Average               100              85                85              -0.12        0.25        96              98                 88                0.17       -0.09\par
+\par
+\par
+                                                                                     4\par
+W. Noh and H.B. Chew                                                                                                     Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+based on its ability to (a) correctly detect the presence or absence of            (generally, d1 \u8725?= d2 \u8725?\par
+                                                                                                        = d3 \u8230?\u8230? in Fig. 3-top), and superposing the discrete\par
+dislocations within the sampling image (detection accuracy), as well as            (pixelated) MD stress fields for isolated edge dislocations (Fig. 3-bot\u173?\par
+(b) predict the dislocation location within a 4 \u215? 4 pixel2 (2 \u215? 2\u197? )\par
+                                                                          2        tom). Recognizing that the <001> symmetrical-tilt Cu grain boundary\par
+square grid from its core center for samples containing dislocations               structures of interest comprise of only periodic arrays of GBDs with fixed\par
+(localization accuracy). We train each model on the training dataset for           periodicity dp , we repeat the training process outlined in Section 3.3 to\par
+100 epochs and we select the epoch with the lowest validation loss from            train a new CNN based on periodically-distributed edge dislocations\par
+the validation dataset. We further confirm that this validation loss is            along the x1 -axis \u8211? each training data has random but equal GBD spac\u173?\par
+similar to the loss from the testing dataset at the 100 epoch, which               ings (d1 = d2 = d3 \u8230?\u8230? in Fig. 3-top). We find that this new CNN, trained\par
+suggests generalizability of the CNN to unseen data. Results of the                on the periodic dataset, outperforms the previous CNN trained on the\par
+hyperparameter study are summarized in Table S1 of the Supplementary               non-periodic dataset (Section 3.3). We then elucidate the ability of this\par
+Materials. Our studies show that the learning rate is the most critical            newly-trained CNN to accurately detect and quantify the dislocation\par
+hyperparameter (optimal at 1e-5), followed by the number of convolu\u173?               structures of <001> symmetrical-tilt grain boundaries of varying tilt\par
+tional layers (\u8805? 3 layers are necessary). Our final CNN architecture has a         angles, based on the MD-computed grain boundary stresses as the input\par
+learning rate of 1e-5, with 4 convolutional layers, each coupled to a              to the CNN.\par
+ReLU activation layer, followed by a max pooling kernel of size 2 \u215? 2                  We first focus on low- to moderate-tilt-angle grain boundaries of \u968? =\par
+and stride 2, except for the final convolutional layer where the activa\u173?            3.28\u9702? to 22.62\u9702? where the location of GBDs can still be ascertained by\par
+tion layer is separately coupled to two parallel FC layers. Because of the         DXA analysis. However, the resolution of DXA analysis is limited to the\par
+low computational cost of training the neural network (longest runtime             size of the smallest possible Burgers circuit that can be constructed; a\par
+to train a CNN for 100 epochs with a batch size of one is 170.18 minutes           more accurate assessment of the ground truth location for these GBDs\par
+on a 3.70 GHz Intel i9\u8211?10900X processor with 10 cores) and the near-               can be estimated from the inflection point between the maximum tensile\par
+perfect predictive accuracies already achieved with this neural                    and compressive \u963?11 and \u963? 22 stresses along x2 = 0 (Figs. S1 and S2 of the\par
+network architecture, we did not further optimize the remaining                    Supplementary Materials). Based on this \u8220?ground truth\u8221? representation\par
+hyperparameters, such as the type of optimizer, training step size, and            of the GBD locations, we quantify the true positive and true negative\par
+                                                                                                                                               2\par
+accuracy variance in the training cycle.                                           dislocation detection accuracies by sliding a 10 \u215? 10\u197? detection win\u173?\par
+                                                                                                                  2\par
+                                                                                   dow in single pixel (0.5 \u215? 0.5\u197? ) increments along the x1 - and x2 -axis of\par
+4. Results                                                                         each grain boundary structure. For samples where a dislocation is pre\u173?\par
+                                                                                   sent within the detection window, we also compute the localization\par
+4.1. Low to moderate angle grain boundaries                                        error as the average difference between the predicted dislocation loca\u173?\par
+                                                                                   tion and its \u8220?actual\u8221? ground truth location. As summarized in Table 1,\par
+   Our CNN architectures in Section 3.3 are trained on datasets gener\u173?             our CNN trained on the discrete (pixelated) superposed stress field of\par
+ated by randomly positioning edge dislocations along the x1 -axis                  dislocation arrays is able to detect with 100% accuracy the presence of\par
+\par
+\par
+\par
+\par
+Fig. 4. Sampling of detection windows (colored boxes) where true positive edge dislocations are detected for low- (a,b) and moderate-tilt-angle (c,d) grain\par
+boundaries, along with the predicted dislocation locations (corresponding colored dislocation symbols). Green dislocation symbol: average predicted dislocation\par
+location across all positive detection windows. Black box: \u177?2 pixel error bound centered about the actual dislocation location (black cross).\par
+\par
+                                                                               5\par
+W. Noh and H.B. Chew                                                                                                         Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+an edge dislocation across these grain boundary structures, albeit with               Fig. 5, since the superposed fields are used for the training of our CNN.\par
+an observable false positive prediction (~15%). The localization pre\u173?                 We observe minor variations in the localization predictions (green\par
+dictions are surprisingly accurate, with mean location predictions                    dislocation symbols) among neighboring GBDs along each of the\par
+                                             2\par
+residing well within a single 0.5 \u215? 0.5\u197? pixel from the ground truth                  symmetrical-tilt grain boundaries, which we attribute to small trans\u173?\par
+location, which is the current limit of our localization resolution.                  lation of pixels because the grain boundaries modeled in MD do not have\par
+    We show in Fig. 4a a sampling of detection windows for grain                      periodicities that are exactly divisible by the pixel dimension of 0.5 \u197?.\par
+boundaries with varying tilt angles where true positive (colored boxes)               Close examination also shows that the dislocation cores of these super\u173?\par
+dislocations are detected, along with the predicted locations (corre\u173?                 posed fields are slightly more diffused compared to the actual MD grain\par
+sponding colored dislocation symbols) of these detections. We remark                  boundaries, and have a distinct neutral zone within its compressive core.\par
+that the false positive detections are consistently associated with sam\u173?              Our MD simulations show that this neutral zone dissipates for tilt angles\par
+pling windows just outside the \u177?1A\u778? error bound (solid black box)                     of \u968? = 5.45\u9702? and beyond, suggesting some structural changes to the core\par
+centered at the core of the GBD (black cross). Interestingly, the locali\u173?             even at these low tilt angles. The presence of this neutral zone, however,\par
+zation predictions are very accurate, providing a mean GBD location                   has little apparent bearing on the CNN\u8217?s ability to detect and localize the\par
+(green dislocation symbol) that almost overlaps with the actual ground                GBDs.\par
+truth predictions, even at moderate grain boundary tilt angles of \u968? =\par
+16.26\u9702? and 22.62\u9702? (Figs. 4c and 4d). This high accuracy can be attrib\u173?\par
+uted to the generally similar grain boundary stress fields from MD                    4.2. High angle grain boundaries\par
+simulations versus the reconstructed stress fields from superposing the\par
+pixelated MD stress fields of isolated edge dislocations, as shown in                    DXA analysis cannot identify the dislocation structures of high angle\par
+                                                                                      grain boundaries beyond \u968? > 22.62\u9702? , since the cores of the closely-\par
+\par
+\par
+\par
+\par
+Fig. 5. Comparison of the superposed stress fields of isolated dislocations versus the actual grain boundary stress fields from MD simulations for low- and moderate-\par
+tilt-angle grain boundaries. Green dislocation symbol: predicted dislocation location. Black cross: actual dislocation location.\par
+\par
+                                                                                  6\par
+W. Noh and H.B. Chew                                                                                                         Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+spaced GBDs are now overlapping. In contrast, our trained CNN is able                error bound (solid black box) centered at the core of the GBD, which\par
+to detect the presence of GBDs in both the \u968? = 28.06\u9702? and 36.86\u9702? grain               suggests a lack of confidence in the CNN predictions.\par
+boundaries with very high accuracy, as shown in Table 1. While the                       To elucidate the contrasting performance of the CNN towards both\par
+exact GBD location can be ascertained with high confidence for the \u968? =               these high-tilt-angle boundaries, we compare the reconstructed stress\par
+28.06\u9702? grain boundary, poor localization predictions are obtained for                fields of these boundaries from superposition of the periodic GBDs\par
+the \u968? = 36.86\u9702? grain boundary. Figs. 6a and 6b show the sampling of                  versus the actual MD stress fields (Figs. 6c and 6d). Unlike low- to\par
+true positive detection windows (colored boxes) for both these high-tilt-            moderate-tilt-angle grain boundaries, distinct differences are now\par
+angle grain boundaries, along with the corresponding locations of these              observed between the superposed and actual MD grain boundary fields\par
+detected dislocations (colored dislocation symbols). For the \u968? = 28.06\u9702?              for both these high-tilt-angle grain boundaries. For the \u968? = 28.06\u9702? grain\par
+grain boundary, there is surprisingly very limited spread in the predicted           boundary, there is still good general agreement between the superposed\par
+GBD locations, suggesting high accuracy of the CNN even when the cores               and actual MD stress fields within the core of the GBDs, which allows the\par
+are overlapping. In contrast, we observe a huge scatter in dislocation               neural network to correctly localize the GBDs, but the reconstructed\par
+location predictions for the \u968? = 36.86\u9702? grain boundary with average                  field increasingly deviates from the actual MD stress field with radial\par
+predictions (green dislocation symbol) falling well outside of the \u177?1A\u778?              distance from the center cores of these GBDs. For the \u968? = 36.86\u9702? grain\par
+\par
+\par
+\par
+\par
+Fig. 6. High-tilt-angle grain boundaries: (a,b) Sampling of detection windows (colored boxes) where true positive edge dislocations are detected, along with the\par
+predicted dislocation locations (corresponding colored dislocation symbols). Green dislocation symbol: average predicted dislocation location across all positive\par
+detection windows; black box: \u177?2 pixel error bound centered about the actual dislocation location (black cross). (c,d) Comparison of the superposed stress fields of\par
+isolated dislocations versus the actual grain boundary stress fields from MD simulations.\par
+\par
+                                                                                 7\par
+W. Noh and H.B. Chew                                                                                                       Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+boundary, there is now complete lack of correlation between the su\u173?                 associated with positive and negative contours of individual \u963? ij stress\par
+perposed stress field used in the training dataset of the CNN and the               components near the grain boundary is, to a first order, the key feature\par
+actual MD grain boundary field, which explains the poor predictive                  that enables the neural network to pinpoint the exact location of GBDs.\par
+localization performance of the CNN. We attribute the discrepancies                 Accordingly, we delineate the grain boundary stress field into tension\par
+                                                                                                             \u8402? \u8402?\par
+between the superposed and MD fields to: (a) changes to the dislocation             (\u963?ij > 1 GPa), neutral (\u8402?\u963?ij \u8402? \u8804? 1 GPa), and compression (\u963?ij < \u8722? 1 GPa)\par
+core structure with increasing proximity/overlap of the GBDs, and (b)               zones. For grain boundaries with low- and moderate-tilt-angles in Fig. 7,\par
+numerical errors associated with superposition of the discrete stress               we can clearly identify unique stress signatures associated with indi\u173?\par
+fields for isolated edge dislocations used for the training of the CNN. The         vidual GBDs along the boundary which are exhibited by both the MD\par
+former could warrant incorporating the MD fields of closely-spaced but              and superposed fields. For the high-tilt-angle grain boundary with \u968? =\par
+clearly identifiable dislocation structures within the training dataset,            28.06\u9702? in Fig. 8, distinctive tension, neutral and compression zones are\par
+and is discussed in Section 5. The latter contributes to an accumulation            still exhibited by both the MD and superposed \u963? ij field, although some\par
+of error with increasing density of superposed GBDs, and hence is                   background noise is now observed for the latter. This background noise\par
+exacerbated for high-tilt-angle grain boundaries with shorter grain                 permeates the entire superposed stress field for the \u968? = 36.86\u9702? grain\par
+boundary period, dp .                                                               boundary, which clouds the compression-tension stress pattern and the\par
+    One distinct characteristic of GBDs is the clear demarcation between            ability of a CNN to identify the GBD signatures for these high-tilt-angle\par
+tension and compression zones. We theorize that the distinct pattern                boundaries.\par
+\par
+\par
+\par
+\par
+Fig. 7. Tension and compression contours of the grain boundary stress fields from MD versus the superposed discrete and continuum stress fields of isolated dis\u173?\par
+                                                                                                                    \u8402? \u8402?\par
+locations for low- and moderate-tilt-angle grain boundaries. Yellow: \u963? ij > 1 GPa; blue: \u963?ij < \u8722? 1 GPa; pale green: \u8402?\u963? ij \u8402? \u8804? 1 GPa. Green dislocation symbol: CNN\par
+prediction trained on the continuum stress fields.\par
+\par
+                                                                                8\par
+W. Noh and H.B. Chew                                                                                                             Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+\par
+\par
+Fig. 8. Tension and compression contours of the grain boundary stress fields from MD versus the superposed discrete and continuum stress fields of isolated dis\u173?\par
+                                                                                                       \u8402? \u8402?\par
+locations for high-tilt-angle grain boundaries. Yellow: \u963?ij > 1 GPa; blue: \u963? ij < \u8722? 1 GPa; pale green: \u8402?\u963?ij \u8402? \u8804? 1 GPa. Green dislocation symbol: CNN prediction trained on\par
+the continuum stress fields.\par
+\par
+\par
+4.3. Continuum field representation of dislocations                                     isolated edge dislocation with Burgers vector normal to the x1 -axis\par
+                                                                                        generally has equal magnitude but opposite sign about the x2 -axis\par
+       To increase the accuracy of our superposed stress fields in our                  (Figs. S1 and S2 of the Supplementary Materials), except at distances\par
+training dataset for the CNN, we introduce a spectral (field projection)                very close to the dislocation core. This lack of strict enforcement of\par
+method [28\u8211?30] to obtain a continuum-representation of the stress-field                 equilibrium and symmetry constraints for the atomistic (virial) stress\par
+(\u963? cij ) of a single isolated edge dislocation from the discrete atomistic              fields of an isolated dislocation results in significant accumulation of\par
+stress field modeled in MD (\u963?MD                                                         error once we superpose these discrete fields for the training of the CNN,\par
+                             ij ). The 2D continuum stress field can be\par
+represented by a Fourier series,                                                        as shown by the increasing background noise of the superposed fields\par
+                                                                                        with grain boundary tilt-angle in Figs. 7 and 8. Here, we set Q11          11\par
+                                                                                                                                                            0n = S0n =\par
+         M \u8721?\par
+         \u8721?                   (n\u960?x )                        (n\u960?x ) (m\u960?x )                             22                  12            12   12\par
+                                                                                               22                               12\par
+                                                                                         0, Rm0 = Sm0 = 0, and Q0n = Rm0 = S0n = Sm0 = 0 in (2) and (3) to\par
+           N\par
+                                  1      m\u960?x2                   1         2\par
+\u963?cij =             Pijmn sin        sin(      ) + Qijmn sin       cos                                                                \u8747?             \u8747?                  \u8747?\par
+         m=0 n=0\par
+                                L         L                   L         L     (2)       enforce the equilibrium constraints of \u963?11 dx2 = 0, \u963?22 dx1 = 0, and\par
+                    (n\u960?x ) (m\u960?x )                    (n\u960?x ) (m\u960?x )                                 \u8747?\par
+         + Rijmn cos\par
+                           1\par
+                              sin\par
+                                       2\par
+                                          + Sijmn cos\par
+                                                           1\par
+                                                             cos\par
+                                                                      2                 \u963? 12 dx1 = \u963? 12 dx2 = 0, respectively. In addition, we enforce the sym\u173?\par
+                        L           L                    L         L                                                         \u8747?                               11\par
+                                                                                        metry constraint resulting in \u963?11 dx1 \u8776? 0 by setting R11       m0 = Sm0 = 0 in\par
+                                                                                        (2) and (3). We find that the \u963?cij field convergences between N = M =\par
+where (Pijmn ,Qijmn ,Rijmn ,Sijmn ) are the unknown coefficients to be determined\par
+using the orthogonality rule. By approximating \u963? cij \u8773? \u963?MD             when aver\u173?        \u8764?150\u8211?250 terms, and we select N = M = 250 terms in our Fourier\par
+                                                                   ij\par
+                                                                                        construction of \u963?cij . Since \u963? cij is continuous and satisfies the equilibrium\par
+aged over the periodic domain,\par
+                                                                                        equations, we consider (2) to provide a continuum-equivalent repre\u173?\par
+           \u8747?\u8747?\par
+         1 L MD (n\u960? x1 )               m\u960?x2                                             sentation of the combined core and Volterra field of an isolated edge\par
+ Pijmn = 2         \u963? ij sin        sin(      )dx1 dx2\par
+        L      \u8722? L           L           L                                              dislocation.\par
+         1\par
+           \u8747?\u8747? L            (n\u960? x )      m\u960?x2                                                 The periodicity of our Fourier series is defined on the interval ( \u8722? L, L)\par
+                                1\par
+Qijmn = 2\par
+        L\par
+                   \u963?MD\par
+                    ij sin\par
+                             L\par
+                                  cos(\par
+                                         L\par
+                                              )dx1 dx2                                  along both the x1 - and x2 -directions. As such, L has to be sufficiently\par
+                                                                              (3)       large for \u963?MD\par
+                                                                                                   ij to dissipate so that periodic images of the edge dislocation\par
+               \u8722? L\par
+           \u8747?\u8747?\par
+         1 L MD (n\u960?x1 )                 m\u960? x2\par
+Rijmn = 2          \u963?ij cos         sin(       )dx1 dx2                                  through the Fourier series will not influence the stress field in the\par
+        L                     L          L\par
+          \u8747?\u8747?\par
+               \u8722? L\par
+                                                                                        x2 -direction. Along the x1 -axis, however, we seek to superimpose mul\u173?\par
+        1 L MD (n\u960?x1 )                  m\u960?x2                                            tiple equally-spaced edge dislocations (representing the periodic grain\par
+Sijmn = 2         \u963?ij cos         cos(        )dx1 dx2\par
+        L     \u8722? L            L           L                                              boundary spacing dp ) to generate training sets for our CNN. These pe\u173?\par
+    Based on equilibrium conditions, the average normal and shear                       riods will necessarily be significantly shorter than the Fourier period of\par
+tractions along each cross-sectional cut parallel to the x1 - or x2 -axis               2L, and we carefully select the value of L for each training data so that\par
+should be zero for a single edge dislocation with its core centered about               the Fourier representation of the edge dislocation period dp will be\par
+the x3 -axis \u8211? a condition that is clearly not satisfied by our superposed              approximately in discrete multiples of L. This approach allows us to\par
+discrete (pixelated) \u963?ij stress fields, particularly for the high-tilt-angle            superpose the continuum stress field \u963?cij of a significantly reduced set of\par
+grain boundaries in Fig. 8. In addition, the \u963?11 field for a single                     discrete edge dislocations within the bounds of \u8722? L < x1 < L, since the\par
+\par
+\par
+                                                                                    9\par
+W. Noh and H.B. Chew                                                                                                         Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+stress fields of the edge dislocations beyond |x1 | \u8805? L are implicitly                One of the best approaches for establishing dislocation theories of\par
+accounted for with the periodic Fourier representation of \u963?cij .                      plasticity is through atomistic and TEM studies on the interaction be\u173?\par
+    We elucidate the improved accuracy of (2) by comparing the                        tween dislocations and a single grain boundary [30,61]. However,\par
+compression-neutral-tension stress patterns for this continuum field                  scaling these dislocation-grain boundary interaction mechanisms to the\par
+versus the MD field across the low- to high-tilt-angle grain boundaries in            meso-scale (i.e., polycrystalline grain level) with DDD models has been\par
+Figs. 7 and 8. We observe a significant improvement in the GBD field                  challenging, because of the lack of an appropriate descriptor of the grain\par
+representation even for the low- and moderate-tilt-angle boundaries of \u968?              boundary interface. Traditionally, DDD models rely on empirical or\par
+= 11.42\u9702? and 16.26\u9702? in Fig. 7 \u8211? the features associated with the super\u173?               phenomenological rules from lower-scale atomistic calculations and\par
+posed continuum field are in much better agreement with the MD field                  experiments to govern the pile-up of dislocations at grain boundaries\par
+compared to the superposed discrete field. Even for the high-tilt-angle               and the transmission of dislocations through grain boundaries, as well as\par
+boundaries of \u968? = 28.06\u9702? and 36.86\u9702? in Fig. 8, the background noise                   the dependence of these mechanisms on the orientation and character of\par
+in the respective superposed atomistic stress field is now completely                 the grain boundaries [11\u8211?16]. Here, the representation of a grain\par
+suppressed for the superposed continuum field due to the enforced                     boundary with GBDs allows for the explicit modeling of unit\par
+equilibrium and symmetry constraints in the spectral treatment, which                 dislocation-grain boundary interactions in DDD models, and is a critical\par
+allows the distinctive tension-compression features associated with the               step towards plasticity modeling of polycrystalline metals across scales.\par
+GBDs to re-emerge.                                                                        The notion of GBDs as fundamental elements of a grain boundary\par
+    Following the procedure outlined in Section 3, we generate 9000                   structure that create the tilt and twist misorientation adjoining the\par
+samples of the continuum-equivalent stress fields of periodically-spaced              boundary of two crystalline lattices has been well demonstrated by way\par
+edge dislocations for the training, validation, and testing of our CNN,               of atomistic simulations and TEM experiments [19,28,30]. These GBDs\par
+and apply this CNN towards the MD grain boundary models across the                    in turn generate the atomistic field stresses near the grain boundary,\par
+range of \u968? . Our results summarized in Table 1 show that re-training of               which control fundamental mechanistic processes of dislocation emis\u173?\par
+the CNN based on the continuum stress fields of superposed edge dis\u173?                  sion, absorption, and pile-up [28\u8211?30]. Elucidating the dislocation\par
+locations significantly improves the true negative dislocation detections             structure of a boundary from the grain boundary field stresses is there\u173?\par
+(by ~13%) while maintaining high true positive dislocation detection                  fore an inverse problem, which is particularly challenging for\par
+accuracies. The mean localization errors are still mostly within one or               high-tilt-angle grain boundaries due to the overlapping core fields of\par
+two pixels from the core, but the localization predictions for \u968? = 36.86\u9702? ,           adjacent GBDs. Our results show that the presence and location of these\par
+which is the highest tilt angle in Table 1, is markedly improved: ~94%                GBDs across low- to high-tilt-angle grain boundaries can be established\par
+of the correctly predicted dislocations now reside within \u177?1A\u778? of the                 with high confidence using CNNs, trained on a dataset generated by\par
+actual GBD, compared to a mere ~2% when the CNN was trained on the                    superposing the continuum stress fields of unit dislocations. Our pre\u173?\par
+discrete dislocation field.                                                           dictions capture the transition from sparsely-separated dislocations in\par
+    With this improved quality of the training dataset, we show a sam\u173?                low angle grain boundaries, to dislocation clusters with overlapping\par
+pling of the predictions for various sliding detection widows for both \u968?              polymorphic cores in high angle grain boundaries.\par
+= 28.06\u9702? and 36.86\u9702? in Fig. 9. We now obtain very consistent localiza\u173?                    DDD simulations almost universally ignore core effects, and base the\par
+tion predictions with limited scatter for both boundaries; the average                stress field around a dislocation on the analytical linear elastic Volterra\par
+localization predictions of the CNN (green dislocation symbols) are now               solution [11\u8211?16]. However, studies have shown that core effects can be\par
+very close to the actual dislocation location (cross symbol) at the center            significant ~10\u8211?50b (~30\u8211?150 \u197?) from the dislocation line [33]. This\par
+of the error bounding box (black). We further push the limits our CNN                 has motivated the development of analytical solutions for the disloca\u173?\par
+predictions by examining the localization capabilities when applied to a              tion core field as cylindrical dilatations caused by a line defect repre\u173?\par
+grain boundary with a very high tilt angle of \u968? = 53.13\u9702? . While we                   sented by unequal force dipoles, which are in turn superposed on the\par
+cannot ascertain with high confidence the ground truth location of the                Volterra field [34]. We have instead obtained a continuum representa\u173?\par
+GBDs along this particular grain boundary, the scatter in predictions                 tion of the combined core and Volterra field of an isolated edge dislo\u173?\par
+(magenta) across all sliding detection windows is still within reasonable             cation modeled in MD through a spectral method. We find that a CNN,\par
+limits, lending confidence to the average predictions (green dislocation              trained on a dataset generated by superposing the continuum fields of\par
+symbols) as representative of the grain boundary dislocation structure.               randomly-spaced GBDs, is able to accurately quantify the locations of\par
+                                                                                      the GBDs even for very high angle grain boundaries with overlapping\par
+5. Discussions                                                                        core fields. Conversely, we have also trained a CNN based only on the\par
+                                                                                      Volterra analytical fields of superposed GBDs, and our results show\par
+    The multiscale plastic deformation of polycrystalline metals typically            dramatically reduced true positive detection predictions even for\par
+initiates from dislocation mechanisms at the grain boundary [55\u8211?60].                  low-tilt-angle grain boundaries, with an inability of the CNN to localize\par
+                                                                                      the GBDs (Table S2 of the Supplementary Materials).\par
+\par
+\par
+\par
+\par
+Fig. 9. Dislocation structures of high-tilt-angle grain boundaries from CNN trained on the superposed continuum stress fields of isolated dislocations. Colored boxes\par
+and dislocation symbols: sampling of detection windows for true positive edge dislocation with corresponding dislocation locations; black box: \u177?2 pixel error bound\par
+centered about the actual dislocation location (black cross); green dislocation symbol: average predicted dislocation location across all positive detection windows.\par
+\par
+                                                                                 10\par
+W. Noh and H.B. Chew                                                                                                           Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+    Our basic assumption in generating the training dataset is that the                  vidual atoms near the boundary were sequentially removed to compute\par
+principle of superposition holds, and the stress field of the combined                   the pair force between atoms, while correcting for changes to the local\par
+grain boundary structure can be well-represented by the superposed                       electron density caused by atom removal [62]. We have reproduced\par
+stress fields of isolated edge dislocations. This simple assumption ap\u173?                  these atomistic stresses from a DFT model of a symmetrical-tilt\par
+pears to be valid for low- to moderate-tilt-angle grain boundaries, where                \u931?5(310)[001] Cu grain boundary (\u968? = 36.86\u9702? ) in Fig. 10a, which are\par
+the superposed stress fields of the isolated dislocations closely resemble               fed as inputs to our CNN trained on the superposed continuum dislo\u173?\par
+the actual virial stresses of the grain boundaries from MD simulations                   cation fields in Section 4.3. We show that this CNN is able to detect the\par
+(Fig. 5). For high-tilt-angle grain boundaries, however, the superposed                  presence of GBDs with true positive and true negative accuracies of\par
+stress field increasingly deviates from the actual MD stress field with                  100% and 90%, respectively, along with localization accuracies of 95%.\par
+increasing proximity of the GBDs (Fig. 6c,d), which suggests some level                  We include in Fig. 10a a sampling of the true positive detection win\u173?\par
+of core structure changes associated with core-to-core interactions.                     dows, along with the corresponding location of the predicted GBDs from\par
+Nevertheless, the CNN is still able to predict, with high consistency, the               the DFT stress field. Results show that the average GBD location estab\u173?\par
+location of these closely-spaced GBDs in very high-tilt-angle grain                      lished from the DFT stress field (green dislocation symbol) is within\par
+boundaries (Fig. 9). Conceivably, the neural network predictions can be                  ~0.14 \u197? of the average location predicted from the MD stress field in\par
+further improved by incorporating the effects of core structural changes                 Fig. 9b \u8211? we superimpose both these GBD predictions (denoted by green\par
+(as a function of the tilt angle) into the training dataset. To this end, one            and red dislocation symbols, respectively) on a high resolution TEM\par
+possibility is to train the CNN based on the MD stress fields of actual                  image of the same boundary [63] in Fig. 10b. In addition to elucidating\par
+grain boundaries, although this necessitates identifying the dislocation                 the stress state of the grain boundary with atomistic models, experi\u173?\par
+structures of these grain boundaries a priori. We show in Table 2 the                    mental techniques have utilized moving dislocations as mechanical\par
+ability of CNNs, trained on lower tilt-angle grain boundaries (bold en\u173?                  probes, digital image correlation, or dark field in-line holography, to\par
+tries) to predict the dislocation structures of higher tilt-angle grain                  achieve sub-nanometer resolution image-based local strain and stress\par
+boundaries (non-bold entries). Interestingly, the CNN is able to extrap\u173?                 measurements [64\u8211?67]. Recent studies have proposed a hybrid MD-TEM\par
+olate its detection of GBDs in high-tilt-angle grain boundaries with high                approach, using an artificial neural network (ANN) trained on MD data,\par
+accuracy, but its localization extrapolation capabilities are limited only               to quantify the atomistic stresses of a grain boundary from atomic po\u173?\par
+to the nearest few (at times, one or two) neighboring grain boundary                     sition information provided by TEM imaging [39]. Through our neural\par
+models ranked in ascending order of \u968? . Conversely, training the CNN on                  network approach, one can conceivably predict the GBD structures from\par
+very much fewer grain boundary models, but encompassing grain                            the experimental local stress information of these boundaries.\par
+boundaries over a wider range of \u968? , allows for excellent interpolative                      The present analysis for GBD detection and localization is based on\par
+detection and localization capabilities, as shown in Table 3. Even with                  minimum energy symmetrical-tilt <001> grain boundaries, where the\par
+just three grain boundaries within the training dataset (bold entries for                GBDs are known to retain their distinctive edge character with Burgers\par
+CNN-2), the localization predictions on the remaining MD grain                           vector oriented perpendicular to the plane of the grain boundary \u8211? this\par
+boundaries in the testing dataset (non-bold entries) well exceeds 80%                    significantly simplifies the training dataset. Nevertheless, the study\par
+within the interpolative range of \u968? .                                                    demonstrates for the first time the unique ability of CNNs to predict and\par
+    While we base our training/testing datasets in this work on dislo\u173?                   localize GBDs in high-tilt-angle grain boundaries, which have eluded\par
+cation/grain boundary structures modeled with MD simulations, we can                     well-established approaches based on Burgers circuit analysis [52,53].\par
+similarly train or apply the same neural network architecture to other                   Conceivably, the neural network can be extended to also predict the\par
+atomistic models of grain boundaries to predict the corresponding GBD                    Burgers vectors of GBDs in asymmetrical or metastable grain boundaries\par
+structures, as long as a quantifiable measure of the atomistic stress                    [68], localize partial dislocations formed by dissociated GBDs along\par
+tensor (stress-per-atom) near the grain boundary exists. In DFT calcu\u173?                   grain boundaries with different rotation axes (e.g. <110>) [28], or even\par
+lations, a numerical technique termed the sequential atom removal                        quantify the mixed screw and edge character of GBDs in 3D micro\u173?\par
+(SAR) method was developed to reconstruct the equivalent atomistic                       structures, by incorporating the relevant full/partial and edge/screw\par
+(quantum-mechanical) stresses near a grain boundary, in which indi\u173?                      dislocation fields within the training dataset. This systematic extension\par
+\par
+\par
+Table 2\par
+Extrapolative capabilities of a CNN trained on the stress fields of actual MD grain boundaries: Detection and localization training and testing accuracies across grain\par
+boundaries with various tilt-angles (\u968? ). Bold: training dataset. Non-bold: testing dataset.\par
+            CNN-1                                  CNN-2                                    CNN-3                                CNN-4\par
+ \u968? (\u9702? )\par
+            Detect and Localize (%)                Detect and Localize (%)                  Detect and Localize (%)              Detect and Localize (%)\par
+\par
+            True           True         \u177?1 \u197?       True           True         \u177?1 \u197?         True           True       \u177?1 \u197?       True           True          \u177?1 \u197?\par
+            positive       negative     Box        positive       negative     Box          positive       negative   Box        positive       negative      Box\par
+\par
+    3.28    100            100          95         100            100          88           100            100         95        100            100           100\par
+    3.95    100            100          95         100            100          89           100            100         95        100            100           100\par
+    4.24    100            100          95         100            100          90           100            100         95        100            100           100\par
+    5.45     99            100          97         100            100          91           100            100         96        100            100            99\par
+    5.73     99            100          93         100            100          90           100            100         96        100            100            98\par
+    6.73    100            100          96         100            100          94           100            100         97        100            100           100\par
+    8.17    100            100          94          99            100          92           100            100         96        100            100            99\par
+    8.80     94            100          94          97            100          95           100            100        100         99            100           100\par
+    10.39    93            100          87          96            100          92            99            100         99         99            100            99\par
+    11.42    99            100          90          95            100          89           100            100         98        100            100            99\par
+    12.68    99            100          88          93            100          86           100            100         96        100            100           100\par
+    14.25    93             99          79          96            100          79            91             99         95        100            100            99\par
+    16.26    89             99          47          88            100          66            81             99         75         96            100            99\par
+    18.93    93            100          32          74            100          67            83            100         52        100            100           100\par
+    22.62    96            100          17          74            100          49            78            100         33        100            100            99\par
+    28.06    94             98          13          78            100          46            82             99          3         95             99            87\par
+    36.86    97             99          21          71            100          20            79            100          1         97            100            10\par
+\par
+\par
+                                                                                    11\par
+W. Noh and H.B. Chew                                                                                                           Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+Table 3\par
+Interpolative capabilities of a CNN trained on the stress fields of actual MD grain boundaries: Detection and localization training and testing accuracies across grain\par
+boundaries with various tilt-angles (\u968? ). Bold: training dataset. Non-bold: testing dataset.\par
+               CNN-1                                               CNN-2                                               CNN-3\par
+ \u968? (\u9702? )\par
+               Detect and Localize (%)                             Detect and Localize (%)                             Detect and Localize (%)\par
+\par
+               True positive       True negative    \u177?1 \u197? Box       True positive        True negative   \u177?1 \u197? Box       True positive       True negative     \u177?1 \u197? Box\par
+\par
+    3.28       100                 100               94            100                  100              94            100                 100                95\par
+    3.95       100                 100               94            100                  100              95            100                 100                96\par
+    4.24       100                 100               94            100                  100              95            100                 100                96\par
+    5.45        85                 100               57             92                  100              91            100                 100                95\par
+    5.73        84                 100               55             89                  100              91            100                 100                95\par
+    6.73        88                 100               60             93                  100              93            100                 100                93\par
+    8.17        88                 100               65             94                  100              93             97                 100                95\par
+    8.80        84                 100               68            100                  100              94            100                 100                95\par
+    10.39       85                 100               74             99                  100              92             99                 100                99\par
+    11.42       88                 100               75             94                  100              94             95                 100                98\par
+    12.68       91                 100               80             94                   99              94             95                  99                96\par
+    14.25       88                  99               76             98                  100              90            100                 100                99\par
+    16.26       94                  97               65             94                   97              84             96                 100                93\par
+    18.93      100                  99               80             99                   99              85             95                 100                91\par
+    22.62      100                 100              100            100                  100             100            100                 100               100\par
+    28.06       95                  99               97             95                   99              88             95                  99                91\par
+    36.86       95                 100                6             89                  100              10             94                 100                23\par
+\par
+\par
+\par
+\par
+Fig. 10. DFT computations of GBDs for high-tilt-angle grain boundary with \u968? = 36.86\u9702? . (a) Stress-per-atom computations, with colored boxes and dislocation\par
+symbols denoting sampling of detection windows for true positive edge dislocations with corresponding dislocation locations; black box: \u177?2 pixel error bound\par
+centered about the actual dislocation location (black cross). (b) Comparison of DFT, TEM, and MD grain boundary structures; green and red dislocation symbols:\par
+average predicted dislocation location from DFT- and MD-generated grain boundaries across all positive detection windows.\par
+\par
+\par
+of the CNN towards more realistic microstructures is a subject of future                tilt-angle grain boundaries with overlapping core fields. This machine\par
+work.                                                                                   learning approach of detecting the presence and identifying the loca\u173?\par
+                                                                                        tions of dislocations with sub-angstrom accuracies is a significant\par
+6. Conclusion                                                                           improvement over prior approaches based on Burgers circuit analysis,\par
+                                                                                        which is typically limited to low- and moderate-tilt-angle grain bound\u173?\par
+   We have demonstrated the high accuracy of CNNs in quantifying the                    aries with no overlapping cores. This representation of the atomistic\par
+edge dislocation structures across a series of <001> symmetrical-tilt Cu                structures of grain boundaries, in terms of unit dislocations as funda\u173?\par
+grain boundaries. We show that a training dataset generated from the                    mental elements of the boundary, paves the way for the bridging of\par
+superposed MD stress fields of individual dislocations allows the CNN to                scales between MD or DFT models of grain boundaries and mesoscale\par
+predict the GBD structures across a wide range of tilt angles. Training the             DDD calculations. Such accurate quantification of the dislocation\par
+CNN on continuum representations of the superposed dislocation field,                   structures of grain boundaries, and hence the local strain distributions,\par
+constrained to satisfy equilibrium and symmetry conditions, further                     provides rich fundamental insights into the underpinning dislocation\par
+improves the localization accuracy, particularly when applied to high-                  mechanics to enable grain boundary engineering.\par
+\par
+\par
+                                                                                   12\par
+W. Noh and H.B. Chew                                                                                                                           Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+\par
+CRediT authorship contribution statement                                                         [18] D.L. Medlin, S.M. Foiles, D. Cohen, A dislocation-based description of grain\par
+                                                                                                      boundary dissociation: Application to a 90\u9702? <110> tilt boundary in gold, Acta\par
+                                                                                                      Mater. 49 (2001) 3689\u8211?3697.\par
+   William Noh: Writing \u8211? review & editing, Writing \u8211? original draft,                            [19] R.G. Hoagland, S.M. Valone, Emission of dislocations from grain boundaries by\par
+Methodology, Investigation, Formal analysis, Data curation. Huck Beng                                 grain boundary dissociation, Philos. Mag. 95 (2015) 112\u8211?131.\par
+Chew: Writing \u8211? review & editing, Writing \u8211? original draft, Supervision,                         [20] W.T. Read, W. Shockley, Dislocation models of crystal grain boundaries, Phys. Rev.\par
+                                                                                                      78 (1950) 275\u8211?289.\par
+Funding acquisition, Formal analysis, Conceptualization.                                         [21] A.P. Sutton, Grain-boundary structure, Int. Met. Rev. 29 (1984) 377\u8211?404.\par
+                                                                                                 [22] A.P. Sutton, V. Vitek, On the structure of tilt grain boundaries in cubic metals I.\par
+                                                                                                      Symmetrical tilt boundaries, Philos. Trans. R. Soc. Lond. A 309 (1983) 1\u8211?36.\par
+Declaration of Competing Interest                                                                [23] A.P. Sutton, V. Vitek, On the structure of tilt grain boundaries in cubic metals II.\par
+                                                                                                      Asymmetrical tilt boundaries, Philos. Trans. R. Soc. Lond. A 309 (1983) 37\u8211?54.\par
+    The authors declare that they have no known competing financial                              [24] A.P. Sutton, V. Vitek, On the structure of tilt grain boundaries in cubic metals. III.\par
+                                                                                                      Generalizations of the structural study and implications for the properties of grain\par
+interests or personal relationships that could have appeared to influence                             boundaries, Philos. Trans. R. Soc. Lond. A 309 (1983) 55\u8211?68.\par
+the work reported in this paper.                                                                 [25] G.H. Bishop, B. Chalmers, A coincidence-ledge-dislocation description of grain\par
+                                                                                                      boundaries, Scr. Metall. 2 (1968) 133\u8211?139.\par
+                                                                                                 [26] J. Han, V. Vitek, D.J. Srolovitz, The grain-boundary structural unit model redux,\par
+Data availability\par
+                                                                                                      Acta Mater. 133 (2017) 186\u8211?199.\par
+                                                                                                 [27] M.A. Tschopp, D.L. McDowell, Tension-compression asymmetry in homogeneous\par
+    Data will be made available on request.                                                           dislocation nucleation in single crystal copper, Appl. Phys. Lett. 90 (2007) 121916.\par
+                                                                                                 [28] R. Li, H.B. Chew, Grain boundary traction signatures: quantifying the asymmetrical\par
+                                                                                                      dislocation emission processes under tension and compression, J. Mech. Phys.\par
+Acknowledgements                                                                                      Solids 103 (2017) 142\u8211?154.\par
+                                                                                                 [29] R. Li, H.B. Chew, Grain boundary traction signatures: quantitative predictors of\par
+                                                                                                      dislocation emission, Phys. Rev. Lett. 117 (2016) 085502.\par
+   This work is supported by AFOSR Aerospace Materials for Extreme\par
+                                                                                                 [30] S. Mohan, R. Li, H.B. Chew, Local stress analysis of partial dislocation interactions\par
+Environment Program under Award No. FA9550-19-1-0242, as well as                                      with symmetrical-tilt grain boundaries containing E-structural units, Philos. Mag.\par
+the National Science Foundation (NSF) under Award Nos. NSF-DMR-18-                                    98 (2018) 2345\u8211?2366.\par
+09696 and NSF-CMMI-2009684. WN acknowledges the support of a                                     [31] T.A. Khraishi, J.P. Hirth, H.M. Zbib, T. Diaz, de La Rubia, The stress field of a\par
+                                                                                                      general circular Volterra dislocation loop: analytical and numerical approaches,\par
+DIGI-MAT graduate fellowship based upon work supported by NSF                                         Philos. Mag. Lett. 80 (2010) 95\u8211?105.\par
+under Grant No. 1922758. We also acknowledge the use of the Advanced                             [32] D. Hull, D.J. Bacon, Introduction to Dislocations, fifth ed. Elsevier, 2011.\par
+Cyberinfrastructure Coordination Ecosystem: Services & Support (AC\u173?                              [33] C.H. Henager Jr, R.G. Hoagland, R.G, Dislocation core fields and forces in FCC\par
+                                                                                                      metals, Scr. Mater. 50 (2004) 1091\u8211?1095.\par
+CESS) through allocations MAT230069, MAT210031, and MAT230055,                                   [34] C.H. Henager Jr, R.G. Hoagland, Dislocation and stacking fault core fields in FCC\par
+and TACC Frontera through allocation MSS22006.                                                        metals, Philos. Mag. 85 (2005) 4477\u8211?4508.\par
+                                                                                                 [35] Q. Zhu, A. Samanta, B. Li, R.E. Rudd, T. Frolov, Predicting phase behavior of grain\par
+                                                                                                      boundaries with evolutionary search and machine learning, Nat. Commun. 9\par
+Appendix A. Supporting information                                                                    (2018) 467.\par
+                                                                                                 [36] E.R. Homer, D.M. Hensley, C.W. Rosenbrock, A.H. Nguyen, G.L. Hart, Machine-\par
+   Supplementary data associated with this article can be found in the                                learning informed representations for grain boundary structures, Front. Mater. 6\par
+                                                                                                      (2019) 168.\par
+online version at doi:10.1016/j.eml.2024.102138.                                                 [37] L. Huber, R. Hadian, B. Grabowski, J. Neugebauer, A machine learning approach to\par
+                                                                                                      model solute grain boundary segregation, Npj Comput. Mater. 4 (2018) 1\u8211?8.\par
+References                                                                                       [38] S. Zhang, L. Wang, G. Zhu, M. Diehl, A. Maldar, X. Shang, X. Zeng, Predicting grain\par
+                                                                                                      boundary damage by machine learning, Int. J. Plast. 150 (2022) 103186.\par
+                                                                                                 [39] Y. Cui, H.B. Chew, Machine-learning prediction of atomistic stress along grain\par
+ [1] J. Kacher, B.P. Eftink, B. Cui, I.M. Robertson, Dislocation interactions with grain\par
+                                                                                                      boundaries, Acta Mater. 222 (2022) 117387.\par
+     boundaries, Curr. Opin. Solid State Mater. Sci. 18 (2014) 227\u8211?243.\par
+                                                                                                 [40] F.T. Latypov, E.V. Fomin, V.S. Krasnikov, A.E. Mayer, Dynamic compaction of\par
+ [2] J. Schi\u248?tz, K.W. Jacobsen, A maximum in the strength of nanocrystalline copper,\par
+                                                                                                      aluminum with nanopores of varied shape: MD simulations and machine-learning-\par
+     Science 301 (2003) 1357\u8211?1359.\par
+                                                                                                      based approximation of deformation behavior, Int. J. Plast. 156 (2022) 103363.\par
+ [3] M.A. Meyers, A. Mishra, D.J. Benson, Mechanical properties of nanocrystalline\par
+                                                                                                 [41] D.P. Jang, P. Fazily, J.W. Yoon, Machine learning-based constitutive model for J2-\par
+     materials, Prog. Mater. Sci. 51 (2006) 427\u8211?556.\par
+                                                                                                      plasticity, Int. J. Plast. 138 (2021) 102919.\par
+ [4] V. Yamakov, D. Wolf, S.R. Phillpot, A.K. Mukherjee, H. Gleiter, Dislocation\par
+                                                                                                 [42] W. Muhammad, A.P. Brahme, O. Ibragimova, J. Kang, K. Inal, A machine learning\par
+     processes in the deformation of nanocrystalline aluminum by molecular dynamics\par
+                                                                                                      framework to predict local strain distribution and the evolution of plastic\par
+     simulation, Nat. Mater. 1 (2002) 45\u8211?49.\par
+                                                                                                      anisotropy and fracture in additively manufactured alloys, Int. J. Plast. 136 (2021)\par
+ [5] Z. Shan, E.A. Stach, J.M.K. Wiezorek, J.A. Knapp, D.M. Follstaedt, S.X. Mao, Grain\par
+                                                                                                      102867.\par
+     boundary-mediated plasticity in nanocrystalline nickel, Science 305 (2004)\par
+                                                                                                 [43] A. Mangal, E.A. Holm, Applied machine learning to predict stress hotspots I: face\par
+     654\u8211?657.\par
+                                                                                                      centered cubic materials, Int. J. Plast. 111 (2018) 122\u8211?134.\par
+ [6] X. Li, Y. Wei, L. Lu, K. Lu, H. Gao, Dislocation nucleation governed softening and\par
+                                                                                                 [44] X. Li, C.C. Roth, D. Mohr, Machine-learning based temperature- and rate-\par
+     maximum strength in nano-twinned metals, Nature 464 (2010) 877\u8211?880.\par
+                                                                                                      dependent plasticity model: application to analysis of fracture experiments on DP\par
+ [7] R. Li, H.B. Chew, Deformation twinning and plastic recovery in Cu/Ag nanolayers\par
+                                                                                                      steel, Int. J. Plast. 118 (2019) 320\u8211?344.\par
+     under uniaxial tensile straining, Philos. Mag. Lett. 94 (2014) 260\u8211?268.\par
+                                                                                                 [45] J. Chapman, R. Batra, R. Ramprasad, Machine learning models for the prediction of\par
+ [8] R. Li, H.B. Chew, Planar-to-wavy transition of Cu\u8211?Ag nanolayered metals: a\par
+                                                                                                      energy, forces, and stresses for Platinum, Comput. Mater. Sci. 174 (2020) 109483.\par
+     precursor mechanism to twinning, Philos. Mag. 95 (2015) 1029\u8211?1048.\par
+                                                                                                 [46] A.P. Thompson, H.M. Aktulga, R. Berger, D.S. Bolintineanu, W.M. Brown, P.\par
+ [9] R. Li, H.B. Chew, Closed and open-ended stacking fault tetrahedra formation along\par
+                                                                                                      S. Crozier, P.J. in \u8217?t Veld, A. Kohlmeyer, S.G. Moore, T.D. Nguyen, R. Shan, M.\par
+     the interfaces of Cu\u8211?Al nanolayered metals, Philos. Mag. 95 (2015) 2747\u8211?2763.\par
+                                                                                                      J. Stevens, J. Tranchida, C. Trott, S.J. Plimpton, LAMMPS \u8211? a flexible simulation\par
+[10] D.V. Bachurin, D. Weygand, P. Gumbsch, Dislocation\u8211?grain boundary interaction\par
+                                                                                                      tool for particle-based materials modeling at the atomic, meso, and continuum\par
+     in <111> textured thin metal films, Acta Mater. 58 (2010) 5232\u8211?5241.\par
+                                                                                                      scales, Comp, Phys. Comm. 271 (2022) 108171.\par
+[11] M. Huang, S. Huang, S. Liang, Y. Zhu, Z. Li, An efficient 2D discrete dislocation\par
+                                                                                                 [47] S.M. Foiles, M.I. Baskes, M.S. Daw, Embedded-atom-method functions for the fcc\par
+     dynamics-XFEM coupling framework and its application to polycrystal plasticity,\par
+                                                                                                      metals Cu, Ag, Au, Ni, Pd, Pt, and their alloys, Phys. Rev. B 33 (1986) 7983.\par
+     Int. J. Plast. 127 (2020) 102647.\par
+                                                                                                 [48] F. Cleri, V. Rosato, Tight-binding potentials for transition metals and alloys, Phys.\par
+[12] S.S. Quek, Z. Wu, Y.W. Zhang, D.J. Srolovitz, Polycrystal deformation in a discrete\par
+                                                                                                      Rev. B 48 (1993) 22.\par
+     dislocation dynamics framework, Acta Mater. 75 (2014) 92\u8211?105.\par
+                                                                                                 [49] N.W. Ashcroft, N.D. Mermin, Solid State Physics, Holt, Rinehart, and Winston, New\par
+[13] R. Kumar, F. Sze\u769?kely, E. Van Der Giessen, Modelling dislocation transmission\par
+                                                                                                      York, 1976.\par
+     across tilt grain boundaries in 2D, Comput. Mater. Sci. 49 (2010) 46\u8211?54.\par
+                                                                                                 [50] G. Simmons, H. Wang, Single Crystal Elastic Constants and Calculated Aggregated\par
+[14] N. Ahmed, A. Hartmaier, Mechanisms of grain boundary softening and strain-rate\par
+                                                                                                      Properties: A Hand Book, MIT Press, Cambridge, 1971.\par
+     sensitivity in deformation of ultrafine-grained metals at high temperatures, Acta\par
+                                                                                                 [51] J.P. Hirth, R.C. Pond, R.G. Hoagland, X.-Y. Liu, J. Wang, Interface defects,\par
+     Mater. 59 (2011) 4323\u8211?4334.\par
+                                                                                                      reference spaces and the Frank\u8211?Bilby equation, Prog. Mater. Sci. 58 (2013)\par
+[15] C. Zhou, R. LeSar, Dislocation dynamics simulations of plasticity in polycrystalline\par
+                                                                                                      749\u8211?823.\par
+     thin films, Int. J. Plast. 30-31 (2012) 185\u8211?201.\par
+                                                                                                 [52] A. Stukowski, Visualization and analysis of atomistic simulation data with\par
+[16] X. Zhang, S. Lu, B. Zhang, X. Tian, Q. Kan, G. Kang, Dislocation\u8211?grain boundary\par
+                                                                                                      OVITO\u8211?the Open Visualization Tool, Model. Simul. Mater. Sci. Eng. 18 (2010)\par
+     interaction-based discrete dislocation dynamics modeling and its application to\par
+                                                                                                      015012.\par
+     bicrystals with different misorientations, Acta Mater. 202 (2021) 88\u8211?98.\par
+                                                                                                 [53] A. Stukowski, K. Albe, Extracting dislocations and non-dislocation crystal defects\par
+[17] J.W. Cahn, Y. Mishin, A. Suzuki, Duality of dislocation content of grain boundaries,\par
+                                                                                                      from atomistic simulation data, Model. Simul. Mater. Sci. Eng. 18 (2010) 085001.\par
+     Philos. Mag. 86 (2006) 3965\u8211?3980.\par
+\par
+\par
+                                                                                            13\par
+W. Noh and H.B. Chew                                                                                                                              Extreme Mechanics Letters 68 (2024) 102138\par
+\par
+[54] L. Alzubaidi, J. Zhang, A.J. Humaidi, A. Al-Dujaili, Y. Duan, O. Al-Shamma,                     [61] M.D. Sangid, H.J. Maier, H. Sehitoglu, The role of grain boundaries on fatigue\par
+     J. Santamaria, M.A. Fadhel, M. Al-Amidie, L. Farhan, Review of deep learning:                        crack initiation \u8211? an energy approach, Int. J. Plast. 27 (2011) 801\u8211?821.\par
+     concepts, CNN architectures, challenges, applications, future directions, J. Big Data           [62] Y. Cui, H.B. Chew, A simple numerical approach for reconstructing the atomic\par
+     8 (2021) 53.                                                                                         stresses at grain boundaries from quantum-mechanical calculations, J. Chem. Phys.\par
+[55] D.L. McDowell, A perspective on trends in multiscale plasticity, Int. J. Plast. 26                   150 (2019) 144702.\par
+     (2010) 1280\u8211?1309.                                                                               [63] G. Duscher, M. Chisholm, U. Alber, M. R\u252?hle, Bismuth-induced embrittlement of\par
+[56] G.J. Tucker, D.L. McDowell, Non-equilibrium grain boundary structure and                             copper grain boundaries, Na. Mater. 3 (2004) 621\u8211?626.\par
+     inelastic deformation using atomistic simulations, Int. J. Plast. 27 (2011) 841\u8211?857.            [64] C.T. Koch, V.B. O\u776?zdo\u776?l, P.A.Van Aken, An efficient, simple, and precise way to map\par
+[57] G.J. Tucker, S.M. Foiles, Quantifying the influence of twin boundaries on the                        strain with nanometer resolution in semiconductor devices, Appl. Phys. Lett. 96\par
+     deformation of nanocrystalline copper using atomistic simulations, Int. J. Plast. 65                 (2010) 091901.\par
+     (2015) 191\u8211?205.                                                                                 [65] M. H\u255?tch, F. Houdellier, F. H\u252?e, E. Snoeck, Nanoscale holographic interferometry\par
+[58] Q. Huang, Q. Zhao, H. Zhou, W. Yang, Misorientation-dependent transition                             for strain measurements in electronic devices, Nature 453 (2008) 1086\u8211?1089.\par
+     between grain boundary migration and sliding in FCC metals, Int. J. Plast. 159                  [66] A. Be\u769?che\u769?, J.L. Rouvie\u768?re, J.P. Barnes, D. Cooper, Strain measurement at the\par
+     (2022) 103466.                                                                                       nanoscale: comparison between convergent beam electron diffraction, nano-beam\par
+[59] E.N. Borodin, A.E. Mayer, M. Yu Gutkin, Coupled model for grain rotation,                            electron diffraction, high resolution imaging and dark field electron holography,\par
+     dislocation plasticity and grain boundary sliding in fine-grained solids, Int. J. Plast.             Ultramicroscopy 131 (2013) 10\u8211?23.\par
+     134 (2020) 102776.                                                                              [67] M. Legros, In situ mechanical TEM: seeing and measuring under stress with\par
+[60] H. Lim, M.G. Lee, J.H. Kim, B.L. Adams, R.H. Wagoner, Simulation of polycrystal                      electrons, Comptes Rendus Phys. 15 (2014) 224\u8211?240.\par
+     deformation with grain and grain boundary effects, Int. J. Plast. 27 (2011)                     [68] J. Han, V. Vitek, D.J. Srolovitz, Grain-boundary metastability and its statistical\par
+     1328\u8211?1354.                                                                                           properties, Acta Mater. 104 (2016) 259\u8211?273.\par
+\par
+\par
+\par
+\par
+                                                                                                14\par
+
+}

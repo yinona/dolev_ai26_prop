@@ -1,0 +1,478 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+                                        PHYSICAL REVIEW E 97, 043002 (2018)\par
+\par
+\par
+\par
+                               Thermodynamic dislocation theory: Bauschinger effect\par
+\par
+                                                          K. C. Le and T. M. Tran\par
+                     Lehrstuhl f\u252?r Mechanik\u8211?Materialtheorie, Ruhr-Universit\u228?t Bochum, D-44780 Bochum, Germany\par
+\par
+                                                (Received 12 March 2018; published 23 April 2018)\par
+\par
+                 The thermodynamic dislocation theory developed for nonuniform plastic deformations is used here to simulate\par
+              the stress-strain curves for crystals subjected to antiplane shear-controlled load reversal. We show that the presence\par
+              of the positive back stress during the load reversal reduces the magnitude of shear stress required to pull excess\par
+              dislocations back to the center of the specimen. There, the excess dislocations of opposite signs meet and annihilate\par
+              each other leading to the Bauschinger effect.\par
+\par
+              DOI: 10.1103/PhysRevE.97.043002\par
+\par
+\par
+\par
+                      I. INTRODUCTION                                      and strain rate, and thus to be key ingredients of the theory.\par
+                                                                           In Sec. III we discretize the obtained system of governing\par
+    The thermodynamic dislocation theory (TDT), proposed\par
+                                                                           equations and develop the numerical method for its solution.\par
+initially by Langer, Bouchbinder, and Lookman [1] and\par
+                                                                           The results of numerical simulations as well as the physical\par
+developed further in [2\u8211?7], deals with the uniform plastic\par
+                                                                           explanation of the Bauschinger effect are presented in Sec. IV.\par
+deformations of crystals driven by a constant strain rate. During\par
+                                                                           We conclude in Sec. V with some remarks about the signifi-\par
+these uniform plastic deformations the crystal may have only\par
+                                                                           cance of these calculations.\par
+redundant dislocations whose resultant Burgers vector van-\par
+ishes. As shown in [8,9], the extension of TDT to nonuniform\par
+plastic deformations should account for excess dislocations                                   II. EQUATIONS OF MOTION\par
+due to the incompatibility of the plastic distortion [10]. In all\par
+                                                                              Suppose, for simplicity, that the single crystal beam has a\par
+studies mentioned above, only the case of proportional loading\par
+                                                                           rectangular cross section, of width c and height h, that lies\par
+in one direction with the constant strain rate is considered.\par
+                                                                           in the (x,y) plane. This crystal beam is placed in a \u8220?hard\par
+The purpose of this paper is to explore use of TDT for\par
+                                                                           device\u8221? such that at its side boundary the displacement in the\par
+nonuniform plastic deformations [8,9] in modeling crystals\par
+                                                                           z direction is prescribed: w = \u947? (t)y, with \u947? (t) being the shear\par
+subjected to loading, unloading, and further loading in the\par
+                                                                           strain regarded as a control parameter (see Fig. 1). Under this\par
+opposite direction in the antiplane shear mode. Our challenge is\par
+                                                                           condition, dislocations cannot reach the boundary, as otherwise\par
+to simulate the stress strain curves exhibiting the Bauschinger\par
+                                                                           the steps formed by them (equal to the length of the Burgers\par
+effect and explain these based on the physical mechanism of\par
+                                                                           vector) would contradict the smoothness of the displacement\par
+movement and annihilation of excess dislocations during the\par
+                                                                           specified there. In this sense, the \u8220?hard\u8221? boundary conditions\par
+load reversal.\par
+                                                                           model the grain boundaries that serve as obstacles and prevent\par
+    The thermodynamic dislocation theory is based on two\par
+                                                                           dislocations to leave the grain. If h  c, we may neglect the\par
+unconventional ideas. The first of these is that, under nonequi-\par
+                                                                           end effect near y = 0 and y = h and assume that all state\par
+librium conditions, the atomically slow configurational de-\par
+                                                                           variables depend only on the spatial coordinate x.\par
+grees of freedom of dislocated crystals are characterized by an\par
+                                                                              Now, let this system be driven at a constant shear rate\par
+effective disorder temperature that differs from the ordinary\par
+                                                                           \u947?\u775? \u8801? q0 /t0 , where t0 is a characteristic microscopic time scale.\par
+kinetic-vibrational temperature. Both of these temperatures\par
+                                                                           Because the system is undergoing steady-state antiplane shear,\par
+are thermodynamically well defined variables whose equa-\par
+                                                                           we can replace the time t by the total strain \u947? so that t0 \u8706?/\u8706?t \u8594?\par
+tions of motion determine the irreversible behaviors of these\par
+                                                                           q0 \u8706?/\u8706?\u947? . The equation of motion for the flow stress becomes\par
+systems. The second principal idea is that entanglement of\par
+dislocations is the overwhelmingly dominant cause of resis-                                                            \par
+                                                                                                 \u8706?\u964?Y              q(\u947? )\par
+tance to deformation in crystals. These two ideas have led                                             =\u956? 1\u8722?             ,               (2.1)\par
+                                                                                                 \u8706?\u947?                 q0\par
+to successfully predictive theories of strain hardening [1,2],\par
+steady-state stresses over exceedingly wide ranges of strain               with \u956? being the shear modulus. Note that, for the uniform\par
+rates [1], thermal softening during deformation [6], yielding              plastic deformation involving only redundant dislocations,\par
+transitions between elastic and plastic responses [3,5], and               q(\u947? )/t0 equals the plastic shear rate \u946?\u775?, with \u946? being the\par
+shear banding instabilities [4,7].                                         uniform plastic distortion, but in general when \u946? is nonuniform\par
+    We start in Sec. II with a brief annotated summary of                  it is not necessarily so.\par
+the equations of motion to be used here. Our focus is on                       The state variables that describe this system are the elastic\par
+the physical significance of the various parameters that occur             strain \u947? \u8722? \u946?, the areal densities of redundant dislocations \u961?r\par
+in them. We discuss which of these parameters are expected                 and excess dislocations \u961?g \u8801? |\u946?,x |/b (where b is the length\par
+to be material-specific constants, independent of temperature              of the Burgers vector), and the effective disorder temperature\par
+\par
+2470-0045/2018/97(4)/043002(7)                                     043002-1                                    \u169?2018 American Physical Society\par
+K. C. LE AND T. M. TRAN                                                                        PHYSICAL REVIEW E 97, 043002 (2018)\par
+\par
+\par
+                                         y                             and a denoting the average spacing between dislocations in the\par
+                                                                       limit of infinite \u967? (a is a length of the order of tens of atomic\par
+                                                                       spacings). The coefficient K\u961? is an energy conversion factor\par
+                                                                       that, according to arguments presented in [1] and [4], should\par
+                                                                       be independent of both strain rate and temperature. The other\par
+                                                                       quantity that appears in the prefactor in Eq. (2.3) is\par
+                                                                                                               \u8730? \par
+               \u947?h                                                                 \u957?(\u952?,\u961?,q0 ) \u8801? ln\par
+                                                                                                      1\par
+                                                                                                         \u8722? ln ln\par
+                                                                                                                    b \u961?\par
+                                                       x                                              \u952?               q0\par
+                                                                                                                             .      (2.4)\par
+\par
+                             h                                            The equation of motion for the effective temperature \u967?\par
+                                        L                              is a statement of the first law of thermodynamics for the\par
+                                                                       configurational subsystem:\par
+                       c                                                                \u8706?\u967?       \u964?Y eD q\par
+                                                                                                         \par
+                                                                                                              \u967?\par
+                                                                                                                 \par
+          z                                                                             \u8706?\u947?\par
+                                                                                           =K\par
+                                                                                                  \u956? q0\par
+                                                                                                          1\u8722?\par
+                                                                                                              \u967?0\par
+                                                                                                                  .         (2.5)\par
+\par
+               FIG. 1. Antiplane constrained shear.                    Here, \u967?0 is the steady-state value of \u967? for strain rates ap-\par
+                                                                       preciably smaller than inverse atomic relaxation times, i.e.,\par
+\u967? (cf. [3,11]). All four quantities, \u947? \u8722? \u946?, \u961?r , \u961?g , and \u967? , are      much smaller than t0\u8722?1 . The dimensionless factor K is inversely\par
+functions of \u947? .                                                       proportional to the effective specific heat ceff . Unlike K\u961? , there\par
+    The central, dislocation-specific ingredient of this analysis      is no reason to believe that K is a rate-independent constant. In\par
+is the thermally activated depinning formula for q as a function       [5], K for copper was found to decrease from 17 to 12 when the\par
+of a flow stress \u964?Y and a total dislocation density \u961? = \u961?r + \u961?g :      strain rate increased by a factor of 106 . Since we shall consider\par
+                         \u8730?                                             changes in strain rate of at most a factor of 102 here, we shall\par
+           q(\u964?Y ,\u961?) = b \u961?[fP (\u964?Y ,\u961?) \u8722? fP (\u8722?\u964?Y ,\u961?)],                   assume that K is a constant.\par
+                                            \par
+                                 1                                         The equation for the plastic distortion \u946? reads\par
+          fP (\u964?Y ,\u961?) = exp \u8722? e\u8722?\u964?Y /\u964?T (\u961?) .                 (2.2)\par
+                                 \u952?\par
+                                                                                               \u964? \u8722? \u964?B \u8722? \u964?Y = 0.                      (2.6)\par
+This is an Orowan relation of the form q = \u961? b v t0 in which\par
+the speed of the dislocations v is given by the distance between       This equation is the balance of microforces acting on excess\par
+them multiplied by the rate at which they are depinned from            dislocations. Here, the first term \u964? = \u956?(\u947? \u8722? \u946?) is the applied\par
+each other. That rate is approximated here by the activation           shear stress, the second term the back stress due to the\par
+terms fP (\u964?Y ,\u961?) and \u8722?fP (\u8722?\u964?Y ,\u961?), in which the energy barrier         interaction of excess dislocations, and the last one the flow\par
+eP = kB TP (implicit in the scaling of \u952? = T /TP ) is reduced by       stress. This balance of microforces can be derived from the\par
+                                                                \u8730?\par
+the stress dependent factor e\u8722?\u964?Y /\u964?T (\u961?) , where \u964?T (\u961?) = \u956?T b \u961?       variational equation for irreversible processes [8,9] yielding\par
+is the Taylor stress with \u956?T being proportional to \u956? (see                                   \par
+Sec. III). Note that, when dealing with the load reversal,                           1 \u8706?\u966?m                    1 \u8706? 2 \u966?m\par
+                                                                             \u964?B = \u8722?              sgn\u946?,x = \u8722? 2           \u946?,xx ,    (2.7)\par
+antisymmetry is required in Eq. (2.2) both to preserve reflection                    b \u8706?\u961?g ,x                 b \u8706?(\u961?g )2\par
+symmetry and to satisfy the second-law requirement that the\par
+energy dissipation rate, \u964?Y q/q0 , is non-negative.                    with \u966?m being the free energy density of excess dislocations.\par
+    The pinning energy eP is large, of the order of electron volts,    Berdichevsky [12] has found \u966?m for the locally periodic\par
+so that \u952? is very small. As a result, q(\u964?Y ,\u961?) is an extremely         arrangement of excess screw dislocations. However, as shown\par
+rapidly varying function of \u964?Y and \u952? . This strongly nonlinear         by us in [9], his expression must be extrapolated to the\par
+behavior is the key to understanding yielding transitions and          extremely small or large dislocation densities to guarantee\par
+shear banding as well as many other important features of              the existence of solution within TDT. Using the extrapolated\par
+crystal plasticity. For example, the extremely slow variation of       energy proposed in [9] we find that\par
+the steady-state flow stress as a function of strain rate discussed\par
+                                                                                        k1 \u958? 2 + (2k0 k1 \u8722? 1)\u958? + k1 k02 \u8722? 2k0\par
+in [1] is the converse of the extremely rapid variation of q as a           \u964?B = \u8722?\u956?b2                                         \u946?,xx , (2.8)\par
+function of \u964?Y in Eq. (2.2).                                                                        4\u960? (k0 + \u958? )2\par
+    The equation of motion for the total dislocation density \u961? =       where \u958? = b|\u946?,x |. Equation (2.6) is subjected to the Dirichlet\par
+\u961?r + \u961?g describes energy flow. It says that some fraction of the       boundary condition \u946?(0) = \u946?(c) = 0.\par
+power delivered to the system by external driving is converted\par
+into the energy of dislocations, and that that energy is dissipated\par
+according to a detailed-balance analysis involving the effective            III. DISCRETIZATION AND METHOD OF SOLUTION\par
+temperature \u967? . This equation is                                          For the purpose of numerical integration of the system\par
+        \u8706?\u961?                \u964?Y q                  \u961?                    of equations (2.1)\u8211?(2.8) it is convenient to introduce the\par
+            = K\u961? 2                        1 \u8722?          ,       (2.3)   dimensionless variables and quantities\par
+        \u8706?\u947?          a \u957?(\u952?,\u961?,q0 )2 \u956? q0        \u961?ss (\u967? )\par
+with \u961?ss (\u967? ) = (1/a 2 )e\u8722?eD /\u967? being the steady-state value of \u961? at   x\u771? = x/b, \u961?\u771? = a 2 \u961?, \u964?\u771? = \u964?/\u956?, \u964?\u771?Y = \u964?Y /\u956?, \u964?\u771?B = \u964?B /\u956?.\par
+given \u967? , eD a characteristic formation energy for dislocations,                                                            (3.1)\par
+\par
+                                                                 043002-2\par
+THERMODYNAMIC DISLOCATION THEORY: BAUSCHINGER \u8230?                                                         PHYSICAL REVIEW E 97, 043002 (2018)\par
+\par
+The variable x\u771? changes from zero to c\u771? = c/b. Then we rewrite             reduced with the same rate from \u947? \u8727? to some negative value \u947?\u8727? ,\par
+Eq. (2.2) in the form                                                      to be specified later. We postulate that the system of governing\par
+                                      b                                    equations (3.7)\u8211?(3.10) remains valid during this load reversal.\par
+                      q(\u964?Y ,\u961?) =        q\u771?(\u964?\u771?Y ,\u961?\u771?),               (3.2)   Besides, as initial conditions we propose that all quantities\par
+                                      a                                    \u964?\u771?Y , \u961?\u771?, \u967?\u771?, and \u946? assume those values \u964?\u771?Y (\u947? \u8727? ), \u961?\u771?(\u947? \u8727? ), \u967?\u771? (\u947? \u8727? ),\par
+where                                                                      and \u946?(\u947? \u8727? ) achieved at the end of the loading, thus satisfying\par
+                           \par
+           q\u771?(\u964?\u771?Y ,\u961?\u771?) =    \u961?\u771?[f\u732?P (\u964?\u771?Y ,\u961?\u771?) \u8722? f\u732?P (\u8722?\u964?\u771?Y ,\u961?\u771?)].    (3.3)   the continuity requirement. Since the equations remain valid\par
+                                                                           during the load reversal with the same magnitude of the strain\par
+We set \u956?\u771?T = (b/a)\u956?T = \u956?r and assume that r is independent                 rate, we leave q\u771?0 unchanged, reverse the expression for q\u771? to\par
+of temperature and strain rate. Then                                                              \par
+                                                                                   q\u772?(\u964?\u771?Y ,\u961?\u771?) = \u961?\u771?[f\u732?P (\u8722?\u964?\u771?Y ,\u961?\u771?) \u8722? f\u732?P (\u964?\u771?Y ,\u961?\u771?)],    (3.14)\par
+                                   1        \u8730?\par
+             f\u732?P (\u964?\u771?Y ,\u961?\u771?) = exp \u8722? e\u8722?\u964?\u771?Y /(r \u961?\u771?) .    (3.4)                and integrate the system (3.7)\u8211?(3.10), with q\u771? being replaced by\par
+                                   \u952?\par
+                                                                           q\u772?, backwards in \u947? . If the next load reversal with the same shear\par
+We define q\u771?0 = (a/b)q0 so that q/q0 = q\u771?/q\u771?0 . Equation (2.4)             rate should be made after reaching \u947?\u8727? , we switch again to q\u771? and\par
+becomes                                                                    integrate the system (3.7)\u8211?(3.10), with the initial conditions\par
+                                     \u8730? \par
+                              1              \u961?\u771?                            satisfying the continuity requirement, forwards in \u947? . We can\par
+          \u957?\u771?(\u952?,\u961?\u771?,q\u771?0 ) \u8801? ln     \u8722? ln ln          .      (3.5)             also change the magnitude of the strain rate q\u771?0 if necessary.\par
+                              \u952?            q\u771?0\par
+                                                                           Thus the numerical simulation with several load reversals and\par
+The dimensionless steady-state quantities are                              different strain rates can be realized in this way.\par
+                 \u961?\u771?ss (\u967?\u771? ) = e\u8722?1/\u967?\u771? , \u967?\u771?0 = \u967?0 /eD .              (3.6)       After finding the solution we can compute the average\par
+                                                                           rescaled stress according to\par
+Using q\u771? instead of q as the dimensionless measure of plastic\par
+                                                                                                                                   c\u771?\par
+strain rate means that we are effectively rescaling t0 by a                                                           1\par
+                                                                                                       \u964?\u772? /\u956? =                          \u964?\u771? d x\u771?.                     (3.15)\par
+factor b/a. For purposes of this analysis, we assume that                                                             c\u771?       0\par
+(a/b)t0 = 10\u8722?12 s.\par
+                                                                           The average flow stress is computed similarly. The total\par
+   In terms of the introduced dimensionless quantities the\par
+                                                                           number of dislocations per unit height is\par
+governing equations read\par
+                                                                                                          c\par
+                                                                                                                                   b            c\u771?\par
+              \u8706? \u964?\u771?Y          q\u771?(\u964?\u771?Y ,\u961?\u771?)                                                       N=               \u961? dx =                               \u961?\u771? d x\u771?.        (3.16)\par
+                    = 1\u8722?                   ,                    (3.7)                                   0                          a2       0\par
+              \u8706?\u947?                 q\u771?0\par
+                                                                         The number of excess dislocations per unit height equals\par
+               \u8706? \u961?\u771?             \u964?\u771?Y q\u771?                \u961?\u771?\par
+                    = K\u961?                        1\u8722?            , (3.8)                          c/2                             c/2\par
+               \u8706?\u947?         \u957?\u771?(\u952?,\u961?\u771?,q\u771?0 )2 q\u771?0       \u961?\u771?ss (\u967?\u771?)                                                      2                                         2\par
+                                                                              Ng = 2               \u961?g dx =                            \u946?,x dx =              \u946?m ,   (3.17)\par
+               \u8706? \u967?\u771?     \u964?\u771?Y q\u771?            \u967?\u771?                                               0                      b        0                                b\par
+                    =K            1\u8722?          ,                 (3.9)\par
+               \u8706?\u947?         q\u771?0            \u967?\u771?0                               where \u946?m = \u946?(c\u771?/2). Then, obviously, Nr = N \u8722? Ng .\par
+\u947? \u8722? \u946? \u8722? \u964?\u771?B \u8722? \u964?\u771?Y = 0,                                            (3.10)\par
+                                                                                           IV. NUMERICAL SIMULATIONS\par
+where\par
+              k1 \u958? 2 + (2k0 k1 \u8722? 1)\u958? + k1 k02 \u8722? 2k0                           Let the antiplane shear test be done at room temperature\par
+    \u964?\u771?B = \u8722?                                         \u946?,x\u771? x\u771?       (3.11)   T = 298 K and at the strain rate q\u771?0 = 10\u8722?13 . The parameters\par
+                          4\u960? (k0 + \u958? )2                                    for copper at this room temperature are chosen as follows [1]:\par
+and \u958? = |\u946?,x\u771? |. To solve this system of partial differential equa-\par
+tions subject to initial and boundary conditions numerically,              r = 0.0323, \u952? = 0.0073, K = 350, K\u961? = 96.1, \u967?\u771?0 = 0.25.\par
+we discretize the equations in the interval (0 < x\u771? < c\u771?) by               We take c = 5.1 micron, b = 2.55 A\u778?, and a = 10b. In addition,\par
+dividing it into n subintervals of equal length x\u771? = c\u771?/n. Then            the parameters k0 and k1 required to compute the back stress\par
+the first and second spatial derivatives of \u946? in Eq. (3.10) are            [9] are k0 = 10\u8722?6 and k1 = 2.1\u215?106 . We choose also the initial\par
+approximated by                                                            conditions\par
+                  \u8706?\u946?             \u946?i+1 \u8722? \u946?i\par
+                        (x\u771?i ) =           ,                      (3.12)    \u964?\u771?Y (0) = 0, \u961?\u771?(0) = 6.25\u215?10\u8722?5 , \u967?\u771? (0) = 0.18, \u946?(0) = 0.\par
+                  \u8706? x\u771?                x\u771?\par
+                 \u8706? 2\u946?            \u946?i+1 \u8722? 2\u946?i + \u946?i\u8722?1                         This initial dislocation density in real dimension equals\par
+                        (x\u771?i ) =                   ,              (3.13)   1013 m2 .\par
+                 \u8706? x\u771? 2                 ( x\u771?)2                                The results of numerical simulations are presented in\par
+where \u946?i = \u946?(x\u771?i ). In this way, we reduce the four partial                Figs. 2\u8211?10. In Fig. 2 the average normalized shear stress\par
+differential equations to a system of 4n ordinary differential-            versus shear strain curve (called for short stress-strain curve)\par
+algebraic equations. We have solved these numerically using                with the strains at the beginning of load reversals \u947? \u8727? = 0.08\par
+the Matlab-ode15s solver with n = 1000 and the \u947? step equal                and \u947?\u8727? = \u8722?0.00414 is shown. We plot there also the average\par
+to 10\u8722?6 .                                                                  rescaled flow stress \u964?\u772?Y /\u956? versus \u947? (dashed black curve) for\par
+   After shearing the specimen up to the shear strain \u947? \u8727? we               comparison. The loading path OAB (black curve) consists of\par
+unload the crystal and load it further in the opposite direction           the elastic line OA and the hardening curve AB. The yielding\par
+by reversing the direction of change of \u947? . The latter will now be         transition occurs at A. Figure 3 shows the plastic distortion\par
+\par
+                                                                     043002-3\par
+K. C. LE AND T. M. TRAN                                                                              PHYSICAL REVIEW E 97, 043002 (2018)\par
+\par
+\par
+ \u8722?\par
+ \u964?/\u956?                                                                          Ng 8\par
+     -3                                                                       7 10\par
+8 10\par
+                                                                              6                                                        C      B\par
+6                                                                     B\par
+                                                                              5\par
+4\par
+                                                                              4\par
+2\par
+                                                                              3\par
+             A\par
+0           O                                                   C             2\par
+\par
+-2                                                                            1\par
+\par
+-4                                                                            0 D\par
+        D                                                                         O\par
+                                                                        \u947?     -1                                                               \u947?\par
+-6                                                                           -0.01   0     0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08\par
+ -0.01       0     0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08\par
+\par
+    FIG. 2. Stress-strain curves at the strain rate q\u771?0 = 10\u8722?13 , for room       FIG. 4. Ng versus \u947? at the strain rate q\u771?0 = 10\u8722?13 , for room\par
+temperature, and for \u947? \u8727? = 0.08: (i) loading path OAB (black), (ii) load     temperature, and for \u947? \u8727? = 0.08: (i) loading path (black), (ii) load\par
+reversal BCD [red (dark gray)], (iii) second load reversal DO [yellow        reversal [red (dark gray)], and (iii) second load reversal [yellow\par
+(light gray)], and (iv) flow stress versus strain (dashed black curve).      (light gray)].\par
+\par
+\par
+\u946? at three different \u947? along the hardening curve AB that                     of the specimen) are frozen as seen in Figs. 4\u8211?6. The yielding\par
+agrees well with the approximate analytical solution found                   transition occurs at C, where the magnitude of the stress is\par
+in [9]. The excess dislocations pile up against the left and                 much lower than that at the end of the loading path exhibiting\par
+right boundaries, leaving the center of the specimen free of                 the Bauschinger effect. To explain this effect we plot in Fig. 8\par
+excess dislocations. As \u947? increases the number of excess and                 the evolution of the normalized back stress \u964?\u771?B (near the\par
+redundant dislocations as well as the effective temperature also             boundary) as \u947? changes. This back stress increases during the\par
+increase as shown in Figs. 4\u8211?6.                                              loading due to the increasing number of excess dislocations,\par
+    During the load reversal BCD [red (dark gray)] we observe                and then remains unchanged during the unloading when the\par
+first the elastic unloading BC where the redundant and excess                dislocations are frozen along the line BC. The presence of\par
+dislocations as well as the effective temperature (in the middle             this positive back stress reduces the magnitude of shear stress\par
+                                                                             required for pulling the excess dislocations back to the center\par
+                                                                             of the specimen. There, the excess dislocations of opposite\par
+     \u946?                                                                       signs meet and annihilate each other, so the number of excess\par
+0.06                                                                         dislocations reduces gradually to zero along the curve CD as\par
+                                 \u947? = 0.06                                    shown in Fig. 4. Figure 7 shows the evolution of the plastic\par
+                                                                             distortion at three different \u947? that confirms this tendency. It\par
+0.05                                                                         is interesting that the number of redundant dislocations do not\par
+                                                                             decrease at all, except that they are also frozen along the elastic\par
+0.04                             \u947? = 0.04                                    line BC as shown in Fig. 5.\par
+                                                                                 If we reverse the loading direction again by increasing\par
+                                                                             \u947? from \u947?\u8727? to zero, (\u947? ,\u964?\u771? ) moves along the elastic line DO\par
+0.03                                                                         [yellow (light gray)], where the dislocations and the effective\par
+                                                                             temperature are frozen (see Fig. 1). Note that the effective\par
+0.02                             \u947? = 0.02                                    temperature always increases during the loading along AB and\par
+                                                                             loading in the opposite direction along CD as seen in Fig. 6,\par
+                                                                             in agreement with the second law of thermodynamics.\par
+0.01                                                                             It is remarkable that the loading path in the opposite\par
+                                                                             direction CD differs essentially from the loading path AB due\par
+    0                                                                   ~    to the increase of the total number of dislocations along CD.\par
+        0    0.2   0.4   0.6   0.8   1      1.2   1.4   1.6   1.8    24 x    Thus along CD the material is closer to the steady state than\par
+                                                                    10\par
+                                                                             along AB and, consequently, the slope of CD must be less\par
+    FIG. 3. Evolution of \u946?(x\u771?) at the strain rate q\u771?0 = 10\u8722?13 and            than that of AB. This asymmetry between loadings in opposite\par
+for room temperature during the loading along AB: (i) \u947? = 0.02               directions becomes more pronounced as \u947? \u8727? increases.\par
+(black), (ii) \u947? = 0.04 [red (dark gray)], and (iii) \u947? = 0.06 [yellow             It is interesting to examine the influence of the size of\par
+(light gray)].                                                               the sample on the Bauschinger effect. Figure 9 shows two\par
+\par
+                                                                       043002-4\par
+THERMODYNAMIC DISLOCATION THEORY: BAUSCHINGER \u8230?                                                           PHYSICAL REVIEW E 97, 043002 (2018)\par
+\par
+\par
+Nr 9                                                                             \u946?\par
+6 10                                                                       0.07\par
+                                                                                                               \u947? = 0.006\par
+ 5                                                                         0.06\par
+       D\par
+\par
+                                                                           0.05\par
+ 4                                                                                                             \u947? = 0.004\par
+                                                                           0.04\par
+ 3\par
+                                                                           0.03\par
+                                                                                                                \u947? = 0.02\par
+ 2                                                             C\par
+                                                                     B     0.02\par
+\par
+ 1                                                                         0.01\par
+\par
+           O                                                          \u947?      0                                                                         ~\par
+ 0                                                                                  0       0.2   0.4   0.6   0.8   1      1.2   1.4   1.6   1.8    24 x\par
+-0.01      0       0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08                                                                                         10\par
+    FIG. 5. Nr versus \u947? at the strain rate q\u771?0 = 10\u8722?13 , for room              FIG. 7. Evolution of \u946?(x\u771?) at the strain rate q\u771?0 = 10\u8722?13 and for\par
+temperature, and for \u947? \u8727? = 0.08: (i) loading path (black), (ii) load       room temperature during the load reversal along CD: (i) \u947? = 0.02\par
+reversal [red (dark gray)], and (iii) second load reversal [yellow         (black), (ii) \u947? = 0.04 [red (dark gray)], and (iii) \u947? = 0.06 [yellow\par
+(light gray)].                                                             (light gray)].\par
+\par
+stress-strain curves for two samples with different widths\par
+c = 5.1 micron (dashed line) and c = 51 micron (bold line)                 rates q\u771?0 = 10\u8722?13 (dashed line), q\u771?0 = 10\u8722?11 (bold line), and\par
+and with all other parameters being left unchanged. We see                 q\u771?0 = 10\u8722?8 (dashed and dotted line). The width of samples\par
+that the size strongly influences the slope of the hardening               is c = 5.1 micron, while all other parameters remain un-\par
+curve because the dislocation pileup for the smaller sample                changed. We see that the strain rate mainly affects the isotropic\par
+leads to stronger kinematic hardening than for the larger sample           hardening, but much less the Bauschinger effect. Even for\par
+(smaller is stronger). This affects the stress level at which the          q\u771?0 = 10\u8722?8 (corresponding to the fast strain rate q0 = 104 /s\par
+yielding transition occurs during load reversal. For the smaller           which is typical of Hopkinson bar testing) the Bauschinger\par
+sample, this stress is even positive.                                      effect remains nearly the same as for the much slower loading.\par
+   Another important question is how much the strain rate                  The reason is that the kinematic hardening due to the excess\par
+affects the Bauschinger effect. Figure 10 shows three stress-              dislocations is much less sensitive to the change in strain rate.\par
+strain curves for three samples loaded at three different strain           Also note that it is practically difficult to stop the load and\par
+\par
+\par
+     ~\par
+     \u967?                                                                         ~\par
+                                                                               \u964?B\par
+                                                                           0.08\par
+                                                                                                                                              C      B\par
+         D                                                                 0.07\par
+0.21\par
+                                                                           0.06\par
+\par
+                                                                           0.05\par
+ 0.2                                                                       0.04\par
+\par
+                                                                           0.03\par
+                                                               C\par
+                                                                     B\par
+                                                                           0.02\par
+0.19\par
+                                                                           0.01\par
+\par
+                                                                                0       D\par
+                                                                                             O\par
+0.18\par
+               O                                                      \u947?    -0.01                                                                      \u947?\par
+  -0.01        0    0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08                   -0.01          0     0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08\par
+\par
+    FIG. 6. \u967?\u771? (c\u771?/2) versus \u947? at the strain rate q\u771?0 = 10\u8722?13 , for room        FIG. 8. Normalized back stress \u964?\u771?B near the boundary versus \u947? at\par
+temperature, and for \u947? \u8727? = 0.08: (i) loading path (black), (ii) load       the strain rate q\u771?0 = 10\u8722?13 , for room temperature, and for \u947? \u8727? = 0.08:\par
+reversal [red (dark gray)], and (iii) second load reversal [yellow         (i) loading path (black), (ii) load reversal [red (dark gray)], and\par
+(light gray)].                                                             (iii) second load reversal [yellow (light gray)].\par
+\par
+                                                                     043002-5\par
+K. C. LE AND T. M. TRAN                                                                            PHYSICAL REVIEW E 97, 043002 (2018)\par
+\par
+\par
+\u8722?\par
+\u964?/\u956?                                                                       \u8722?\u964?/\u956?\par
+     -3\par
+ 8 10                                                                          -3\par
+                                                                           8 10\par
+\par
+ 6                                                                         6\par
+\par
+ 4                                                                         4\par
+\par
+ 2                                                                         2\par
+\par
+ 0                                                                         0\par
+\par
+-2                                                                        -2\par
+\par
+-4                                                                        -4\par
+\par
+-6                                                                   \u947?    -6                                                                    \u947?\par
+-0.01     0    0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08                    -0.01 0        0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08\par
+    FIG. 9. Stress-strain curves for specimens with different sizes at        FIG. 10. Stress-strain curves for the specimen loaded at different\par
+the strain rate q\u771?0 = 10\u8722?13 , for room temperature, and for \u947? \u8727? = 0.08:   strain rates, for room temperature, and for \u947? \u8727? = 0.08: (i) q\u771?0 = 10\u8722?13\par
+(i) c = 5.1 micron (dashed) and (ii) c = 51 micro (bold).                 (dashed), (ii) q\u771?0 = 10\u8722?11 (bold), and (iii) q\u771?0 = 10\u8722?8 (dashed and\par
+                                                                          dotted).\par
+instantly realize the load reversal at the same rate of strain,\par
+especially for the fast loading. Therefore, the real stress-strain        stress from the first principle calculation of the free energy of\par
+curve usually deviates from the theoretical one in a small                dislocated crystals and thus to predict the stress-strain curves\par
+transient period. Perhaps this is one of the reasons for the              and the Bauschinger effect.\par
+differences between unloading and immediate reloading.                        As the comparison with the experiments is concerned, the\par
+                                                                          experimental data in antiplane shear-controlled deformations\par
+                 V. CONCLUDING REMARKS                                    are not known to us, in contrast to the tension-compression tests\par
+                                                                          provided in [14,15] or plane strain shear tests in [16,17], so the\par
+    The physical explanation of the Bauschinger effect on the             justification of the theory by the experiments is not possible\par
+basis of the back stress and the excess dislocations seems to             at the present time. However, the proposed theory may serve\par
+us to be quite reasonable. In constructing the STZ theory for             as a useful guide for the future experimental investigation on\par
+glasses [13] Langer has argued that \u8220?The Bauschinger effect               the Bauschinger effect in several directions: (i) the asymmetry\par
+is one example where the system remembers the direction                   between loadings in opposite directions at different levels of\par
+in which it has been deformed, and responds differently\u8212?                  \u947? \u8727? , (ii) the influence of the size effect, (iii) the sensitivity\par
+more compliantly or less so\u8212?to further loading in different               of the back stress on the strain rate and temperature, etc.\par
+directions. The natural way to include such effects in the theory         Last, but not least, let us mention that the thermodynamic\par
+is to let the STZ\u8217?s possess internal degrees of freedom that              dislocation theory for uniform plastic deformations [1] yields\par
+carry information from one event to the next.\u8221? This argument              in the proportional compression tests for copper an excellent\par
+holds true for dislocation mediated plasticity as well. Here, in          agreement with the experiments conducted in [18] over a wide\par
+our opinion, the incompatible plastic distortion is the natural           range of temperatures and strain rates. This gives us the hope\par
+variable that keeps the memory of excess dislocations. It cannot          that the same will happen for the theory proposed in this paper.\par
+enter the free energy, but the curl of this quantity should enter\par
+the free energy causing the back stress. In this way the theory\par
+                                                                                               ACKNOWLEDGMENTS\par
+differs substantially from the phenomenological plasticity that\par
+introduces the back stress along with an assumed constitutive                T.M.T. acknowledges support from the Vietnamese Gov-\par
+equation to fit the stress strain curves exhibiting the kinematic         ernment Scholarship Program 911. K.C.L. is grateful to J. S.\par
+hardening. In contrary, our theory allows us to find the back             Langer for helpful discussions.\par
+\par
+\par
+\par
+\par
+ [1] J. S. Langer, E. Bouchbinder, and T. Lookman, Acta Mater. 58,         [5] J. S. Langer, Phys. Rev. E 95, 033004 (2017).\par
+     3718 (2010).                                                          [6] K. C. Le, T. M. Tran, and J. S. Langer, Phys. Rev. E 96, 013004\par
+ [2] J. S. Langer, Phys. Rev. E 92, 032125 (2015).                             (2017).\par
+ [3] J. S. Langer, Phys. Rev. E 94, 063004 (2016).                         [7] K. C. Le, T. M. Tran, and J. S. Langer, Scr. Mater. 149, 62 (2018).\par
+ [4] J. S. Langer, Phys. Rev. E 95, 013004 (2017).                         [8] K. C. Le, J. Mech. Phys. Solids 111, 157 (2018).\par
+\par
+\par
+                                                                    043002-6\par
+THERMODYNAMIC DISLOCATION THEORY: BAUSCHINGER \u8230?                                               PHYSICAL REVIEW E 97, 043002 (2018)\par
+\par
+ [9]   K. C. Le and Y. Piao, arXiv:1801.05304.                       [15] P. S. Bate and D. W. Wilson, Acta Metall. 34, 1097 (1986).\par
+[10]   J. F. Nye, Acta Metall. 1, 153 (1953).                        [16] M. Lewandowska, Mater. Chem. Phys. 81, 555 (2003).\par
+[11]   E. Kr\u246?ner, GAMM-Mitteilungen 15, 104 (1992).                  [17] G. Vincze, E. F. Rauch, J. J. Gracio, F. Barlat, and A. B. Lopes,\par
+[12]   V. L. Berdichevsky, Int. J. Eng. Sci. 116, 74 (2017).              Acta Mater. 53, 1005 (2005).\par
+[13]   J. S. Langer, Phys. Rev. E 77, 021502 (2008).                 [18] P. S. Follansbee and U. F. Kocks, Acta Metall. 36, 81\par
+[14]   A. Abel and H. Muir, Philos. Mag. 26, 489 (1972).                  (1988).\par
+\par
+\par
+\par
+\par
+                                                               043002-7\par
+
+}

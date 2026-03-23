@@ -1,0 +1,573 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+                                                                         Acta Materialia 256 (2023) 119096\par
+\par
+\par
+                                                                    Contents lists available at ScienceDirect\par
+\par
+\par
+                                                                            Acta Materialia\par
+                                                          journal homepage: www.elsevier.com/locate/actamat\par
+\par
+\par
+Full length article\par
+\par
+Automated extraction of interfacial dislocations and disconnections from\par
+atomistic data\par
+Nipal Deka a , Alexander Stukowski b , Ryan B. Sills a ,\u8727?\par
+a   Department of Materials Science and Engineering, Rutgers University, Piscataway, NJ 08854, USA\par
+b\par
+    OVITO GmbH, Darmstadt, Germany\par
+\par
+\par
+\par
+ARTICLE                 INFO                               ABSTRACT\par
+\par
+Keywords:                                                  We introduce Interfacial Line Defect Analysis (ILDA), a method for identifying and extracting interfacial\par
+Dislocation                                                dislocations and disconnections with little-to-no input from the user on the nature of the interface. By simply\par
+Disconnections                                             providing the orientations and coherency strains for the crystals in a coherent reference state of the interface,\par
+Molecular dynamics\par
+                                                           ILDA provides exact Burgers vectors. Alternatively, these orientations and strains can be estimated using local\par
+Interfaces\par
+                                                           atomic deformation gradients, making ILDA fully automated and providing estimated Burgers vectors. ILDA\par
+                                                           also determines the step height associated with each defect line segment, in case the associated defect is a\par
+                                                           disconnection. The heart of the method is the identification of atoms residing at co-incidence sites between\par
+                                                           the two crystals and the construction of a surface mesh connecting these sites that is used to compose Burgers\par
+                                                           circuits and insert defect line segments. We demonstrate the performance of ILDA in two test cases: a twist\par
+                                                           grain boundary and a phase boundary.\par
+\par
+\par
+\par
+1. Introduction                                                                                    While it has been well understood for some time that interfacial\par
+                                                                                               line defects play important roles in behaviors of materials, a compre-\par
+    Line defects such as dislocations and disconnections are a ubiqui-                         hensive understanding of their properties is lacking. Most theories for\par
+tous feature of crystalline interfaces [1]. In grain boundaries (GBs),                         interfacial line defects are based on continuum theories [1,9] which\par
+line defects may be present to accommodate misorientations from                                lack an accurate description of defect cores. Furthermore, these theories\par
+co-incidence site lattice orientations (so-called \u120564? boundaries). Grain                         are unable to accurately characterize phenomena such as dislocation\par
+boundary line defects may also form when lattice dislocations im-                              transmission and emission at interfaces because these processes are\par
+pinge on GBs, leading to dislocation transmission and/or absorption                            governed by localized nonlinear interatomic interactions [10]. On the\par
+events that generate grain boundary dislocations and/or disconnec-                             other hand, molecular dynamics (MD) simulations have provided great\par
+tions. These defects are known to affect many phenomena in materi-                             insights into the core-dominated aspects of interfacial line defects,\par
+als science, including GB strengthening (e.g., Hall\u8211?Petch strengthen-                          such as line defect reactions in interfaces [11,12], motion of interfaces\par
+ing) [2], GB sliding [3], GB diffusion [4], intergranular fracture [5],\par
+                                                                                               containing line defects [13,14], and segregation of solutes to inter-\par
+and GB phase/complexion transitions [6]. In phase boundaries, line\par
+                                                                                               faces [15,16] One major challenge for MD in the context of studying\par
+defects may form for similar reasons. However, unlike GBs, the two\par
+                                                                                               interfaces is identifying and extracting interfacial line defects. Without\par
+crystals forming a coherent phase boundary do not mate-up perfectly;\par
+                                                                                               the ability to readily identify interfacial line defects, quantify their\par
+the two lattices must be distorted to form the coherent interface. This\par
+                                                                                               Burgers vector content and step heights, and extract their positions\par
+lattice mismatch leads to strain energy in the crystals which must be\par
+                                                                                               within the interface, it is difficult or impossible to unambiguously\par
+relaxed by arrays of interfacial line defects in order for the interface to\par
+be stable. Finally, in the case of both grain and phase boundaries, there                      analyze MD simulations of interfaces.\par
+is accumulating evidence that the primary mechanism of boundary                                    To date, there have been two classes of tools which have been\par
+migration is the lateral motion of disconnections [7,8]. Disconnections                        developed for analysis of interfacial line defects in atomistic datasets:\par
+are like interfacial dislocations embedded inside of an interfacial step of                    the dislocation extraction algorithm (DXA) which uses Burgers circuits\par
+height \u8462? [9]; upon migration of the disconnection across the interface,                        to localize line defects and methods based on computation of the Nye\par
+the entire interface translates by a distance \u8462?.                                               tensor [17,18]. Compared to Nye tensor approaches, DXA has the\par
+\par
+\par
+     \u8727? Correspondence to: 607 Taylor Rd, Piscataway, NJ 08854, USA.\par
+       E-mail address: ryan.sills@rutgers.edu (R.B. Sills).\par
+\par
+https://doi.org/10.1016/j.actamat.2023.119096\par
+Received 13 April 2023; Received in revised form 9 June 2023; Accepted 14 June 2023\par
+Available online 21 June 2023\par
+1359-6454/\u169? 2023 Acta Materialia Inc. Published by Elsevier Ltd. All rights reserved.\par
+N. Deka et al.                                                                                                                    Acta Materialia 256 (2023) 119096\par
+\par
+\par
+benefit of unambiguously identifying the position and Burgers vector             structure. Furthermore, only CISs within the interface are required for\par
+for each dislocation. DXA was originally developed to extract lattice dis-       the method to work. For example, the entire, three-dimensional co-\par
+locations and has seen widespread use since its invention [19,20]. DXA           incidence site lattice (CSL) does not need to be identified. In the case\par
+was subsequently extended to the case of interfacial dislocations [21],          studies presented below, we employ the following algorithm to identify\par
+but has seen less use for this purpose. One reason for this lack of              CISs:\par
+widespread adoption of DXA for interfacial analysis is that the user\par
+must fully specify the relaxed atomic structure within the interface.             Step 1. Identify atoms of unknown structure. With the help of the Poly-\par
+This relaxed structure is usually not known by the user, and often                        hedral Template Matching (PTM) algorithm [26], identify\par
+requires considerable effort to determine. On the other hand, Nye-                        atoms with an unknown (\u8216?\u8216?Other\u8217?\u8217?) structure type. Most\u8212?if\par
+tensor-based approaches do not require specification of this relaxed                      not all\u8212?atoms within the interface will have an unknown\par
+structure. Recently, Winters et al. applied the Nye tensor methodology                    structure type, because PTM is designed to recognize only\par
+to grain boundary dislocations and disconnections [22]. While pow-                        perfectly-coordinated lattice sites. PTM identifies structure\par
+erful, this approach has the drawback that the user must specify the                      types by comparing the polyhedron formed by an atom\u8217?s local\par
+displacement shift complete lattice for the interface, and the method                     atomic neighborhood to a reference template for each crystal\par
+does not unambiguously identify the Burgers vector or line position.                      structure of interest. If the deviation from the closest match-\par
+Finally, neither approach is able to detect and quantify the step height                  ing reference template falls below a user-specified maximum\par
+of a disconnection.                                                                       root mean square deviation (RMSD), then it is declared to\par
+    Our goal here is to develop a methodology for identifying and                         belong to that structure type. Atoms whose RMSD exceeds\par
+extracting interfacial line defects which is able to explicitly provide                   the maximum value for all structure types are declared to\par
+Burgers vectors and positions in space like DXA, but without requiring                    have unknown structure. Selection of the maximum RMSD\par
+a significant amount of input from the user. Below we present a new                       value is thus an important aspect of using PTM and finding\par
+approach to this problem that we call Interfacial Line Defect Analysis                    co-incidence sites.\par
+(ILDA), which uses Burgers circuits to analyze line defects like DXA but\par
+                                                                                  Step 2. Assign atoms to crystals. Using the Grain Segmentation modi-\par
+requires little or no input from the user on the nature of the interface.\par
+                                                                                          fier in OVITO, assign all atoms to a crystal. The segmentation\par
+Additionally, ILDA enables automatic quantification of the step height\par
+                                                                                          algorithm finds contiguous groups of atoms having the same\par
+\u8462? for disconnections. Below we present the ILDA algorithm and then\par
+                                                                                          crystalline structure type and a similar local lattice orien-\par
+demonstrate its performance on a pair of test cases: a \u120564?11 twist GB\par
+                                                                                          tation, using information previously computed by the PTM\par
+and a phase boundary.\par
+                                                                                          algorithm. In the case of a single phase polycrystal, each\par
+                                                                                          crystallite is a grain, with grain boundaries separating crys-\par
+2. Theory\par
+                                                                                          tals. The Grain Segmentation modifier works equally well for\par
+                                                                                          multiphase systems.\par
+    The ILDA algorithm differs from DXA in two key ways: (1) co-\par
+incidence sites are used to construct Burgers circuits which cross the            Step 3. Find CIS atoms. Out of the atoms with unknown structure\par
+interface and (2) a surface mesh is used to comprehensively explore                       type, identify atoms which are simultaneously polyhedral\par
+interfaces for line defects and to insert defect line segments. The                       neighbors to two different crystals, i.e., an unknown atom has\par
+result is a tool which can identify interfacial line defects including                    neighbor atoms in both crystals. Here \u8216?\u8216?polyhedral neighbor\par
+disconnections without the need to specify the atomic structure within                    atom\u8217?\u8217? means an atom used to construct the polyhedron\par
+the interface.                                                                            analyzed by PTM. The resulting set of atoms are by definition\par
+    Below we enumerate all of the steps in ILDA, which can be broken                      CIS atoms.\par
+into four stages, as shown in Fig. 1. The algorithm is implemented\par
+as an open-source Python function using the OVITO Python API [23],               2.2. Stage 2: Construction of Burgers circuits\par
+and made available for interactive use in the OVITO Pro applica-\par
+tion [24] and integration in standalone Python codes/workflows [25].                  The heart of ILDA is the construction of Burgers circuits using three\par
+All simulation graphics below were produced using OVITO Pro.                     different coordinate frames, as shown in Fig. 2. First, a closed pair of\par
+                                                                                 half circuits are constructed in the Physical Frame. Each step within\par
+2.1. Stage 1: Identification of co-incidence sites                               these circuits is mapped to the Lattice Reference Frames (one for each\par
+                                                                                 crystal) corresponding to the perfect crystal structures in the unit cell\par
+    One of the challenges in identifying line defects in interfaces is           coordinate systems. This mapping is established by PTM\u8217?s capability to\par
+dealing with the disordered atomic structure within the interface when           associate neighbor atoms with corresponding lattice directions. Finally,\par
+performing Burgers circuits. DXA overcomes this challenge by requiring           the circuits are mapped from the Lattice Reference Frames to the\par
+that the user specify the \u8216?\u8216?perfect\u8217?\u8217? atomic structure of the reference          Coherent Reference Frame (CRF) by rotating and/or stretching the\par
+interface (without line defects) so that each circuit step within the in-        crystals. The Coherent Reference Frame is the frame within which\par
+terface can be mapped to a \u8216?\u8216?perfect\u8217?\u8217? step within the specified interface       coherency is established between the two crystals. In the case of a\par
+structure. Accordingly, Burgers circuits can weave arbitrarily through           grain boundary, the CRF enables definition of both the CSL and the\par
+interfaces since the entire interface structure is known. Here, we adopt         displacement shift complete lattice [9]. In the case of a phase boundary,\par
+a simpler strategy: we first identify atoms that are located in or near          the CRF enables definition of a coherent dichromatic pattern used in the\par
+co-incidence sites (CISs) between the two crystals. By definition, a CIS         topological model for interfacial line defects [27,28].\par
+is a lattice site that is common to both crystals. This means that a                  Specification of the CRF is a tremendously important step, because\par
+Burgers circuit is able to cross the interface at a CIS without needing          it is within this frame that Burgers vectors are defined. The CRF can be\par
+to know anything other than the structure of the crystals on each side.          defined by selecting a pair of deformation gradients, A \u119813? and B \u119813?, which\par
+In ILDA, this is accomplished by performing half circuits through each           accomplish the mapping from the Lattice Reference Frames to the CRF.\par
+crystal which connect at a pair of CISs. The CISs are thus \u8216?\u8216?glue\u8217?\u8217? which        In ILDA, two options exist for defining A \u119813? and B \u119813?. In cases where the\par
+connects half circuits within the two crystals. Unlike DXA, only Burgers         user knows what CRF they want to use, it can be manually specified by\par
+circuits which pass through co-incidence sites can be constructed using          inputting the crystal orientations and coherency strains. Consider the\par
+this method. The advantage is that CISs can be found in an auto-                 case where crystal A is oriented with crystallographic directions \u119909? A ,\par
+mated manner, without requiring any knowledge about the interface                \u119910?A , and \u119911?A pointed along the \u119909?, \u119910?, and \u119911? axes in the CRF, respectively.\par
+\par
+                                                                             2\par
+N. Deka et al.                                                                                                                                   Acta Materialia 256 (2023) 119096\par
+\par
+\par
+\par
+\par
+                           Fig. 1. Workflow for Interfacial Line Defect Analysis (ILDA), showing the four stages of the method. (CIS = co-incidence site).\par
+\par
+\par
+\par
+\par
+Fig. 2. Reference frames used by ILDA. In the Physical (simulation) Frame, closed circuits are constructed via a pair of half circuits (one in each crystal). Polyhedral template\par
+matching (PTM) then maps these to the Lattice Reference Frame for each crystal. A set of deformation gradients A \u119813? and B \u119813? then map to the Coherent Reference Frame where the\par
+Burgers vector is defined. The step height \u8462? is determined in the Physical Frame.\par
+\par
+\par
+Also, the state of strain applied to establish coherency after rotating the                   rather than coherent. This gives rise to spurious Burgers vectors that\par
+crystal is A\u120576? \u119888? . The result deformation gradient which maps to the CRF                       must be filtered out. Thus, another user-specified parameter \u119887?tol dictates\par
+from the Lattice Reference Frame is                                                           the minimum magnitude that a Burgers vector must have, otherwise it\par
+                                                                                              is ignored.\par
+A\u119813?   = (\u119816? + A\u120576? \u119888? ) \u8901? A \u119825?                                                           (1)\par
+                                                                                                  With the reference frames fully defined, it is possible to construct\par
+where A \u119825? = [\u119909?  \u119909?A \u119910? A \u119911? A ]. When the user manually specifies the CRF,                       Burgers circuits in search of closure failures. However, it is unclear how\par
+ILDA provides a robust means for identifying exact Burgers vectors,                           these circuits can be performed in a comprehensive manner to ensure\par
+even if the physical interface in the simulation experiences a spatially                      that all interfacial line defects are successfully identified. To accomplish\par
+varying strain state or set of line defects. If the user does not know                        this, we employ a surface mesh representation of the interface. Specif-\par
+a CRF, or if a quick estimate of the Burgers vectors is desired, ILDA                         ically, we construct a triangulated surface mesh whose vertices are CIS\par
+can attempt to obtain estimates A \u119813? and B \u119813? by computing the local                            atoms in the interface. This surface mesh spans the whole interface,\par
+deformation gradients of the atoms near the interface. Specifically, a                        and provides a set of topological connections between the CIS atoms:\par
+user-defined parameter \u119889?F defines the thickness of the layer of atoms                         the edges of the mesh. Thus, by constructing Burgers circuits between\par
+near the interface to be used. The atomic deformation gradients are                           every pair of CIS atoms connected by an edge of the mesh, we can\par
+computed using the method of Shimizu et al. [29], and then A \u119813? and                            comprehensively explore the interface for line defects.\par
+B \u119813? are obtained as the average over all such atoms in each respective                            The following sequence of steps accomplishes the above.\par
+crystal. In our experimentation with ILDA, we find that these estimated\par
+values of A \u119813? and B \u119813? often yield reasonable estimates of the Burgers                          Step 1. Construct surface mesh. A surface mesh which connects only\par
+vectors, with errors of 10% or less. However, it should be noted that                                  CIS atoms is constructed using the so-called alpha-shape\par
+since A \u119813? and B \u119813? are approximate, the CRF is likely to be incoherent                                  method in OVITO [30,31]. If any surface mesh elements\par
+\par
+                                                                                          3\par
+N. Deka et al.                                                                                                                           Acta Materialia 256 (2023) 119096\par
+\par
+\par
+            connect to non-CIS atoms, these elements are systematically\par
+            \u8216?\u8216?pruned\u8217?\u8217? from the surface mesh by removing non-CIS atoms\par
+            from the mesh.\par
+\par
+  Step 2. Construct closed circuits. For each edge of the surface mesh,\par
+          construct a pair of half circuits which start and finish at\par
+          the CIS atoms bounding the edge. Each successive atomic\par
+          step in the half circuits is identified by choosing the atomic\par
+          neighbor which minimizes the distance to the destination\par
+          CIS atom. Let the vector connecting two atoms in the circuit\par
+          in the Physical Frame be \u120549?\u119909?   \u119909?\u119894? . Since the circuit is closed in\par
+                                \u8721?\par
+          the Physical Frame, \u119894? \u120549?\u119909?   \u119909?\u119894? = 0 . Each vector in the Physical\par
+          Frame is mapped by PTM to a perfect lattice vector \u120549?\u119883?       \u119883? \u119894? in\par
+          the Lattice Reference Frame.\par
+\par
+  Step 3. Map lattice steps to coherent reference frame. Each step in the          Fig. 3. Use of the interface surface mesh to determine disconnection step height at the\par
+          Burgers circuit is mapped from the Lattice Reference Frame               edge connecting nodes \u119894? and \u119895?. Gray triangles are associated with the disconnection\par
+          by computing the product A \u119813?\u120549?\u119883?    \u119883? \u119894? for steps in crystal A and         (heavy black line). Blue triangles are associated with the upper terrace and green\par
+                                                                                   triangles with the lower terrace of the interface, all of which are free of line defects.\par
+              \u119883? \u119894? for steps in crystal B.\par
+          B \u119813?\u120549?\u119883?                                                                    Darkly colored triangles are used to determine the habit plane normal vector \u119899? and\par
+                                                                                   the step height \u8462? using Eqs. (4) and (5). (For interpretation of the references to color\par
+  Step 4. Determine Burgers vectors. To determine the Burgers vector for           in this figure legend, the reader is referred to the web version of this article.)\par
+          each pair of half circuits, we simply sum each of the circuit\par
+          step vectors in the CRF and compute the closure failure.\par
+          Mathematically this is obtained as\par
+                                                                                   2.4. Stage 4: Insertion of line segments\par
+              \u8721?            \u8721?\par
+          \u119939?=         \u119883?\u119894? +\par
+                 A \u119813?\u120549?\u119883?             \u119883?\u119895?\par
+                               B \u119813?\u120549?\u119883?                                 (2)\par
+                 \u119894?\u8712?\u119860?            \u119895?\u8712?\u119861?                                                    The aim of this last step is to construct a discrete line representation\par
+            where the sums are over all circuit steps in the respective            of the interfacial defects identified in the previous stages. In order\par
+            crystals.                                                              to systematically and comprehensively insert line segments, we again\par
+                                                                                   utilize the surface mesh of the interface.\par
+2.3. Stage 3: Determination of step height\par
+                                                                                     Step 1. Check conservation of Burgers vector on mesh faces. We loop\par
+    To determine step heights in the Physical Frame, we use the in-                          over each face of the surface mesh and first check that Burg-\par
+terface plane normal vector \u119899? associated with each Burgers circuit, as                       ers vector conservation is satisfied. Each triangular mesh face\par
+shown in Fig. 3.                                                                             can be thought of as a control volume which dislocation lines\par
+                                                                                             may \u8216?\u8216?flow into\u8217?\u8217? at its edges. The Burgers vector assigned to\par
+  Step 1. Loop over mesh faces. For an edge bounded by vertices \u119894? and                        each edge gives the net Burgers vector content flowing (cross-\par
+          \u119895? that has a non-zero Burgers vector (magnitude exceeding                          ing) into that edge. To check Burgers vector conservation, we\par
+          \u119887?tol ), loop over all mesh faces connected to vertices \u119894? and \u119895?.                    simply sum all Burgers vectors, being careful to ensure that\par
+                                                                                             all line sense vectors point into the mesh face (an arbitrary\par
+  Step 2. Compute area vectors for defect-free faces. For each face \u119898?                        convention). If the sum is not close to zero within a user\par
+          connected to vertices \u119894? or \u119895? which does not contain any                            specified tolerance \u119887?tol , the mesh face is flagged for the user\par
+          line defects (all edges of the face have Burgers vectors with                      as being problematic.\par
+          magnitude less than \u119887?tol ), compute the area vector as\par
+                                                                                     Step 2. Insert line segments. Since we have already verified that mesh\par
+            \u119860? \u119898? = \u119907? \u119894?\u119896? \u215? \u119907? \u119894?\u119897?                                           (3)                  faces properly satisfy Burgers vector conservation, line seg-\par
+            where \u119907? \u119894?\u119896? is the vector which points from vertex \u119894? to vertex                    ment insertion is straight-forward. Segments are inserted in\par
+            \u119896? and face \u119898? is formed by vertices \u119894?, \u119896?, and \u119897?. Sum these                        one of two ways, as shown in Fig. 4. If all edges have non-zero\par
+                                  \u8721?                                                          Burgers vectors, then segments are inserted which connect\par
+            area vectors as \u119860? = \u119898? \u119860? \u119898? . We only use defect-free faces\u8212?\par
+            shown as faces that are darkly colored in Fig. 3\u8212?for this                        from the center of each edge to the centroid of the triangle.\par
+            computation because these faces are assumed to be associated                     If only two edges have non-zero Burgers vectors, a segment\par
+            with the \u8216?\u8216?terrace plane\u8217?\u8217? of the interface [28], within which                   is inserted connecting the centers of these edges. Subsequent\par
+            coherency is established. In principle, this computation could                   smoothing operations may be applied to remove artificial\par
+            be extended to include faces connected to neighbors of ver-                      jagged geometries, as is done in DXA.\par
+            tices \u119894? and \u119895? as well in order to get a more representative\par
+            sampling of the interface.                                                 To summarize: ILDA uses CIS atoms to construct a surface mesh,\par
+                                                                                   which is then utilized to construct a comprehensive set of Burgers\par
+  Step 3. Compute average normal vector. Compute the average normal                circuits spanning the interface. Based on a user-specified CRF or an\par
+          vector using all area vectors computed in Step 2 as                      estimated CRF, Burgers vectors can then be defined and line segments\par
+                   \u119860?                                                               inserted by applying conservation of Burgers vector to each mesh face.\par
+            \u119899?=                                                          (4)        The interface structure and/or displacement shift complete lattice does\par
+                  \u8214?\u119860?\par
+                   \u119860?\u8214?\par
+                                                                                   not need to be defined for any of these steps.\par
+  Step 4. Determine step height. The step height is straightforwardly\par
+          determined for each edge as                                              2.5. Line defect statistics\par
+\par
+            \u8462? = |\u119899?\u119899? \u8901? \u119907? \u119894?\u119895? |.                                           (5)           Unlike with analysis of bulk line defects where the menu of possible\par
+                                                                                   Burgers vectors is known in advance, the set of possible line defects\par
+\par
+                                                                               4\par
+N. Deka et al.                                                                                                                              Acta Materialia 256 (2023) 119096\par
+\par
+Table 1\par
+Simulation and coherent reference frame (CRF) coordinate axes used for the bicrystalline test cases considered here. (GB = grain boundary, NW = Nishiyama\u8211?Wasserman).\par
+ Case                 Crystal             Phase             \u119909? sim                      \u119910? sim                   \u119911? sim            \u119909? CRF            \u119910? CRF               \u119911? CRF\par
+ \u120564?11 GB               A                   FCC               [146 98 148]               [542 2 536]             [1 3 1]          [3 2 3]           [1 0 1]            [1 3 1]\par
+                      B                   FCC               [148 98 146]               [536 2 542]             [1 3 1]          [3 2 3]           [1 0 1]            [1 3 1]\par
+ NW                   A                   FCC               [1 1 0]                    [1 1 2]                 [1 1 1]          [1 1 0]           [1 1 2]            [1 1 1]\par
+                      B                   BCC               [1 0 0]                    [0 1 1]                 [0 1 1]          [1 0 0]           [0 1 1]            [0 1 1]\par
+\par
+\par
+\par
+                                                                                               Since this is a GB, no coherency strains need to be imposed to achieve\par
+                                                                                               coherency in the CRF. The system contained about 430,000 atoms and\par
+                                                                                               the interface was approximately 312 \u197? by 345 \u197?. After inserting the\par
+                                                                                               crystals, the system was relaxed via energy minimization, annealed at\par
+                                                                                               400 K for 24 ps, and then relaxed again via energy minimization for line\par
+                                                                                               defect analysis. The Mishin et al. embedded atom method potential for\par
+                                                                                               Cu was used [33].\par
+                                                                                                   Fig. 5 shows the results. First, Fig. 5(a) shows that the atomic struc-\par
+Fig. 4. Cases for line insertion using triangular mesh faces: (left) one segment is\par
+                                                                                               ture of the interface is not flat, but instead contains numerous curved\par
+inserted because only two edges have non-zero Burgers vectors and (right) three                steps, indicating the possible presence of disconnections. These defects\par
+segments are inserted because all three edges have non-zero Burgers vectors. In both           nucleated to accommodate the misorientation from the perfect 180\u9702?\par
+cases, Burgers vector conservation is satisfied.                                               twist. Using the CIS identification subroutine, 6011 CIS atoms were\par
+                                                                                               identified using a maximum RMSD value of 0.06 \u197?, and these atoms\par
+                                                                                               are colored yellow. These CIS atoms form an approximately planar\par
+for a given interface is rarely known. This can make it difficult to                           interface in between the stepped defects. Note that only a fraction of\par
+assess the output of a line defect analysis code, such as ILDA. To help                        the atoms in the GB were identified as CIS atoms (white atoms in the\par
+organize the output, ILDA tries to categorize the observed line defects.                       interface have unknown structure and are not CIS atoms). Fig. 5(b)\par
+First, the Burgers vectors are sorted based on the magnitude of the                            shows the surface mesh resulting from these CIS atoms. Fig. 5(c) finally\par
+Burgers vector; line defects with Burgers vectors of similar magnitude                         shows the line defect structure identified by ILDA using the user-\par
+are grouped together. The \u119887?tol parameter dictates how different two                            specified CRF given in Table 1. Line defects are colored based on their\par
+Burgers vector magnitudes have to be for them to be considered distinct                        Burgers ID, each Burgers ID corresponds to a distinct Burgers vector\par
+from one another. Each distinct Burgers vector magnitude is assigned a                         magnitude. The Burgers vectors and the average step height \u10216?\u8462?\u10217? for\par
+\u8216?\u8216?Burgers ID\u8217?\u8217?. Then, within each Burgers ID, the code sorts the Burgers                       each are given in the table in Fig. 5, which also provides a color legend\par
+vectors into \u8216?\u8216?variants\u8217?\u8217?, with each variant corresponding to a Burgers                        for the line defects. We have analyzed the same interface using DXA and\par
+vector with a distinct direction. For example, [1 1 0], [1 0 1], and [1 1 0]                   find agreement between ILDA and DXA on both line configurations and\par
+would be variants of the same Burgers ID. To determine whether two                             Burgers vectors. Recall that while DXA requires the interfacial atomic\par
+Burgers vectors are distinct, the angle between them is computed and                           structure to be specified, ILDA does not.\par
+if this angle is larger than a user-specified \u120579?tol parameter then they                             The majority of the line defect network is comprised of \u8216?\u8216?ID 2\u8217?\u8217?\par
+are declared separate variants. This analysis is especially useful when                        disconnections with a small step height of 1.09 \u197? (yellow lines). ID 2\par
+using an estimated CRF, because Burgers vectors are approximate and                            disconnections have two variants, whose Burgers vectors only differ by\par
+uncertain. In other words, Burgers vectors which should be identical                           a single negative sign. When one ID 2 disconnection from each variant\par
+are not. ILDA assigns Burgers IDs and variants to each Burgers vector,                         meets, they react to form an ID 3 disconnection with a much smaller\par
+and then computes the average and standard deviation (weighted by                              Burgers vector and larger step height (red lines). However, this reaction\par
+the segment lengths) for each component of each Burgers vector within                          does not seem to be very stable, because we see many locations where\par
+the same Burgers ID and variant. These values are outputted at the end                         the structure stays disassociated as two yellow ID 2 lines rather than\par
+of the analysis. Judicious choice of \u119887?tol and \u120579?tol can lead to a reasonable                    combining together into one red ID 3 line. At the bottom of the figure,\par
+understanding of the line defect content in an interface, even with the                        we also see ID 1 disconnections (green lines) with a large step height\par
+uncertainty introduced by an estimated CRF.                                                    of 5.71 \u197?. These form when five or six ID 2 disconnections combine\par
+                                                                                               together, and three distinct variants are observed.\par
+3. Results                                                                                         In the table in Fig. 5, we also list the average Burgers vectors\par
+                                                                                               and associated standard deviations obtained using the estimated CRF\par
+   We demonstrate ILDA\u8217?s functionality on two different test cases: one                        computed with \u119889?F = 5 \u197?, \u119887?tol = 0.5 \u197?, and \u120579?tol = 10\u9702? . Approximately\par
+GB and one biphase interface. Both cases consider a planar interface be-                       18,700 atoms from each crystal were used to approximate A \u119813? and B \u119813?.\par
+tween two periodic crystals. The crystal orientations used to construct                        We can see that the Burgers vectors obtained using the estimated CRF\par
+the atomistic systems are given in Table 1 (the \u8216?sim\u8217? vectors). In this                        are generally accurate to within 0.1 \u197? and the standard deviations are\par
+table, we also give the crystal orientations used to specify the CRF.                          all less than 0.04 \u197?. These estimated Burgers vectors were obtained\par
+Simulations were performed using LAMMPS [32]. The run-time for the                             with no user input on the geometry of the problem or the nature of\par
+Python implementation of ILDA in OVITO was on the order of 5 min                               the interface.\par
+on a laptop computer for these interfaces containing \u8764?104 CIS atoms.\par
+                                                                                               3.2. Nishiyama\u8211?Wasserman interface\par
+3.1. \u120564?11 Twist GB\par
+                                                                                                  Next we consider a biphase interface using the Zhou et al. em-\par
+    A GB vicinal to the \u120564?11(131) 180\u9702? pure twist boundary with face-                           bedded atom method potential for Fe [34], examining an FCC crystal\par
+centered cubic (FCC) crystals was considered. Crystals were inserted                           coherently bonded to a body-centered cubic (BCC) crystal. The two\par
+in a non-orthogonal simulation cell resulting in a 179.29\u9702? twist about                         crystals satisfy the Nishiyama\u8211?Wasserman (NW) orientation relation,\par
+the (131) axis between the top and bottom crystals. The CRF for this                                                                                            \u772? FCC \u8741?\par
+                                                                                               with (111)FCC \u8741? (110)BCC for the interface plane normal, and [110]\par
+interface corresponds to the grain orientations for the perfect \u120564?11 GB.                         \u772?                \u772?         \u772?\par
+                                                                                               [100]BCC and [112]FCC \u8741? [011]BCC in the plane of the interface; this set of\par
+\par
+                                                                                         5\par
+N. Deka et al.                                                                                                                                    Acta Materialia 256 (2023) 119096\par
+\par
+\par
+\par
+\par
+Fig. 5. Line defect analysis for a GB vicinal to a \u120564?11 twist GB. (a) Atomic view with FCC atoms from the top grain removed. Yellow atoms are CIS atoms. Inset shows zoom\par
+of the interface. (b) Surface mesh used by ILDA. (c) Line defects extracted by ILDA. The table gives information on the 3 distinct interfacial line defects and their variants using\par
+exact and estimated coherent reference frames (CRFs). (CIS = co-incidence site). (For interpretation of the references to color in this figure legend, the reader is referred to the\par
+web version of this article.)\par
+\par
+\par
+crystallographic relationships also defines the CRF for the interface. The                   Ma and Pond [28]. Note that while this choice is arbitrary, a \u8216?\u8216?correct\u8217?\u8217?\par
+NW orientation relation has been observed experimentally for marten-                         CRF does exist such that the long-range stress fields of the interface\par
+sitic interfaces in steels [35]. Since this is a biphase interface, coherency                are zero when the line defects at the interface satisfy the Frank\u8211?Bilby\par
+strains are necessary to achieve coherency in the CRF; specifically, for                     equation [36]. Determination of the \u8216?\u8216?correct\u8217?\u8217? CRF requires solution of\par
+lattice parameters \u119886?FCC = 3.58 \u197?, \u119886?BCC = 2.87 \u197? and an interface                             an elasticity problem [36], which is beyond the scope of this paper.\par
+plane orthogonal to the \u119911?-axis, the following set of coherency strains                       However, once the Burgers vectors are determined in any CRF, they can\par
+are specified:\par
+                                                                                             be easily mapped to a different CRF by simply applying a deformation\par
+        \u9121?0.0669       0         0\u9124?             \u9121?\u8722?0.0590         0       0\u9124?                   gradient. Consider the following example. Let \u119939? be a Burgers vector\par
+A\u120576? \u119888?   =\u9122? 0        \u8722?0.0372      0\u9125? ,   B\u120576? \u119888?   =\u9122? 0           0.0401     0\u9125?                   obtained in the exact CRF given above, where coherency strains are\par
+        \u9122?                        \u9125?             \u9122?                         \u9125?\par
+        \u9123? 0           0         0\u9126?             \u9123? 0              0       0\u9126?                   equally partitioned between crystals A and B. According to Eq. (2), this\par
+where crystal A is the FCC crystal and crystal B is the BCC crystal.                         Burgers vector can be expressed in a new CRF where all coherency\par
+This set of coherency strains results in a CRF that is halfway between                       strain has been applied to crystal B as \u119939?\u8242? = (\u119816? + A\u120576? \u119888? )\u8722?1 \u8901? \u119939?, which\par
+the unstrained FCC and BCC crystals (e.g., the lattice spacings in the                       effectively \u8216?\u8216?removes\u8217?\u8217? the coherency strain from crystal A and instead\par
+interface are the average of the FCC and BCC spacings), as used by                           applies it to crystal B.\par
+\par
+                                                                                         6\par
+N. Deka et al.                                                                                                                                    Acta Materialia 256 (2023) 119096\par
+\par
+\par
+\par
+\par
+Fig. 6. Line defect analysis for Shockley\u8211?Read partial dislocations impinging on an FCC-BCC NW interface. (a) Atomic view with FCC atoms removed. Yellow atoms are CIS atoms.\par
+Inset shows zoom of the interface. (b) Surface mesh used by ILDA. (c) Line defects extracted by ILDA and DXA. The table gives information on the 4 distinct interfacial line defects\par
+identified by ILDA. (SF = stacking fault, CIS = co-incidence site, NW = Nishiyama\u8211?Wasserman). (For interpretation of the references to color in this figure legend, the reader is\par
+referred to the web version of this article.)\par
+\par
+\par
+    The biphase system contains about 3 million atoms and is con-                            Looking to the bottom right of the figure, we see that the Type 1\par
+structed to form a 220 \u197? by 270 \u197? interface, which is relaxed with a                         disconnection is able to emit another Type 4 disconnection, forming\par
+zero-pressure NPT ensemble at 5 K. A set of three glide dislocation                          a new Type 2 (yellow) disconnection with a much larger step height of\par
+loops of dimensions 60 \u197? by 100 \u197? are also introduced into the FCC                           about 4 \u197?.\par
+crystal by carefully removing parallelepipedal regions of atoms. During\par
+relaxation, these dislocation loops bowout and impinge on the inter-                             The Burgers vector statistics obtained using the estimated CRF with\par
+face, stimulating the nucleation of stepped defects in the interface, as                     \u119889?F = 5 \u197?, \u119887?tol = 0.25 \u197?, and \u120579?tol = 10\u9702? are also given in the table\par
+shown in Fig. 6(a). In this figure, the 12,730 identified CIS atoms, as                      in Fig. 6. Approximately 26,000 atoms were used from each crystal\par
+obtained using a maximum RMSD value of 0.05 \u197?, are shown as yellow.                          to compute the estimated values of A \u119813? and B \u119813?. When it comes to\par
+All atoms in the interface are CIS atoms for this test case. Fig. 6(b)                       estimating the CRF from the interface in the simulation, this test case is\par
+shows the surface mesh which spans these CIS atoms. In order to fully\par
+                                                                                             more challenging since the FCC crystal contains numerous line defects\par
+assess the line defects in this simulation, we utilize DXA to analyze\par
+                                                                                             which are impinging on the interface, whereas no such defects were\par
+the bulk dislocations and ILDA to analyze the interfacial line defects.\par
+Fig. 6(c) shows the line defect structure identified by DXA and ILDA                         present in the \u120564?11 GB case. Compared to the twist GB example, these\par
+using the user-specified CRF given in Table 1. Four distinct interfacial                     estimated Burgers vectors differ more significantly from their exact CRF\par
+line defects are identified, which are listed in the table in Fig. 6, each                   counterparts. These differences are a result of the different rotation ma-\par
+only has one variant. This analysis clearly reveals that the impingement                     trices and coherency strain tensors which define the estimated CRF. To\par
+on the interface by a Shockley\u8211?Read partial dislocation (colored green)                      better understand this, we employ polar decomposition to decompose\par
+leads to disassociation into a pair of disconnections, one with ID 3                         the estimated deformation gradients into their corresponding rotations\par
+(colored light blue) and one with ID 4 (colored dark blue). The ID 4\par
+                                                                                             \u119825? and stretches \u119829? = \u119816? + \u120576? \u119888? , such that \u119813? = \u119829? \u8901? \u119825? [37]. The estimated\par
+disconnection appears to be glissile and begins gliding away from the\par
+                                                                                             deformation gradients for this test case are:\par
+original intersection area, whereas the ID 3 disconnection appear to\par
+be immobile. After a second Shockley\u8211?Read dislocation hits the same                                \u9121?0.075      0.006      \u8722?0.753\u9124?            \u9121?0.943      \u8722?0.001        0 \u9124?\par
+region on the interface, a Type 1 disconnection (red line) is formed.                        A\u119813?\par
+                                                                                               \u771? = \u9122?0.410      0.764      0.423 \u9125? ,      \u771? = \u9122?0.001\par
+                                                                                                                                        B\u119813?                0.741      0.723\u9125? .\par
+Type 1, 3, and 4 disconnections all have step heights around 2 \u197?.                                  \u9122?                             \u9125?           \u9122?                            \u9125?\par
+                                                                                                   \u9123?0.580     \u8722?0.580       0.577 \u9126?           \u9123? 0         \u8722?0.711      0.711\u9126?\par
+\par
+                                                                                         7\par
+N. Deka et al.                                                                                                                  Acta Materialia 256 (2023) 119096\par
+\par
+\par
+The polar decomposition of these deformation gradients gives the                   bicrystals could be valuable to the study of interfaces beyond the search\par
+following estimated coherency strain tensors:                                      for line defects.\par
+                                                                                       It is worth reiterating the differences between ILDA and DXA. Both\par
+          \u9121? 0.062   \u8722?0.005     0 \u9124?                \u9121?\u8722?0.057   0.001     0 \u9124?\par
+                                                                                   approaches use Burgers circuits to identify line defects. The major\par
+A\u120576?\u771? \u119888?   = \u9122?\u8722?0.005   \u8722?0.035   0.020\u9125? ,   B\u120576?\u771? \u119888?   = \u9122? 0.001   0.036   0.006\u9125? .\par
+          \u9122?                       \u9125?               \u9122?                      \u9125?         differences are: (1) how interfaces are handled during Burgers circuit\par
+          \u9123? 0        0.020   0.003\u9126?               \u9123? 0       0.006   0.006\u9126?\par
+                                                                                   construction and (2) how line segments are inserted.\par
+Comparing these estimated coherency strains with the exact ones                        Regarding (1), in DXA interfaces are treated exactly the same as\par
+above, we see several differences. First, several spurious shear strain            bulk crystalline regions. A \u8216?\u8216?perfect\u8217?\u8217? atomic structure is identified for\par
+components with magnitudes on the order of 0.01 appear in the                      bulk and interface regions via a repeating atomic motif. Accordingly,\par
+estimated strain tensors. And second, the coherency strain magnitudes              any atomic jump inside of an interface could be used in constructing\par
+in the estimated tensors are uniformly smaller than those of the exact             Burgers circuits. In contrast, ILDA treats interfaces fundamentally dif-\par
+tensors (e.g., 0.062 compared with 0.0669). Both of these effects give             ferently than bulk regions. Only the CIS atoms within an interface are\par
+rise to a slightly incoherent interface in the estimated CRF, and cause            used to construct Burgers circuits, other interface atoms are ignored.\par
+the Burgers vectors to differ from the exact CRF.                                  As a result, ILDA will not be able to locate line positions within the\par
+                                                                                   interface as precisely as DXA, but also does not require the specification\par
+4. Discussion                                                                      of a structural motif for the interface.\par
+                                                                                       Regarding (2), in DXA line segments are inserted by sweeping a\par
+    The major benefit of ILDA compared to DXA is that little, or no,               single Burgers circuit which is known to have a closure failure along the\par
+information about the nature of the interface is necessary to use it. In           manifold surrounding regions containing atoms of unknown structure\par
+the case where a user knows the CRF for the interface\u8212?for example                  type. In ILDA, line defects are inserted by applying conservation of\par
+when a manually constructed planar interface is being studied (as in               Burgers vector to each face of the interfacial surface mesh individually\par
+our test cases)\u8212?then the user simply needs to specify the known crystal            (see Fig. 4). Unfortunately this difference in line insertion means that\par
+orientations and coherency strains that define the CRF. The line defects           the line defects extracted by ILDA and DXA cannot presently be tied\par
+that are extracted in this case are precisely defined with respect to that         together at their intersections points; additional research is necessary\par
+CRF. This scenario applies to many previous works, such as the large               to properly couple them together. Such a unified algorithm may be\par
+body of research focused on GB mobility, energy, and GB interactions               enabled by a future reformulation of DXA based on a 3D Delaunay\par
+with bulk line defects [38], and the large but more modest body of                 tessellation in which short dislocation segments are constructed in each\par
+work on planar biphase interfaces. In the case where a user does not               tetrahedral element [39]. Another point to make is that, in principle,\par
+know the CRF, the estimated CRF allows an initial analysis without                 the ILDA approach should be more amenable to parallelization than\par
+having to specify anything about the interface. Of course the results              DXA, since all Burgers circuit construction and line insertion events\par
+using an estimated CRF are only approximate, and some fine-tuning                  are independent of each other. An additional benefit of the interfacial\par
+may be required to determine the appropriate values of \u119889?F , \u119887?tol , and             surface mesh approach of ILDA is the ability to extract the step height\par
+\u120579?tol which provide useful results. Furthermore, the user may be able to            of a disconnection, which is not currently possible in DXA.\par
+use the estimated CRF to help determine the true CRF using the polar                   Interestingly, the notion of a CRF as used in ILDA is quite similar\par
+decomposition, as shown in Section 3.2. ILDA automatically performs                to the reference frames and transformation matrices used in DXA to\par
+this polar decomposition for the user and reports the results. We believe          construct Burgers circuits that span interfaces. The only substantive\par
+that the ability to approximately identify interfacial defects without any         difference is that in ILDA mismatched interfaces with coherency strains\par
+user input is a major advancement for the MD community.                            are allowed. We note that DXA is quite more general than ILDA in terms\par
+    There is, of course, a strong requirement before ILDA can be used: it          of being able to construct Burgers circuits which span disparate atomic\par
+must be possible to locate CIS atoms within the interface. If CIS atoms            structures. For example, in DXA a Burgers circuit could be constructed\par
+cannot be located, the method is unable to find line defects. In the cases         around a GB triple point, which requires crossing three separate inter-\par
+presented above, there was a dense set of CIS atoms which made it                  faces. As introduced above, ILDA cannot identify line defects at triple\par
+possible to extract line defects with high spatial resolution (close to the        points. Perhaps ILDA and DXA could be further combined by coupling\par
+atomic spacing). However, if the interface is more heavily disordered,             the transformation matrices concept from DXA with ILDA\u8217?s use of CIS\par
+ILDA may fail to identify CIS atoms. This may be because: (1) CIS atoms            atoms and an interfacial surface mesh.\par
+do not exist for the interface (e.g., a general GB), (2) the interface is              A final, and rather subtle difference between ILDA and DXA is in\par
+too disordered to identify CIS atoms, or (3) CISs exist but atoms do               the nature of the reference state(s) used to define the Burgers vector.\par
+not reside at them. In case (1), there is no way to define interfacial             In DXA, the reference state used for Burgers circuit construction is\par
+defects anyway, so the problem is moot. In case (2), the disorder may              obtained via energy minimization of the interfacial structure. In other\par
+be due to elevated temperature, in which case quenching the system                 words, the atomic jumps within the interface correspond to the atomic\par
+or minimizing the energy may reveal the CIS atoms. Or, the disorder                positions in the true, relaxed interface structure. On the other hand,\par
+may simply be a property of the interface. For example, some GBs may               ILDA only uses CISs within the interface which are defined in the\par
+have a structure which is several atomic planes thick. CIS atoms may be            unrelaxed state. This is akin to how a CSL is defined as a theoretical\par
+difficult to identify in such interfaces. In case (3), the ILDA algorithm          lattice based on abutting two perfect crystals together. The atoms in\par
+would need to be extended in order to account for the possibility of               a real interface which derives from the co-incidence site lattice may\par
+\u8216?\u8216?virtual\u8217?\u8217? CISs, e.g., CISs where no atoms reside; this is possible in            displace away from their theoretical positions during relaxation.\par
+principle, but additional research is necessary. Beyond these scenarios,\par
+there may be cases where CIS atoms can be located, but they are spaced             5. Conclusions\par
+so far apart from each other that it is not possible to locate line defects\par
+with high spatial resolution. Of course the defect content identified by               We have presented a new methodology for identifying and extract-\par
+ILDA will still be valid, it is just that each line segment inserted by            ing interfacial line defects, including dislocations and disconnections,\par
+ILDA may be a composite from many different line defects that exist in             which requires little or no user input on the nature of the interface.\par
+between the CIS atoms. Finally, we argue that identification of CISs is a          This method, which we have called ILDA, is similar to DXA in its\par
+valuable capability by itself, since so much of interfacial structure and          performance, but unlike DXA relies on the ability to find CIS atoms\par
+properties are related to the co-incidence site lattice of an interface. The       in the interface. We apply the approach to two test cases: a pure twist\par
+ability to automatically identify and analyze these sites for arbitrary            GB vicinal to a \u120564? boundary and an FCC-BCC interface. In both cases\par
+\par
+                                                                               8\par
+N. Deka et al.                                                                                                                                     Acta Materialia 256 (2023) 119096\par
+\par
+\par
+ILDA was able to reveal in detail what line defects were present in                           [15] C. Hu, D.L. Medlin, R. Dingreville, Disconnection-mediated transition in seg-\par
+the interface, both in terms of their Burgers vectors and their step                               regation structures at twin boundaries, J. Phys. Chem. Lett. 12 (29) (2021)\par
+                                                                                                   6875\u8211?6882.\par
+heights. Notably, by using the atoms near the interface to estimate\par
+                                                                                              [16] C. Hu, S. Berbenni, D.L. Medlin, R. Dingreville, Discontinuous segregation\par
+the CRF, accurate estimates of the Burgers vectors could be obtained                               patterning across disconnections, Acta Mater. 246 (2023) 118724.\par
+without specifying anything about the interface. In the future, we hope                       [17] C. Hartley, Y. Mishin, Characterization and visualization of the lattice misfit\par
+to improve the coupling between ILDA and DXA to lead to a unified                                  associated with dislocation cores, Acta Mater. 53 (5) (2005) 1313\u8211?1321.\par
+methodology for line defect analysis which is easy to use and efficient                       [18] C.S. Hartley, Y. Mishin, Representation of dislocation cores using Nye tensor\par
+                                                                                                   distributions, Mater. Sci. Eng. A 400\u8211?401 (2005) 18\u8211?21.\par
+for high-performance computing.                                                               [19] A. Stukowski, K. Albe, Extracting dislocations and non-dislocation crystal defects\par
+                                                                                                   from atomistic simulation data, Modelling Simul. Mater. Sci. Eng. 18 (8) (2010)\par
+Declaration of competing interest                                                                  085001.\par
+                                                                                              [20] A. Stukowski, Dislocation analysis tool for atomistic simulations, in: W. Andreoni,\par
+                                                                                                   S. Yip (Eds.), Handbook of Materials Modeling, Springer International Publishing,\par
+    The authors declare that they have no known competing finan-\par
+                                                                                                   Cham, 2020, pp. 1545\u8211?1558.\par
+cial interests or personal relationships that could have appeared to                          [21] A. Stukowski, V.V. Bulatov, A. Arsenlis, Automated identification and indexing\par
+influence the work reported in this paper.                                                         of dislocations in crystal interfaces, Modelling Simul. Mater. Sci. Eng. 20 (8)\par
+                                                                                                   (2012) 085007.\par
+Acknowledgments                                                                               [22] I. Winter, T. Oppelstrup, T. Frolov, R. Rudd, Characterization and visualization\par
+                                                                                                   of grain boundary disconnections, Acta Mater. 237 (2022) 118067.\par
+                                                                                              [23] OVITO Python API. http://docs.ovito.org/python/.\par
+    This work was supported by the U.S. Department of Energy, Office                          [24] A. Stukowski, Visualization and analysis of atomistic simulation data with OVITO\par
+of Science, Basic Energy Sciences, under Award # DE-SC0022154 (N.D.                                \u8211? the open visualization tool, Modelling Simul. Mater. Sci. Eng. 18 (1) (2010)\par
+and R.B.S.).                                                                                       015012.\par
+                                                                                              [25] ILDA source code. Source code available for download. https://mmod.rutgers.\par
+                                                                                                   edu/index.php/codes/.\par
+References                                                                                    [26] P.M. Larsen, S. Schmidt, J. Schi\u248?tz, Robust structural identification via polyhedral\par
+                                                                                                   template matching, Modelling Simul. Mater. Sci. Eng. 24 (5) (2016) 055007.\par
+ [1] A.P. Sutton, R.W. Balluffi, Interfaces in Crystalline Materials, in: Monographs          [27] J. Hirth, R. Pond, Steps, dislocations and disconnections as interface defects\par
+     on the Physics and Chemistry of Materials, no. 51, Clarendon Press; Oxford                    relating to structure and phase transformations, Acta Mater. 44 (12) (1996)\par
+     University Press, Oxford: New York, 1995.                                                     4749\u8211?4763.\par
+ [2] Z.C. Cordero, B.E. Knight, C.A. Schuh, Six decades of the Hall\u8211?Petch effect \u8211? a          [28] X. Ma, R. Pond, Parent\u8211?Martensite interface structure in ferrous systems, J. Nucl.\par
+     survey of grain-size strengthening studies on pure metals, Int. Mater. Rev. 61                Mater. 361 (2\u8211?3) (2007) 313\u8211?321.\par
+     (8) (2016) 495\u8211?512.                                                                      [29] F. Shimizu, S. Ogata, J. Li, Theory of shear banding in metallic glasses and\par
+ [3] J. Monk, B. Hyde, D. Farkas, The role of partial grain boundary dislocations in               molecular dynamics calculations, Mater. Trans. 48 (11) (2007) 2923\u8211?2927.\par
+     grain boundary sliding and coupled grain boundary motion, J. Mater. Sci. 41              [30] H. Edelsbrunner, E.P. M\u252?cke, Three-dimensional alpha shapes, ACM Trans.\par
+     (23) (2006) 7741\u8211?7746.                                                                        Graph. 13 (1) (1994) 43\u8211?72.\par
+ [4] A. Oudriss, J. Creus, J. Bouhattate, C. Savall, B. Peraudeau, X. Feaugas, The            [31] A. Stukowski, Computational analysis methods in atomistic modeling of crystals,\par
+     diffusion and trapping of hydrogen along the grain boundaries in polycrystalline              JOM 66 (3) (2014) 399\u8211?407.\par
+     nickel, Scr. Mater. 66 (1) (2012) 37\u8211?40.                                                 [32] A.P. Thompson, H.M. Aktulga, R. Berger, D.S. Bolintineanu, W.M. Brown, P.S.\par
+ [5] Z. Pan, T.J. Rupert, Damage nucleation from repeated dislocation absorption at                Crozier, P.J. in \u8217?t Veld, A. Kohlmeyer, S.G. Moore, T.D. Nguyen, R. Shan, M.J.\par
+     a grain boundary, Comput. Mater. Sci. 93 (2014) 206\u8211?209.                                      Stevens, J. Tranchida, C. Trott, S.J. Plimpton, LAMMPS - a flexible simulation\par
+ [6] T. Meiners, T. Frolov, R.E. Rudd, G. Dehm, C.H. Liebscher, Observations of                    tool for particle-based materials modeling at the atomic, meso, and continuum\par
+     grain-boundary phase transformations in an elemental metal, Nature 579 (7799)                 scales, Comput. Phys. Comm. 271 (2022) 108171.\par
+     (2020) 375\u8211?378.                                                                          [33] Y. Mishin, M.J. Mehl, D.A. Papaconstantopoulos, A.F. Voter, J.D. Kress, Struc-\par
+ [7] J. Howe, R. Pond, J. Hirth, The role of disconnections in phase transformations,              tural stability and lattice defects in copper: Ab Initio , tight-binding, and\par
+     Prog. Mater. Sci. 54 (6) (2009) 792\u8211?838.                                                      embedded-atom calculations, Phys. Rev. B 63 (22) (2001) 224106.\par
+ [8] J. Han, S.L. Thomas, D.J. Srolovitz, Grain-boundary kinetics: A unified approach,        [34] X.W. Zhou, M.E. Foster, R.B. Sills, An Fe-Ni-Cr embedded atom method potential\par
+     Prog. Mater. Sci. 98 (2018) 386\u8211?476.                                                          for austenitic and ferritic systems, J. Comput. Chem. 39 (29) (2018) 2420\u8211?2431.\par
+ [9] W. Cai, W.D. Nix, Imperfections in Crystalline Solids, Cambridge University Press,       [35] H. Kitahara, R. Ueji, M. Ueda, N. Tsuji, Y. Minamino, Crystallographic analysis\par
+     Cambridge, 2016.                                                                              of plate martensite in Fe\u8211?28.5 at.% Ni by FE-SEM/EBSD, Mater. Charact. 54\par
+[10] D.E. Spearot, M.D. Sangid, Insights on slip transmission at grain boundaries from             (4\u8211?5) (2005) 378\u8211?386.\par
+     atomistic simulations, Curr. Opin. Solid State Mater. Sci. 18 (4) (2014) 188\u8211?195.        [36] N. Abdolrahim, M. Demkowicz, Determining coherent reference states of general\par
+[11] S. Shao, J. Wang, A. Misra, R.G. Hoagland, Spiral patterns of dislocations at                 semicoherent interfaces, Comput. Mater. Sci. 118 (2016) 297\u8211?308.\par
+     nodes in (111) semi-coherent FCC interfaces, Sci. Rep. 3 (1) (2013) 2448.                [37] A. Hoger, D.E. Carlson, Determination of the stretch and rotation in the polar\par
+[12] A. Vattr\u233?, N. Abdolrahim, S. Navale, M. Demkowicz, The relaxed structure                      decomposition of the deformation gradient, Quart. Appl. Math. 42 (1) (1984)\par
+     of intrinsic dislocation networks in semicoherent interfaces: Predictions from                113\u8211?117.\par
+     anisotropic elasticity theory and comparison with atomistic simulations, Extreme         [38] Y. Mishin, M. Asta, J. Li, Atomistic modeling of interfaces and their impact on\par
+     Mech. Lett. 28 (2019) 50\u8211?57.                                                                  microstructure and properties, Acta Mater. 58 (4) (2010) 1117\u8211?1151.\par
+[13] H. Khater, A. Serra, R. Pond, J. Hirth, The disconnection mechanism of coupled           [39] A. Stukowski, A triangulation-based method to identify dislocations in atomistic\par
+     migration and shear at grain boundaries, Acta Mater. 60 (5) (2012) 2007\u8211?2020.                 models, J. Mech. Phys. Solids 70 (2014) 314\u8211?319.\par
+[14] Y. Deng, C. Deng, Size and rate dependent grain boundary motion mediated by\par
+     disconnection nucleation, Acta Mater. 131 (2017) 400\u8211?409.\par
+\par
+\par
+\par
+\par
+                                                                                          9\par
+
+}

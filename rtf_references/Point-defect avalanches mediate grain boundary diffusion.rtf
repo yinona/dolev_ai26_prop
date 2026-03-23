@@ -1,0 +1,673 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+                  ARTICLE\par
+                  https://doi.org/10.1038/s43246-022-00314-7               OPEN\par
+\par
+                  Point-defect avalanches mediate grain boundary\par
+                  diffusion\par
+                  Ian Chesser         1\u9993?   & Yuri Mishin         1\u9993?\par
+\par
+\par
+\par
+\par
+                  Grain boundary diffusion in polycrystalline materials is a physical phenomenon of great\par
+                  fundamental interest and practical signi\u64257?cance. Although accelerated atomic transport along\par
+                  grain boundaries has been known for decades, atomic-level understanding of diffusion\par
+                  mechanisms remains poor. Previous atomistic simulations focused on low temperatures\par
+                  where the grain boundary structure is ordered or high temperatures where it is highly dis-\par
+1234567890():,;\par
+\par
+\par
+\par
+\par
+                  ordered. Here, we conduct molecular dynamics simulations of grain boundary diffusion at\par
+                  intermediate temperatures most relevant to applications. A surprising result of this work is\par
+                  the observation of intermittent GB diffusion behavior and its strong system-size dependence\par
+                  unseen in previous work. Both effects are found to originate from thermally activated point-\par
+                  defect avalanches. We identify the length and time scales of the avalanches and link their\par
+                  formation to dynamic heterogeneity in partially disordered systems. Our \u64257?ndings have\par
+                  implications for future computer modeling of grain boundary diffusion and mass transport in\par
+                  nano-scale materials.\par
+\par
+\par
+\par
+\par
+                  1 Department   of Physics and Astronomy, MSN 3F3, George Mason University, Fairfax, VA 22030, USA. \u9993?email: ichesser@gmu.edu; ymishin@gmu.edu\par
+\par
+                  COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat                                   1\par
+ARTICLE                                                           COMMUNICATIONS MATERIALS | https://doi.org/10.1038/s43246-022-00314-7\par
+\par
+\par
+\par
+\par
+M\par
+            ost technological materials are composed of differently         Table 1 Crystallography and 0 K energies of Al GBs.\par
+            oriented crystallites (grains) separated by a network of\par
+            grain boundaries (GBs)1. Atomic transport along GBs is\par
+                                                                            GB description                   x                   y                  z               \u947? (mJ/\par
+known to be much faster than in the perfect lattice2. This short-\par
+                                                                                                                                                                    m2)\par
+circuit GB diffusion controls many processes in structural and\par
+functional materials, including microstructure development,                 \u931?3 h110i tilt 70.5\u8728?              [ \u8722? 1, 1, 1]        [0, 1, \u8722? 1]        [2, 1, 1]       418\par
+                                                                                                             [1, \u8722? 1, \u8722? 1]       [0, \u8722? 1, 1]        [2, 1, 1]\par
+phase transformations, and high-temperature modes of plastic\par
+                                                                            \u931?17 h100i tilt 61.9\u8728?             [5, \u8722? 3, 0]         [0, 0, \u8722? 1]        [3, 5, 0]       488\par
+deformation and fracture1,2. In addition to the practical sig-                                               [ \u8722? 5, 3, 0]        [0, 0, 1]          [3, 5, 0]\par
+ni\u64257?cance, GB diffusion is a phenomenon of great fundamental                 \u931?85 \{100\} twist 8.8\u8728?             [ \u8722? 1, 13, 0]       [13, 1, 0]         [0, 0, 1]       306\par
+interest. Being in a frustrated state squeezed between misoriented                                           [1, 13, 0]          [ \u8722? 13, 1, 0]      [0, 0, 1]\par
+crystals, the quasi-two-dimensional GB structure represents a               HAAI \{100\}\u8739?\u8739?\{111\}                [1, 1, 0]           [1, \u8722? 1, 0]        [0, 0, 1]       306\par
+unique state of matter transitional between ordered and dis-                                                 [1, 1, \u8722? 2]         [1, \u8722? 1, 0]        [1, 1, 1]\par
+ordered. Due to this structural complexity, the current under-\par
+                                                                            The Cartesian x, y and z axes are aligned with edges of the rectangular simulation box. The GB\par
+standing of GB diffusion mechanisms remains very limited.                   plane is normal to the z-direction. For each GB, the two lines indicate crystallographic directions\par
+Experiments can only measure numerical values of GB diffusion               parallel to the Cartesian axes in the upper and lower grain. The GB energy (\u947?) was computed\par
+                                                                            with the interatomic potential from Ref. 15.\par
+coef\u64257?cients but provide little information about the microscopic\par
+mechanisms. Hence, practically all existing knowledge about GB\par
+diffusion mechanisms comes from atomistic computer                            Four different GBs were selected for this study (Table 1). These\par
+simulations3.                                                              four boundaries represent diverse GB crystallographies, symme-\par
+   Previous simulations have only addressed two limiting cases of          tries, and atomic structures. The primary material considered is\par
+relatively low and relatively high temperatures. It is now estab-          Face Centered Cubic (FCC) Al, though main results are repro-\par
+lished that at low temperatures (T \u8810? Tm, where Tm is the melting           duced in FCC Ni and Body Centered Cubic (BCC) Fe GBs. Most\par
+point), GBs support both vacancies and interstitials, which can            of the results reported below are for the \u931?3 and \u931?17 GBs, with\par
+exist in a variety of structural forms, have strongly site-dependent       two remaining boundaries left for cross-checking. We note that\par
+but on average lower formation energies than in the lattice, and           both the \u931?3 incoherent twin GB and the high-angle asymmetric\par
+can contribute equally to GB diffusion4\u8211?7. GB atoms can diffuse            incommensurate (HAAI boundary) have relatively low energies\par
+by a variety of different but predominantly collective mechan-             and are common in polycrystalline Al14. To model GB diffusion,\par
+isms, typically in the form of a chain of highly coordinated dis-          we use classical molecular dynamics (MD) with atomic interac-\par
+placements that can be open-ended (string) or looped (ring). In            tions described with the interatomic potential15 referred to as Al-\par
+the other limit, when temperature approaches the bulk melting              M. To demonstrate that our results are not a speci\u64257?c feature of a\par
+point, the GB structure becomes highly disordered. Some GBs                particular potential, some of the simulations are repeated with\par
+premelt by transforming into a liquid-like layer near Tm6\u8211?8. The           two other Al potentials. In all cases, the results are well-consistent\par
+notion of individual point defects breaks down, but the diffusion          with those obtained with the Al-M potential for the \u931?3 and \u931?17\par
+mechanisms remain collective and closely resemble those in                 GBs, con\u64257?rming the robustness of our conclusions.\par
+disordered bulk systems such as supercooled liquids, glasses,\par
+superheated crystals and crystalline super-ionic materials9\u8211?13.            Results\par
+Accordingly, the statistical methods developed for the char-               0 K GB structure. The \u931?3 and \u931?17 GB structures optimized\par
+acterization of atomic dynamics in disordered bulk systems were            with the Al-M potential are shown in Fig. 1a, b. The GB con-\par
+successfully applied to study diffusion mechanisms in disordered           struction and optimization protocol is explained in the Methods\par
+GBs7,8. Such studies revealed a remarkable similarity between the          section. The \u931?3 GB, also known as incoherent twin boundary,\par
+two types of systems, including the existence of string-like dif-          comprises asymmetric kite-shaped structural units. This struc-\par
+fusion mechanisms and the dynamic heterogeneity occurring on               ture closely matches the high-resolution transmission electron\par
+multiple length and time scales.                                           microscopy observations16,17 and prior simulations18. Its\par
+   Little is known about GB diffusion mechanisms at intermediate           asymmetry arises from a small shift of the upper grain relative\par
+temperatures, at which the GB structure is not liquid-like but             to the lower along the h111i axis (x-direction in the sample\par
+rather retains a signi\u64257?cant degree of structural order. It is pre-         frame), whose magnitude (0.7 A) is close to the experimental\par
+sently unknown if the concepts of dynamic heterogeneity and                value (0.66 \u177? 0.07A)17). This boundary also has a symmetric\par
+dynamic facilitation developed for disordered systems can be               structure (zero shift)17,19, but the latter has a higher energy. We\par
+applied to such boundaries. If they can, the length and time scales        thus use the asymmetric structure for the diffusion simulations.\par
+involved in the heterogeneous dynamics remain unexplored. It               The \u931?17 GB has a zig-zag structure with the kite-unit spacing\par
+should also be noted that the intermediate temperatures are more           (0.59 nm) and energy consistent with prior simulations20. This\par
+relevant to the service conditions of many technological materials         boundary was previously used to study premelting diffusion\par
+than the two limiting cases mentioned above.                               mechanisms in copper7.\par
+   This work aims to \u64257?ll this knowledge gap by studying the\par
+diffusion mechanisms in metallic GBs at intermediate tem-\par
+peratures. A surprising outcome of the study is the observation            Diffusion coef\u64257?cients. Self-diffusion coef\u64257?cients in the \u931?3 and\par
+of a strongly intermittent diffusion behavior and its system-size          \u931?17 GBs were extracted from MD trajectories using the Einstein\par
+dependence unseen in previous work. We show that both                      relation as detailed in Methods. The results are summarized in the\par
+effects originate from an intermittent, avalanche-type genera-             Arrhenius diagram in Fig. 1c. For comparison, the diagram also\par
+tion of point defects causing spontaneous bursts of GB diffu-              shows the diffusion coef\u64257?cients in liquid Al computed in this\par
+sivity. We carefully characterize the length and time scales of            work and the diffusion coef\u64257?cients in FCC Al taken from the\par
+the avalanches and show that they fully explain the observed               literature. In agreement with prior work6, the GB diffusion\par
+intermittent diffusion behavior and its size dependence. We                coef\u64257?cients are intermediate between those in the supercooled\par
+discuss possible implications of our \u64257?ndings for the computer              liquid and in the perfect crystal. Both GBs exhibit diffusion ani-\par
+modeling of GB diffusion and for atomic transport in nano-                 sotropy with faster diffusion along the tilt axis (y-axis) than\par
+scale systems.                                                             normal to it (x-axis). Diffusion in the \u931?3 GB exhibits a larger\par
+\par
+2                      COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat\par
+COMMUNICATIONS MATERIALS | https://doi.org/10.1038/s43246-022-00314-7                                                                                                                ARTICLE\par
+\par
+degree of anisotropy and is over an order of magnitude slower                                          behavior correlates with the lower energy of the \u931?3 GB (418 mJ/\par
+than diffusion in the \u931?17 GB (except close to the melting tem-                                         m2) relative to the \u931?17 GB (488 mJ/m2)5,6.\par
+perature where the two diffusivities tend to converge). This                                             Below the homologous temperature of 0.9Tm (Tm = 929 K\par
+                                                                                                       being the Al melting point predicted by the Al-M potential), the\par
+                                                                                                       GB diffusion coef\u64257?cients follow the Arrhenius relation\par
+                                                                                                                                                 \par
+                                                                                                                                              Ei\par
+                                                                                                                            Di \u188? D0;i exp         ;                \u240?1\u222?\par
+                                                                                                                                             kB T\par
+\par
+                                                                                                       where the index i refers to the directions parallel (\u8739?\u8739?) or normal\par
+                                                                                                       (\u8869?) to the tilt axis, D0,i is the entropic prefactor, Ei is the\par
+                                                                                                       activation energy of diffusion, and kB is Boltzmann\u8217?s constant.\par
+                                                                                                       Table 2 summarizes the Arrhenius parameters for each GB\par
+                                                                                                       obtained by \u64257?tting Eq. (1) to the data below 0.9Tm. For the \u931?3 GB,\par
+                                                                                                       the average activation energy (1.38 eV) is signi\u64257?cantly higher than\par
+                                                                                                       for the \u931?17 GB (0.77 eV) and comparable to the literature data for\par
+                                                                                                       lattice diffusion (1.25-1.45 eV)21. At high temperatures, a\par
+                                                                                                       premelting regime is observed in both GBs as evident from the\par
+                                                                                                       rapid increase in the diffusivity with temperature. The \u931?17 GB\par
+                                                                                                       fully premelts and its diffusivity comes close to that in liquid Al\par
+                                                                                                       near Tm, which is consistent with previous work on this GB in\par
+                                                                                                       copper6,20,22. The \u931?3 GB also premelts, but its diffusivity remains\par
+                                                                                                       below the bulk liquid diffusivity. This work is focused on\par
+                                                                                                       diffusion at intermediate temperatures T < 0.8Tm (T < 750 K), at\par
+                                                                                                       which both GBs are relatively \u64258?at and immobile on the MD\par
+                                                                                                       timescales. This allows us to cleanly analyze the diffusion\par
+                                                                                                       mechanisms without the added complications of GB roughening,\par
+                                                                                                       migration, or premelting.\par
+\par
+                                                                                                       Avalanche-like diffusion mechanisms. Our \u64257?rst key observation\par
+                                                                                                       is the signi\u64257?cant intermittency of GB diffusion at the intermediate\par
+                                                                                                       temperatures. The effect is illustrated in Fig. 2a where we plot the\par
+                                                                                                       mean-square displacement (MSD) of atoms in the \u931?3 GB core as\par
+                                                                                                       a function of time. The remarkable feature of the plot is the slope\par
+                                                                                                       \u64258?uctuations with stochastic switches between nearly horizontal\par
+                                                                                                       and large-slope portions. The zig-zag shape of this plot points to\par
+                                                                                                       the existence of two dynamic regimes with a very small and a\par
+                                                                                                       relatively large GB diffusivity. We refer to the plateaus of the\par
+                                                                                                       diffusivity as the locked states and to the surges of diffusion as\par
+                                                                                                       avalanches. The times at which the avalanches nucleate corre-\par
+                                                                                                       spond to abrupt increases in the number of mobile atoms in the\par
+                                                                                                       GB core, as illustrated in Fig. 2b. In contrast, during the locked\par
+Fig. 1 Atomic structures and diffusion coef\u64257?cients for the Al \u931?3 and \u931?17                               periods, most GB atoms remain immobile; only a few atoms\par
+GBs. a, b The optimized GB structures as viewed parallel (left column) and                             execute jumps, usually in the form of small rings of highly cor-\par
+normal (right column) to the tilt axis. Atoms identi\u64257?ed with perfect FCC                               related displacements (Fig. 2c).\par
+coordination via common neighbor analysis are colored grey and all other                                  The diffusivity bursts are dynamic signatures of the avalanches,\par
+atoms are colored red. c Arrhenius diagram of GB diffusion coef\u64257?cients                                 but they also produce a structural signature. Each avalanche\par
+parallel (D\u8739?\u8739?) and perpendicular (D\u8869?) to the tilt axis. The vertical line                              period is accompanied by a drastically increased point defect\par
+indicates the melting point predicted by the interatomic potential. Shown                              activity in the GB core and thus a temporary decrease in the\par
+for comparison are the computed diffusivities in liquid Al and the                                     structural order. An avalanche triggers a massive formation of\par
+experimental (dashed stripe)53,54 and computed (lower stripe)21 literature                             vacancies and interstitials, which occur in almost equal amounts.\par
+data for self-diffusion in FCC Al.                                                                     Comparison of Figs. 2a and 3a shows that the numbers of\par
+\par
+ Table 2 Activation energies (E) and prefactors (D0) for self diffusion.\par
+\par
+ GB description                                          Direction                                E (eV)                                          D0 (m2/s)\par
+ \u931?3 h110i tilt 70.5\u8728?                                     \u8741? tilt axis                              1.31 \u177? 0.03                                     (3.89 \u177? 7.8) \u215? 10\u8722?3\par
+                                                         \u8869? tilt axis                              1.45 \u177? 0.03                                     (1.17 \u177? 2.24) \u215? 10\u8722?2\par
+ \u931?17 h100i tilt 61.9\u8728?                                    \u8741? tilt axis                              0.72 \u177? 0.01                                     (5.53 \u177? 1.59) \u215? 10\u8722?6\par
+                                                         \u8869? tilt axis                              0.81 \u177? 0.01                                     (2.09 \u177? 0.74) \u215? 10\u8722?5\par
+ Supercooled liquid                                                                               0.227 \u177? 0.001                                   (9.69 \u177? 0.24) \u215? 10\u8722?8\par
+ FCC crystal:\par
+ Experiment53                                                                                     1.32                                            1.79 \u215? 10\u8722?5\par
+ DFT calculations21                                                                               1.25 \u8722? 1.35                                     5.42 \u215? 10\u8722?6 \u8722? 2.42 \u215? 10\u8722?5\par
+\par
+ The reference data for diffusion in FCC Al is taken from experiments53 and \u64257?rst-principles density functional theory (DFT) calculations with several different DFT functionals21.\par
+\par
+\par
+COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat                                                                               3\par
+ARTICLE                                                                 COMMUNICATIONS MATERIALS | https://doi.org/10.1038/s43246-022-00314-7\par
+\par
+\par
+vacancies and interstitials in the GB core strongly correlate not                 also correlate with the total number of mobile atoms (Fig. 3a, c),\par
+only with each other but also with the occurrence of locked and                   con\u64257?rming that GB diffusion occurs by defect-mediated mechan-\par
+avalanche time periods. The \u64258?uctuating point defect populations                   isms. At 700 K, a typical avalanche creates hundreds of point\par
+                                                                                  defects and activates thousands of mobile atoms.\par
+                                                                                     The questions then arise: how does an avalanche begin, and\par
+                                                                                  how does it end? Careful structural analysis (see Methods) reveals\par
+                                                                                  that a typical avalanche starts with the formation of an interstitial\par
+                                                                                  atom in the GB core that hops multiple times (on the ps\par
+                                                                                  timescale) before pushing a regular atom out of its preferred site\par
+                                                                                  (Fig. 3b). This event triggers a cascade of collective structural\par
+                                                                                  excitations with a string-like character in which multiple atoms\par
+                                                                                  move simultaneously in the same direction. A string-like\par
+                                                                                  excitation can be viewed as an extended Frenkel pair in which\par
+                                                                                  the leading atom has an interstitial character (associated with\par
+                                                                                  local compression) and the trailing atom has a vacancy character\par
+                                                                                  (associated with local tension). This interpretation is con\u64257?rmed\par
+                                                                                  by analyzing the free volume distribution in the population of\par
+                                                                                  mobile atoms (see Supplementary Fig. 1). Importantly, the\par
+                                                                                  avalanches involve the facilitated dynamics23,24 of the multiple\par
+                                                                                  Frenkel pairs and neighboring string-like excitations. Namely, a\par
+                                                                                  collective atomic displacement at one location triggers nearby\par
+                                                                                  diffusive events, creating a positive feedback for further propaga-\par
+                                                                                  tion of the atomic displacement \u64257?eld that rapidly grows in size\par
+                                                                                  into a full-\u64258?edged avalanche. As the point-defect population\par
+Fig. 2 Example of intermittent diffusion at intermediate temperatures.            grows, so does the probability of their mutual recombination.\par
+a Atomic MSD as a function of time at 710 K (0.77 Tm) for the \u931?3 GB for a         Eventually, a bifurcation point is reached at which the dynamics\par
+typical GB cross-section (10 nm \u215? 10 nm). Typical atomic displacement             switch to a recombination regime. We hypothesize that the locked\par
+diagrams during the b avalanche and c locked time periods corresponding           states arise from spontaneous switches of the diffusion process\par
+to the blue and red regions in (a). The arrows represent net displacements        from the multiplication to the recombination regime. Self-\par
+during time intervals of 1.2 ns and 3 ns and are colored by the displacement      annihilation of point defects across the periodic boundary\par
+magnitude. The scale bar has units of \u64257?rst nearest neighbor distance r0.          conditions can also play a role.\par
+Note the enhanced atomic mobility in the avalanche regime and only a few             Our second key \u64257?nding is that the intermittent behavior of GB\par
+displaced atoms in the locked regime.                                             diffusion is system-size dependent on the ~10 nm length scale.\par
+\par
+\par
+\par
+\par
+Fig. 3 Point defect signatures of avalanche-like diffusion. a Peaks in the numbers of vacancies and interstitials correlate with the locked and avalanche\par
+time periods seen in Fig. 2a. b A typical collective diffusion event involves the formation and multiplication of Frenkel pairs. The arrows represent string-like\par
+displacements during the time interval \u916?t = 80 ps and colored in dark grey and light grey for displacements smaller and larger than the \u64257?rst-neighbor\par
+distance r0. c Peaks in the number of mobile atoms also correlate with the locked and avalanche time periods. d Correlation between the point-defect\par
+population and the number of mobile atoms in the GB core with the correlation factor of R2 = 0.83.\par
+\par
+4                         COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat\par
+COMMUNICATIONS MATERIALS | https://doi.org/10.1038/s43246-022-00314-7                                                                                                ARTICLE\par
+\par
+                                                                                                          Fig. 4 Finite size effects of diffusion and temperature dependence.\par
+ a                                                                                                        a Atomic MSD versus time at the temperature of 700 K (0.75 Tm) for the\par
+                                                 0.03\par
+                                                            (30 nm x 30 nm)                               (10 nm \u215? 10 nm) and (30 nm \u215? 30 nm) GB cross-sections for the Al \u931?3 GB.\par
+                                                            (10 nm x 10 nm)                               Note that the diffusion intermittency disappears with increasing cross-\par
+                                0.025\par
+                                                                                                          section. b Size dependence of GB diffusivity for several different cross-\par
+                                                                                                          sections with a \u64257?xed 13 nm size perpendicular to the tilt axis and a varied\par
+                                                 0.02                                                     size from 6 nm to 38 nm along the tilt axis. The points represent\par
+     MSD (nm2)\par
+\par
+\par
+\par
+\par
+                                                                                                          independent MD runs with different velocity seeds. The red points\par
+                                0.015                                                                     represent the average values. c Locked-state probability (fraction of plateau\par
+                                                                                                          portions in (a)) as a measure of intermittency plotted as a function of\par
+                                                 0.01                                                     temperature. The error bars are obtained by using up to ten velocity seeds\par
+                                                                                                          at each temperature. The sigmoidal \u64257?t is only meant to guide the eye. Note\par
+                                                                                                          the suppression of intermittency with increasing temperature.\par
+                                0.005\par
+\par
+                                                   0\par
+                                                        0        5       10         15         20         measure of the intermittent diffusion behavior. The plot clearly\par
+                                                                        Time (ns)                         shows that the scatter decreases with increasing GB size. (The\par
+                                                                                                          average diffusivity values seem to increase with the size, but this\par
+ b                                                  x10                                                   trend does not pass statistical signi\u64257?cance tests.) The probability\par
+            Diffusivity along tilt axis (m /s)\par
+\par
+\par
+\par
+\par
+                                                 2.5                                                      of locked states can also be used as a measure of intermittency.\par
+        2\par
+\par
+\par
+\par
+\par
+                                                                                                          The plot Fig. 4c shows that, for a \u64257?xed (10 nm \u215? 10 nm) cross-\par
+                                                                                                          section, the intermittency decreases with increasing temperature\par
+                                                   2                                                      and vanishes at about 750 K. These tests demonstrate that the\par
+                                                                                                          intermittent behavior of GB diffusion exists in a particular\par
+                                                 1.5                                                      temperature-size domain and disappears at high temperatures\par
+                                                                                                          and/or large GB sizes.\par
+                                                                                                             We posit that both phenomena, the GB diffusion intermittency\par
+                                                   1                                                      and its size dependence, have the same physical origin: the \u64257?nite\par
+                                                                                                          size of the mobile atom clusters generated by the point-defect\par
+                                                 0.5                                                      avalanches. In a large GB area, multiple avalanches can form at\par
+                                                                                                          different moments at random locations. The measured diffusion\par
+                                                                                                          coef\u64257?cient then represents the atomic mobility averaged over\par
+                                                   0\par
+                                                            10           20            30           40    multiple avalanches and exhibits a smooth and size-independent\par
+                                                                                                          behavior. If the GB size is less than or comparable to the\par
+                                                                 Size along tilt axis (nm)                avalanche size, the boundary conditions truncate the mobile\par
+                                                                                                          cluster to the GB size. Each mobility surge then quickly spreads\par
+ c                                                                                                        over the entire GB area and later stops across the entire GB area,\par
+                                                  1                                                       causing the on-and-off behavior seen in Figs. 3a and 4a. Due to\par
+         Locked state probability\par
+\par
+\par
+\par
+\par
+                                                                                                          the anisotropy of GB structure, the intermittency condition can\par
+                                                                                                          be met when the mobile cluster size becomes comparable to the\par
+                                                 0.8                                                      GB linear dimension in at least one direction. The disappearance\par
+                                                                                                          of the diffusion intermittency at high temperatures is explained\par
+                                                 0.6                                                      by a decrease in the mobile cluster size with temperature.\par
+                                                                                                             To provide mechanistic support to this explanation, we have\par
+                                                 0.4                                                      analyzed the dynamic length scales of the GB diffusion in more\par
+                                                                                                          detail. We \u64257?nd that the measures of dynamic length scales used in\par
+                                                 0.2                                                      previous work8,11 predict lengths that are too small in magnitude\par
+                                                                                                          to explain the observed diffusion intermittency. For example, the\par
+                                                                                                          average (1.4 nm) and maximum (7 nm) string lengths computed\par
+                                                  0\par
+                                                                                                          for the \u931?3 GB at 700 K by the standard string-like segmentation\par
+                                                                                                          method (see Methods) are smaller than the observed ~10 nm\par
+                                                  600            650       700           750        800\par
+                                                                                                          system-size effect. A method capturing the length scale of the\par
+                                                                          T (K)                           entire avalanche region was required.\par
+                                                                                                             As stated above, the avalanches exist due to the dynamic\par
+                                                                                                          facilitation of collective atomic displacements, in which a local\par
+This was demonstrated by increasing the GB cross-section and                                              excitation spreads in a self-catalytic manner by increasing the\par
+remeasuring the diffusion coef\u64257?cients and the MSD curves. In the                                          probability of atomic displacements in neighboring regions.\par
+example shown in Fig. 4a, the initial zig-zag shape of the MSD                                            Facilitated dynamics can be conveniently visualized using space-\par
+curves is replaced by linear functions when the cross-section is                                          time diagrams23. To construct such a diagram, displacement\par
+increased from (10 nm \u215? 10 nm) to (30 nm \u215? 30 nm). In a more                                              \u64257?elds corresponding to a \u64257?xed time interval are stacked together\par
+systematic test, the GB cross-section in the direction parallel to                                        along the time axis and viewed in a space-time cross-section\par
+the tilt axis was increased incrementally while keeping the size                                          (Fig. 5a, b). We note that in Fig. 5a, artistic license is taken such\par
+normal to the tilt axis \u64257?xed. For each cross-section, the diffusivity                                     that the \u64257?nite width of the GB core along the z direction is visible\par
+was measured several times with different velocity seeds as shown                                         along the time axis. The diagram reveals the formation and\par
+in Fig. 4b. The scatter of the points at each cross-section is a                                          disappearance of mobile and immobile clusters in space and time.\par
+\par
+COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat                                                                         5\par
+ARTICLE                                                                COMMUNICATIONS MATERIALS | https://doi.org/10.1038/s43246-022-00314-7\par
+\par
+\par
+\par
+\par
+Fig. 5 Avalanche time and length scales. a Space-time atomic mobility diagram for the \u931?3 GB at 700 K computed with the time interval of \u916?t = 40 ps and\par
+viewed perpendicular to the tilt axis. The \u64257?nite temperature GB structure is shown on the left with light grey FCC atoms and red non-FCC atoms. The\par
+immobile clusters are evident as voids (or bubbles)24 separating mobile atom trajectories. The arrows show examples of mobile and immobile cluster\par
+dimensions in time. b Cross section of the same diagram with all time data projected onto the GB plane. The rectangular box indicates the 6 nm scale of the\par
+GB structure shown in (a) relative to the GB area. c Probability distribution of lifetimes of mobile and immobile clusters. Note that immobile clusters persist\par
+on a longer time scale than mobile clusters. d Avalanche size distribution at 720 K as measured by the maximum avalanche size perpendicular and parallel\par
+to the tilt axis. The avalanches are elongated along the tilt axis and exhibit a cutoff behavior with large avalanches becoming increasingly unlikely with\par
+increasing size. Note that the cutoff size along the tilt axis is larger than 10 nm.\par
+\par
+\par
+The GB structural units blink between on and off states                          well-consistent with the length scale of the system-size effect of\par
+corresponding to the diffusive and quiescent time periods. The                   GB diffusion (cf. Figs. 3a and 4a). That the avalanche size\par
+branching and coalescence of diffusion trajectories on the                       decreases with temperature was con\u64257?rmed by the analysis shown\par
+diagram are signatures of facilitated dynamics. We have                          in Supplementary Figure 2, in which the average avalanche size\par
+developed a space-time clustering algorithm (see Methods) that                   was estimated by the virtual system-size analysis explained in\par
+identi\u64257?es the mobile and immobile clusters and measures their                    Methods.\par
+dimensions in space and time. The time dimensions of these\par
+clusters are associated with the lifetimes of the avalanches and\par
+locked states. As demonstrated in Fig. 5c, we \u64257?nd that immobile                  GB character and material dependence of avalanche-like dif-\par
+clusters have a longer average lifetime than mobile clusters. This               fusion mechanisms. The intermittent behavior and its dis-\par
+time scale separation is a known hallmark of facilitated                         appearance with increasing system size have been con\u64257?rmed for\par
+dynamics23,24. The spatial dimensions of the mobile and                          the (100) twist and HAIC boundaries, as illustrated in Fig. 6.\par
+immobile clusters are measures of avalanche size. Figure 5d                      These boundaries are crystallographically and structurally dif-\par
+displays the avalanche size probability distribution computed for                ferent from the \u931?3 and \u931?17 GBs but exhibit the same correlation\par
+the \u931?3 GB at 700 K. The plot shows that the avalanches are                       between the avalanche time periods on the MSD plots and the\par
+elongated parallel to the tilt axis (which is consistent with the                bursts of point-defect activity as found in the \u931?3 and \u931?17 GBs.\par
+diffusion anisotropy) and have a signi\u64257?cant probability of being 5               These tests con\u64257?rm the generic character of our main results for a\par
+to 15 nm in size. Over 15 percent of the mobile atoms participate                wide variety of GB structures.\par
+in avalanches larger than 10 nm along the tilt axis. The largest                    All simulations discussed so far utilized the Al-M interatomic\par
+avalanches contain a thousand or more atoms and have linear                      potential15. To demonstrate further generality of our results,\par
+dimensions up to 20 nm along the tilt axis. These dimensions are                 selected simulations were repeated with two additional Al\par
+\par
+6                         COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat\par
+COMMUNICATIONS MATERIALS | https://doi.org/10.1038/s43246-022-00314-7                                                                            ARTICLE\par
+\par
+\par
+\par
+\par
+Fig. 6 Avalanche-like diffusion behavior for various GB types. Intermittent diffusion behavior in the a, b \u931?85\{100\} low-angle twist GB at 500 K and\par
+c, d \{100\}\u8739?\u8739?\{111\} HAIC GB at 700 K. The twist GB is composed of a square network of dislocations displayed in the top left corner of the MSD plot. Panels\par
+(b) and (d) are atomic displacement maps using the same color coding as in Fig. 3 and representing the avalanches shown as blue highlighted regions in\par
+(a) and (c). In (b), the GB structure constrains the collective atomic displacements to the dislocation cores, resulting in string-like and ring-like trajectories.\par
+\par
+potentials and diffusion calculations were conducted for the \u931?3 GB                 Discussion\par
+in FCC Ni and the \u931?17 GB in BCC Fe (described in Supplementary                     The previous paradigm of GB diffusion has been that this process\par
+Table 1) with the embedded-atom interatomic potentials developed                   is continuous in time and uniform along the GB area. Contrary to\par
+in25 and26 and applied to surveys of GB properties in27 and28. The                 this idealistic picture, we have shown that there is a temperature-\par
+additional Al potentials include the embedded-atom potential from                  size domain in which GB diffusion is discontinuous in both time\par
+ref. 29 (Al-99) and the recently developed physically-informed                     and space. For the particular GBs studied here, the time and space\par
+neural network (PINN) potential30 referred to here as Al-PINN.                     scales of the diffusion intermittency are several nanoseconds and\par
+The latter is computationally much slower than the Al-M and Al-                    several nanometers, respectively, although the exact numbers can\par
+99 potentials but gives the most accurate description of Al                        be system-dependent. The physical origin of the GB diffusion\par
+properties (see Supplementary Table 2 for a comparison of relevant                 intermittency is the dynamic heterogeneity of the diffusion pro-\par
+properties).                                                                       cess. The atomic displacements are not distributed uniformly\par
+   An Arrhenius diagram summarizing the diffusion coef\u64257?cients in                   along the boundary but cluster together into large groups of\par
+the \u931?3 and \u931?17 GBs computed with the Al potentials is shown in                     mobile atoms undergoing a collective rearrangement. Sponta-\par
+Supplementary Fig. 3a. All three potentials display similar diffusion              neous formation of a mobile cluster is triggered by a local atomic\par
+behaviors, with a comparable degree of diffusion anisotropy and                    rearrangement that spreads like an avalanche by the dynamic\par
+similar temperatures of premelting. More importantly, the                          facilitation mechanism. The avalanche region is characterized by\par
+existence of the collective diffusion mechanisms in the \u931?3 and                     a drastically increased defect population and enhanced atomic\par
+\u931?17 GBs is reproduced with all three potentials. In particular, the                mobility. If the avalanche size is comparable to the GB size in at\par
+Al-PINN simulations predict string-like displacement geometries                    least one direction, a spike in the GB diffusivity arises. This is the\par
+visually indistinguishable from those obtained with the Al-M                       cause of the system-size dependence of GB diffusion and the\par
+potential. Furthermore, simulations with the Al-99 potential reveal                reason why the size effect vanishes when the GB area is large.\par
+the same type of diffusion intermittency as observed with the Al-M                    To put our \u64257?ndings in perspective with the literature, dynamic\par
+potential (see example in Supplementary Fig. 3b).                                  heterogeneity has been studied for years, but mostly in disordered\par
+   Size dependent diffusion intermittency on the scale of 10 nm is                 bulk systems such as supercooled liquids and glasses9\u8211?11,13. The\par
+also observed during GB diffusion in the \u931?3 GB in FCC Ni and                       concept of dynamic facilitation was introduced more\par
+\u931?17 GB in BCC Fe at intermediate temperatures (see Supple-                         recently23,24,32 but again in the context of bulk disordered sys-\par
+mentary Fig. 4). Collective mechanisms have previously been                        tems. Zhang et al.8 have shown that GB migration and diffusion\par
+reported in BCC Fe GBs31, though intermittency on such large                       processes exhibit dynamic heterogeneity similar to that in\par
+scales has not been documented. The observation of avalanches                      supercooled liquids. They also observed string-like atomic dis-\par
+across multiple GB structures and chemistries provides strong                      placements on time and length scales similar to those in super-\par
+evidence that avalanche-mediated diffusion is generic to metallic                  cooled liquids. However, their work was focused primarily on GB\par
+GBs at intermediate temperatures.                                                  migration rather than diffusion. Dynamic heterogeneity and\par
+\par
+COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat                                                     7\par
+ARTICLE                                                           COMMUNICATIONS MATERIALS | https://doi.org/10.1038/s43246-022-00314-7\par
+\par
+\par
+collective diffusion mechanisms were also investigated in highly           to gain at least some insights into the GB diffusion dynamics on\par
+disordered, premelted copper GBs7. Intermittent diffusion beha-            the atomic level.\par
+vior was seen in MD simulations of low-angle twist GBs, but no\par
+explanation was attempted33. None of the prior work7,8,33                  Methods\par
+investigated the physical origin of the GB diffusion intermittency         The Large-scale Atomic/Molecular Massively Parallel Simulator (LAMMPS)43 was\par
+or studied its size effect. On the other hand, avalanche-mediated          used to conduct molecular statics and MD simulations. The software package\par
+dynamics were investigated by MD simulations of several pro-               OVITO44 was used for visualization and analysis of the collective diffusion\par
+                                                                           mechanisms. The Al-M and Al-99 potentials were downloaded from the LAMMPS\par
+cesses, such as crystallization of glasses (see, e.g,34 and references     interatomic potential library. The GitHub codes from45 were used for LAMMPS\par
+therein), but not for GB or even bulk diffusion. It should also be         simulations with the Al-PINN potential.\par
+noted that the avalanches during glass crystallization occur in a\par
+metastable state as the system gradually transitions to a more             GB structure optimization. Unrelaxed GB structures were created by joining two\par
+stable state. By contrast, the avalanches discussed in this work           grains in a simulation box with periodic boundary conditions in the GB plane (x\u8211?y\par
+occur in an equilibrium system and are caused by thermal \u64258?uc-              coordinate plane) and free-surface boundary conditions normal to the GB\par
+tuations away from equilibrium. Thus, although some of the                 (z-direction). The GB cross-section was chosen with dimensions at least 10 nm by\par
+individual components of this work pre-existed, they were                  10 nm in the x and y directions, and each grain had a thickness of at least 6 nm. To\par
+                                                                           study \u64257?nite-size effects on diffusion, several GB cross-sections were tested up to 32\par
+expanded and integrated into a coherent mechanistic explanation            nm by 32 nm. For the commensurate GBs (Table 1), the lateral bicrystal dimen-\par
+of the previously unknown effects reported in this article.                sions were chosen with integer repeats of the coincident site lattice (CSL) unit cell.\par
+   One lesson from this work for future atomistic simulations is           For the incommensurate GB, the mis\u64257?t strain was minimized within the maximum\par
+that the system size effect is important. If the GB size is com-           interface size (30 nm by 30 nm) and applied to the upper grain only. The mini-\par
+                                                                           mization procedure was repeated at different temperatures for lattice constants\par
+parable to or smaller than the avalanche size and the simulation           expanded by the precomputed bulk thermal expansion coef\u64257?cients. The maximum\par
+time is too short, the MSD-vs-time curve can represent either an           absolute value of the mis\u64257?t strain used in this work was 1.001.\par
+avalanche or a locked state. In either case, the GB diffusivity                The initial GB structures were optimized by a standard grid search that seeks to\par
+extracted from the Einstein relation will be far from the real value.      \u64257?nd a deep local energy minimum46,47. Several hundred initial unrelaxed GB\par
+                                                                           structures were prepared with different rigid shifts applied to the upper grain\par
+Multiple simulations with different system sizes and diffusion             relative to the lower. Translations were chosen within a unit cell of the reciprocal\par
+times are required to ensure averaging over multiple avalanche-            lattice of the CSL (known as the displacement shift complete lattice) and included\par
+locked cycles to obtain the converged GB diffusivity. In experi-           overlaps of the two grains. For each initial structure, pairs of closely spaced atoms\par
+ments, a nano-scale GB can exhibit intermittent mass transport,            were identi\u64257?ed and one atom was deleted at random if the overlap radii were in the\par
+                                                                           range 0.7\u8211?0.95r0, where r0 = 0.28 nm is the \u64257?rst nearest neighbor distance in FCC\par
+creating an additional source of noise in electronic devices35. The        Al. Conjugate gradient minimization was performed at 0 K to relax the atoms in\par
+situation can, for example, be relevant to mass diffusion and/or           the GB core of each candidate structure. The lowest energy structure was used as\par
+electromigration in conductor lines in integrated circuits.                input for the subsequent diffusion simulations. This optimization procedure\par
+Assuming a nanosecond time scale of the avalanches, the                    recovered the well-known structures of the \u931?3 and \u931?17 GBs, but it did not sample\par
+respective \u64258?uctuation frequency could be in the GHz range36.               different GB densities as in more sophisticated optimization routines48\u8211?50.\par
+   In addition to the practical aspects mentioned above, this work\par
+raises many fundamental questions. In contrast to the homo-                Point defect analysis. Wigner-Seitz analysis as implemented in OVITO was used\par
+geneously disordered matter such as 2D or 3D supercooled                   to analyze the point defect content of GBs. This method identi\u64257?es point defects in a\par
+                                                                           \u64257?nite-temperature GB structure relative to the Voronoi tessellation of a defect-free\par
+liquids and glasses, GBs are partially ordered quasi-2D systems            reference structure. As the reference state, we used the 0 K GB structure homo-\par
+with a tunable structure and structural anisotropy. They can               geneously expanded by the thermal expansion coef\u64257?cient at the chosen tempera-\par
+support a broad spectrum of local structural excitations (defects)         ture. Trajectory smoothing was applied over a time window of O(10) ps to mitigate\par
+with diverse sizes, energetics, and geometries. The effects of this        the effect of thermal noise during defect identi\u64257?cation.\par
+partial order and the structural richness on the dynamic hetero-\par
+geneity require further investigations. The exact mechanism of             GB self diffusion coef\u64257?cient calculations. GB diffusion was studied by canonical\par
+the dynamic facilitation in GBs remains unknown but could be               (NVT) and microcanonical (NVE) MD simulations. A multi-step equilibration\par
+                                                                           procedure was performed before production runs. First, the bicrystal was homo-\par
+different from that in homogeneously disordered systems. For               geneously expanded by the precomputed bulk thermal expansion strain at the\par
+example, we found a much larger avalanche length scale (up                 chosen temperature. Next, a 1 nm thick rigid slab at the top of the upper grain was\par
+to ~70r0) compared to that in supercooled liquids and glasses              allowed to \u64258?oat in z-direction during a short (0.1 ns) NVT anneal. Combined with\par
+(below ~10r0)37 (r0 being the \u64257?rst nearest neighbor distance).             the pre-expansion, this step reduced the pressure in the grains to near zero. Then,\par
+                                                                           the rigid slabs at the top and bottom of the bicrystal were \u64257?xed and an NVT anneal\par
+Furthermore, this work only studied GBs in a single-component              was performed for 1 ns. The \u64257?xed boundary conditions suppressed spontaneous\par
+system. Adding segregating solutes to the GB core will add a new           GB sliding events to clearly identify the diffusion mechanisms. After the equili-\par
+level of complexity but will also provide a means to control the           bration, production NVT runs were performed for up to 40 ns and several hundred\par
+GB dynamics. While the segregation effect on GB diffusion has              dump \u64257?les were output for the subsequent calculation of the diffusion coef\u64257?cients.\par
+                                                                           NVE simulations were then performed starting from the end of each NVT run to\par
+been studied38, the underlying microscopic mechanisms remain               analyze the diffusion mechanisms. The NVE ensemble was chosen to eliminate any\par
+unknown.                                                                   possible effect of the thermostat on spontaneous diffusive events. For selected\par
+   Finally, even though most GB diffusion measurements are                 calculations, including diffusion measurements at low temperatures, additional\par
+performed on time and space scales far exceeding the avalanche             statistics were obtained by performing multiple runs with different velocity seeds.\par
+scales, one should explore alternative methods capable of                      The GB self-diffusion coef\u64257?cients were measured by tracking atoms within a 2\par
+                                                                           nm thick layer centered at the GB. The current GB position was determined as the\par
+extracting at least some mechanistic information. For example,             average z-coordinate of non-FCC atoms identi\u64257?ed by the polyhedral template\par
+isotope effect measurements provided evidence for collective               matching modi\u64257?er in OVITO51. The diffusion coef\u64257?cients within the layer were\par
+diffusion mechanisms in metallic glasses39. Although such mea-             calculated from the Einstein relations Dx = \u9001?x2\u9002?/2t and Dy = \u9001?y2\u9002?/2t, where \u9001?x2\u9002?\par
+surements do not give detailed information about speci\u64257?c                   and \u9001?y2\u9002? are the MSDs of atoms in the respective directions parallel to the GB plane\par
+                                                                           and t is the simulation time. Bootstrap resampling was employed as in52 to\par
+mechanisms and are limited to elements with available isotopes,            compute error estimates associated with the diffusion coef\u64257?cient. The hyper-\par
+their application to GB diffusion could still be attempted to              parameters chosen for this method include a smoothing window of 5 ps, a block\par
+con\u64257?rm the existence of collective atomic rearrangements pre-              length of 20 ps, and the number of resampled trajectories equal to 100. Note that\par
+dicted by the simulations. Dielectric spectroscopy methods have            using a \u64257?xed-width layer can underestimate the diffusion coef\u64257?cient because of the\par
+                                                                           possible inclusion of some of the immobile atoms from the perfect lattice regions\par
+also been used in speci\u64257?c glasses and supercooled liquids to               next to the GB core. This underestimation was corrected by rescaling the diffusion\par
+resolve the characteristic frequencies of slow and fast processes          coef\u64257?cients by the average inverse fraction of the mobile atoms in the layer at long\par
+during glassy dynamics40\u8211?42. They, too, could potentially be used          times. The convergence of diffusion calculations in time was veri\u64257?ed by checking\par
+\par
+8                      COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat\par
+COMMUNICATIONS MATERIALS | https://doi.org/10.1038/s43246-022-00314-7                                                                                         ARTICLE\par
+\par
+that the slope of the log(MSD)-log(t) plot was equal to one. All diffusion                  computer simulation part of this research used the publicly available codes LAMMPS\par
+coef\u64257?cients reported here satis\u64257?ed this condition.                                          and OVITO. The routine computer scripts controlling the execution of the calculations\par
+    At high temperatures (typically, T > 0.85Tm) and depending on the GB, random            are not central to this work but are available from the corresponding authors upon\par
+interface displacements were observed in addition to diffusion. When the average            reasonable request.\par
+interface position changed by more than 0.5 nm, the diffusion calculation was reset\par
+from the new GB position.\par
+\par
+                                                                                            Code availability\par
+Liquid self diffusion coef\u64257?cient calculations. To compute the liquid diffusion              The code for computer simulations and post-processing analysis of avalanche-like\par
+coef\u64257?cients, an initial 32,000-atom liquid structure was created in a periodic box by       diffusion mechanisms is available upon reasonable request.\par
+heating a perfect Al crystal in the isothermal-isobaric (NPT) ensemble to 1500 K\par
+and holding it for 200 ps. Next, a set of liquid samples was generated in the\par
+temperature range from 1050 to 1450 K by quenching the high-temperature                     Received: 17 August 2022; Accepted: 31 October 2022;\par
+structure at a rate of 50 K/100 ps and holding it at the set temperature for 200 ps.\par
+A further stepwise quenching was performed from 1050 K to 600 K at a rate of\par
+25 K/ns with a hold time of 2 ns every 50 K. These times were suf\u64257?cient for liquid\par
+equilibration at the chosen temperatures as evidenced by converged total potential\par
+energy and linear MSD vs time behavior. Crystallization was observed at and below\par
+650 K, and these temperatures were not used for the diffusion calculations. Pro-            References\par
+duction NVE anneals were performed for all liquid structures for 0.1 ns. The                1.    Sutton, A. P. & Balluf\u64257?, R. W. Interfaces in Crystalline Materials (Clarendon\par
+diffusivity was computed from the 3D Einstein relation D = \u9001?r2\u9002?/6t and averaged                   Press, Oxford, 1995).\par
+over 20 independent runs with different velocity seeds.                                     2.    Kaur, I. Mishin, Y. & Gust, W. Fundamentals of Grain and Interphase\par
+                                                                                                  Boundary Diffusion (Wiley, Chichester, West Sussex, 1995).\par
+                                                                                            3.    Mishin, Y., Asta, M. & Li, J. Atomistic modeling of interfaces and their impact\par
+Analysis of hierarchical time and length scales associated with diffusion                         on microstructure and properties. Acta. Mater. 58, 1117\u8211?1151 (2010).\par
+avalanches. The following algorithm was used to reveal string-like displacements in         4.    S\u248?rensen, M. R., Mishin, Y. & Voter, A. F. Diffusion mechanisms in cu grain\par
+GB diffusion. First, mobile atoms were identi\u64257?ed within the GB core such that the net             boundaries. Phys. Rev. B 62, 3658 (2000).\par
+displacement of an atom \u916?r during a preset time interval \u916?t was within the range            5.    Suzuki, A. & Mishin, Y. Atomistic modeling of point defects and diffusion in\par
+0.4r0 < \u916?r < 1.2r0. Here, the upper bound was chosen to eliminate atoms that had\par
+                                                                                                  copper grain boundaries. Interface Sci. 11, 131\u8211?148 (2003).\par
+undergone multiple hops, and the lower bound was chosen to eliminate immobile\par
+                                                                                            6.    Suzuki, A. & Mishin, Y. Atomic mechanisms of grain boundary diffusion: Low\par
+atoms. Next, mobile atomic pairs (i, j) were found that remained nearest neighbors at\par
+                                                                                                  versus high temperatures. J. Mater. Sci. 40, 3155\u8211?3161 (2005).\par
+the times t = 0 and t = \u916?t and satis\u64257?ed the criterion min(\u8739?ri(t) \u8722? rj(0)\u8739?, \u8739?rj(t) \u8722?\par
+                                                                                            7.    Mishin, Y. An atomistic view of grain boundary diffusion, in: Defect and\par
+ri(0)\u8739?) < 0.43r0. This criterion captures atomic pairs with string-like motion in which\par
+                                                                                                  Diffusion Forum, volume 363, Trans Tech Publ, 2015, pp. 1-11.\par
+one atom jumps into the previous position of the other. The algorithm has three\par
+hyper-parameters: the lower and upper bounds for the displacement and the sub-              8.    Zhang, H., Srolovitz, D. J., Douglas, J. F. & Warren, J. A. Grain boundaries\par
+stitution distance (the multiplicative factors 0.4, 1.2 and 0.43 above). These para-              exhibit the dynamics of glass-forming liquids. Proc. Natl Acad Sci. 106,\par
+meters were chosen based on the prior studies of diffusion in glass-forming                       7735\u8211?7740 (2009).\par
+supercooled liquids8,11 and were \u64257?xed across all GBs studied in this work.                  9.    Donati, C. et al. Stringlike cooperative motion in a supercooled liquid. Phys.\par
+    All mobile pairs containing common atoms were then joined into larger string-                 Rev. Lett. 80, 2338 (1998).\par
+like clusters, and each cluster was assigned a unique ID. Cluster statistics were then      10.   Derlet, P., Bocquet, H. & Maa\u223?, R. Viscosity and transport in a model fragile\par
+computed over all clusters, including the number of atoms and the gyration tensor.                metallic glass. Phys. Rev. Mater. 5, 125601 (2021).\par
+The string identi\u64257?cation algorithm was repeated for a range of time intervals \u916?t            11.   Zhang, H., Wang, X., Yu, H.-B. & Douglas, J. F. Dynamic heterogeneity,\par
+with multiple start times. The average string length, measured by the average                     cooperative motion, and Johari\u8211?Goldstein \u946? relaxation in a metallic glass-\par
+number of atoms in the string-like cluster, typically exhibits a single maximum as a              forming material exhibiting a fragile-to-strong transition. Eur. Phys. J. E 44,\par
+function of \u916?t at a characteristic time \u916?t \u188? t s .                                               1\u8211?30 (2021).\par
+    The analysis of diffusion avalanches required a more \u64258?exible de\u64257?nition of mobile        12.   Fransson, E. & Erhart, P. Defects from phonons: Atomic transport by\par
+clusters. The input to this method is the space-time trajectory consisting of atomic              concerted motion in simple crystalline materials. Acta. Mater. 196, 770\u8211?775\par
+displacement \u64257?elds computed at a \u64257?xed time interval (\u916?t) and stacked in time. Here,               (2020).\par
+\u916?t is a hyper-parameter taken to be approximately 0:02t s . First, the string clustering   13.   Annamareddy, A. & Eapen, J. Low dimensional string-like relaxation\par
+step was performed in space-time with no upper bound on the displacement length                   underpins superionic conduction in \u64258?uorites and related structures. Sci. Rep.\par
+and all other hyper-parameters as above. The lack of an upper bound allows the                    7, 1\u8211?12 (2017).\par
+strings to incorporate atoms executing multiple jumps. Next, the string connectivity        14.   Saylor, D. M., El Dasher, B. S., Rollett, A. D. & Rohrer, G. S. Distribution of\par
+criterion was relaxed: neighboring strings were combined in space if at least two                 grain boundaries in aluminum as a function of \u64257?ve macroscopic parameters.\par
+atoms in adjacent strings (either in time or space) were no more than 1.2r0 apart. This           Acta. Mater. 52, 3649\u8211?3655 (2004).\par
+hyper-parameter can be interpreted as a cutoff distance for the interaction range in        15.   Mendelev, M., Kramer, M., Becker, C. A. & Asta, M. Analysis of semi-\par
+dynamic facilitation. It also provides a good visual segmentation of the data. If the             empirical interatomic potentials appropriate for simulation of crystalline and\par
+cutoff distance is too large, or the trajectories in space-time are too dense, then all           liquid Al and Cu. Philos. Magaz. 88, 1723\u8211?1750 (2008).\par
+atoms are part of the same mobile cluster and the algorithm loses its meaning. In the       16.   Medlin, D., Mills. M., Stobbs, W., Daw, M. & Cosandey F. HRTEM\par
+space-time trajectories, the same atom can be included multiple times in the same                 observations of a \u931? = 3\{112\} bicrystal boundary in aluminum, MRS Online\par
+mobile cluster if it executes multiple jumps. The mobile clusters often form elongated,           Proceedings Library (OPL) 295 (1992).\par
+anisotropic shapes in space-time. Their size was quanti\u64257?ed as the number of unique          17.   Medlinet, D. et al. Migration dynamics of a \u931? = 3\{112\} boundary in\par
+atoms in the cluster. The dynamic length scale of a given mobile cluster was                      aluminum, MRS Online Proceedings Library (OPL) 319 (1993).\par
+quanti\u64257?ed as its maximum width along a given direction in the GB plane, and its             18.   Wang, J., Misra, A. & Hirth, J. Shear response of \u931? = 3\{112\} twin boundaries\par
+timescale as the maximum width along the time axis.                                               in face-centered-cubic metals. Phys. Rev. B 83, 064106 (2011).\par
+    Immobile clusters are also apparent in space-time diagrams as empty regions             19.   Marquis, E., Hamilton, J., Medlin, D. & L\u233?onard, F. Finite-size effects on the\par
+(bubbles24) separating the mobile clusters. In principle, their length and time scales\par
+                                                                                                  structure of grain boundaries. Phys. Rev. Lett. 93, 156101 (2004).\par
+can be computed in a similar manner as for the mobile clusters. However, in\par
+                                                                                            20.   Koju, R. & Mishin, Y. Atomistic study of grain-boundary segregation and\par
+practice a single percolating immobile cluster in the space-time diagram is often\par
+                                                                                                  grain-boundary diffusion in Al-Mg alloys. Acta. Mater. 201, 596\u8211?603 (2020).\par
+found with this method. An alternative method used here de\u64257?nes and computes the\par
+                                                                                            21.   Hooshmand, M. S., Zhong, W., Zhao, J. C., Windl, W. & Ghazisaeidi, M. Data\par
+immobility time by considering individual square (l \u215? l) GB patches in space. The\par
+                                                                                                  on the comprehensive \u64257?rst-principles diffusion study of the aluminum-\par
+immobility time in each patch is then computed as the time between mobility\par
+events. The immobility time scale is obtained in the limit of l approaching zero,                 magnesium system. Data in Brief 30, 105381 (2020).\par
+while the immobility time distribution can be computed at l = r0. The ratio of the          22.   Hickman, J. & Mishin, Y. Disjoining potential and grain boundary premelting\par
+immobility and mobility times can also serve as a measure of diffusion                            in binary alloys. Phys. Rev. B 93, 224108 (2016).\par
+intermittency. Considered as a function of the patch size l, this ratio is used in the      23.   Jung, Y., Garrahan, J. P. & Chandler, D. Dynamical exchanges in facilitated\par
+virtual size-effect tests as shown in Supplementary Fig. 2.                                       models of supercooled liquids. J. Chem. Phys. 123, 084509 (2005).\par
+                                                                                            24.   Chandler, D. & Garrahan, J. P. Dynamics on the way to forming glass: Bubbles\par
+                                                                                                  in space-time. Annu. Rev. Phys. Chem. 61, 191\u8211?217 (2010).\par
+                                                                                            25.   Foiles, S. & Hoyt, J. J. Computation of grain boundary stiffness and mobility\par
+Data availability                                                                                 from boundary \u64258?uctuations. Acta Mater. 54, 3351\u8211?3357 (2006).\par
+The data supporting the \u64257?ndings of this study are available in the Supplementary            26.   Mendelev, M. I. et al. Development of new interatomic potentials appropriate\par
+Information \u64257?le or from the corresponding authors upon reasonable request. The                    for crystalline and liquid iron. Philos. Magaz. 83, 3977\u8211?3994 (2003).\par
+\par
+\par
+COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat                                                                   9\par
+ARTICLE                                                                      COMMUNICATIONS MATERIALS | https://doi.org/10.1038/s43246-022-00314-7\par
+\par
+\par
+27. Olmsted, D., Foiles, S. & Holm, E. A. Survey of computed grain boundary            51. Larsen, P. M., Schmidt, S. & Schi\u248?tz, J. Robust structural identi\u64257?cation via\par
+    properties in face-centered cubic metals: I. Grain boundary energy. Acta.              polyhedral template matching. Modelling Simul. Mater. Sci. Eng. 24, 055007\par
+    Mater. 57, 3694\u8211?3703 (2009).                                                           (2016).\par
+28. Ratanaphan, S. et al. Grain boundary energies in body-centered cubic metals.       52. Race, C. Quantifying uncertainty in molecular dynamics simulations of grain\par
+    Acta. Mater. 88, 346\u8211?354 (2015).                                                       boundary migration. Mol. Simul. 41, 1069\u8211?1073 (2015).\par
+29. Mishin, Y., Farkas, D., Mehl, M. & Papaconstantopoulos, D. Interatomic             53. Zhong, W., Hooshmand, M. S., Ghazisaeidi, M., Windl, W. & Zhao, J.-C. An\par
+    potentials for monoatomic metals from experimental data and ab initio                  integrated experimental and computational study of diffusion and atomic\par
+    calculations. Phys. Rev. B 59, 3393 (1999).                                            mobility of the Aluminum\u8211?Magnesium system. Acta. Mater. 189, 214\u8211?231\par
+30. Pun, G. P., Yamakov, V., Hickman, J., Glaessgen, E. & Mishin, Y.                       (2020).\par
+    Development of a general-purpose machine-learning interatomic potential for        54. Dais, S., Messer, R. & Seeger, A. Nuclear-magnetic-resonance study of self-\par
+    aluminum by the physically informed neural network method. Phys. Rev.                  diffusion in aluminium, in: Materials Science Forum, volume 15, Trans Tech\par
+    Mater. 4, 113807 (2020).                                                               Publ, 1987, pp. 419-424.\par
+31. Starikov, S., Mrovec, M. & Drautz, R. Study of grain boundary self-diffusion in\par
+    iron with different atomistic models. Acta Mater. 188, 560\u8211?569 (2020).\par
+32. Pan, A. C., Garrahan, J. P. & Chandler, D. Heterogeneity and growing length        Acknowledgements\par
+    scales in the dynamics of kinetically constrained lattice gases in two             We would like to thank Raj Koju, Jack Douglas and Peter Derlet for helpful discussions.\par
+    dimensions. Phys. Rev. E 72, 041106 (2005).                                        This research was supported by the National Science Foundation, Division of Materials\par
+33. Sch\u246?nfelder, B., Gottstein, G. & Shvindlerman, L. Comparative study of grain-      Research, under Award no. 2103431.\par
+    boundary migration and grain-boundary self-diffusion of [0 0 1] twist-grain\par
+    boundaries in copper by atomistic simulations. Acta. Mater. 53, 1597\u8211?1609          Author contributions\par
+    (2005).                                                                            Y.M. acquired funding for this research. I.C. wrote all computer codes/scripts required\par
+34. Eduardo, S. et al. Avalanches mediate crystallization in a hard-sphere glass.      for this work and conducted all simulations reported here under Y.M.\u8217?s guidance and\par
+    Proc. Natl Acad. Sci. 111, 75\u8211?80 (2014).                                           supervision. Both authors participated equally in interpreting the results and writing the\par
+35. Koch, R. H., LLoyd, J. R. & Cronin, J. 1/f noise and grain-boundary diffusion      paper, and approved its \u64257?nal version.\par
+    in aluminum and aluminium alloys. Phys. Rev. Lett. 55, 2487 (1985).\par
+36. Zhang, H. & Douglas, J. Glassy interfacial dynamics of Ni nanoparticles: part I\par
+    Colored noise, dynamic heterogeneity and collective atomic motion. Soft            Competing interests\par
+    Matter 9, 1254\u8211?1265 (2013).                                                        The authors declare no competing interests.\par
+37. Royall, C. P. & Williams, S. R. The role of local structure in dynamical arrest.\par
+    Phys. Rep. 560, 1\u8211?75 (2015).\par
+38. Koju, R. K. & Mishin, Y. Relationship between grain boundary segregation\par
+                                                                                       Additional information\par
+                                                                                       Supplementary information The online version contains supplementary material\par
+    and grain boundary diffusion in Cu-Ag alloys. Phys. Rev. Mater. 4, 073403\par
+                                                                                       available at https://doi.org/10.1038/s43246-022-00314-7.\par
+    (2020).\par
+39. Faupel, F. et al. Diffusion in metallic glasses and supercooled melts. Rev. Mod.\par
+                                                                                       Correspondence and requests for materials should be addressed to Ian Chesser or Yuri\par
+    Phys. 75, 237 (2003).\par
+                                                                                       Mishin.\par
+40. Lunkenheimer, P. & Loidl, A. Dielectric spectroscopy of glass-forming\par
+    materials: \u945?-relaxation and excess wing. Chem. Phys. 284, 205\u8211?219 (2002).\par
+                                                                                       Peer review information Communications Materials thanks Sergei Starikov, Snehanshu\par
+41. Jug, G., Loidl, A. & Tanaka, H. On the structural heterogeneity of supercooled\par
+                                                                                       Pal and Daniel Utt for their contribution to the peer review of this work. Primary\par
+    liquids and glasses (a). EPL (Europhys. Lett.) 133, 56002 (2021).\par
+                                                                                       Handling Editors: Jet-Sing Lee and John Plummer. Peer reviewer reports are available.\par
+42. Arceri, F., Landes, F., Berthier, L. & Biroli, G. A statistical mechanics\par
+    perspective on glasses and aging, arXiv:2006.09725, 2022.\par
+                                                                                       Reprints and permission information is available at http://www.nature.com/reprints\par
+43. Plimpton, S. Fast parallel algorithms for short-range molecular dynamics. J.\par
+    Comput. Phys. 117, 1\u8211?19 (1995).                                                    Publisher\u8217?s note Springer Nature remains neutral with regard to jurisdictional claims in\par
+44. Stukowski, A. Visualization and analysis of atomistic simulation data with         published maps and institutional af\u64257?liations.\par
+    OVITO\u8211?the open visualization tool. Modelling Simul. Materi. Sci. Eng. 18,\par
+    015012 (2009).\par
+45. Files for running PINN simulations in LAMMPS: https://github.com/ymishin-\par
+    gmu/LAMMPS-USER-PINN.                                                                                Open Access This article is licensed under a Creative Commons\par
+46. Olmsted, D. L., Holm, E. A. & Foiles, S. M. Survey of computed grain                                 Attribution 4.0 International License, which permits use, sharing,\par
+    boundary properties in face-centered cubic metals. II: Grain boundary              adaptation, distribution and reproduction in any medium or format, as long as you give\par
+    mobility. Acta. Mater. 57, 3704\u8211?3713 (2009).                                       appropriate credit to the original author(s) and the source, provide a link to the Creative\par
+47. Tschopp, M. A., Coleman, S. P. & McDowell, D. L. Symmetric and                     Commons license, and indicate if changes were made. The images or other third party\par
+    asymmetric tilt grain boundary structure and energy in Cu and Al (and              material in this article are included in the article\u8217?s Creative Commons license, unless\par
+    transferability to other fcc metals). Integr. Mater. Manuf. Innov. 4, 11 (2015).   indicated otherwise in a credit line to the material. If material is not included in the\par
+48. Frolov, T., Olmsted, D. L., Asta, M. & Mishin, Y. Structural phase                 article\u8217?s Creative Commons license and your intended use is not permitted by statutory\par
+    transformations in metallic grain boundaries. Nat. Comm. 4, 1\u8211?7 (2013).            regulation or exceeds the permitted use, you will need to obtain permission directly from\par
+49. Hickman, J. & Mishin, Y. Extra variable in grain boundary description. Phys.       the copyright holder. To view a copy of this license, visit http://creativecommons.org/\par
+    Rev. Mater. 1, 10601 (2017).                                                       licenses/by/4.0/.\par
+50. Yang, C., Zhang, M. & Qi, L. Grain boundary structure search by using an\par
+    evolutionary algorithm with effective mutation methods. Comput. Mater. Sci.\par
+    184, 109812 (2020).                                                                \u169? The Author(s) 2022\par
+\par
+\par
+\par
+\par
+10                          COMMUNICATIONS MATERIALS | (2022)3:90 | https://doi.org/10.1038/s43246-022-00314-7 | www.nature.com/commsmat\par
+
+}

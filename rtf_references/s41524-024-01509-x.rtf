@@ -1,0 +1,868 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+                                    npj | computational materials                                                                                                                   Article\par
+                                    Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences\par
+\par
+\par
+\par
+\par
+                                                                                                                                                  https://doi.org/10.1038/s41524-024-01509-x\par
+\par
+\par
+                                    Feature engineering descriptors,\par
+                                    transforms, and machine learning for grain\par
+                                    boundaries and variable-sized atom\par
+                                    clusters\par
+                                                                                                                                                                              Check for updates\par
+                                                            1                        2                         3                        4                       2\par
+                                    C. Braxton Owens , Nithin Mathew , Tyce W. Olaveson , Jacob P. Tavenner , Edward M. Kober ,\par
+                                    Garritt J. Tucker5, Gus L. W. Hart 3 & Eric R. Homer 6\par
+                  1234567890():,;\par
+1234567890():,;\par
+\par
+\par
+\par
+\par
+                                    Obtaining microscopic structure-property relationships for grain boundaries is challenging due to their\par
+                                    complex atomic structures. Recent efforts use machine learning to derive these relationships, but the\par
+                                    way the atomic grain boundary structure is represented can have a signi\u64257?cant impact on the\par
+                                    predictions. Key steps for property prediction common to grain boundaries and other variable-sized\par
+                                    atom clustered structures include: (1) describing the atomic structure as a feature matrix, (2)\par
+                                    transforming the variable-sized feature matrix to a \u64257?xed length common to all structures, and (3)\par
+                                    applying a machine learning algorithm to predict properties from the transformed matrices. We\par
+                                    examine how these steps and different combinations of engineered features impact the accuracy of\par
+                                    grain boundary energy predictions using a database of over 7000 grain boundaries. Additionally, we\par
+                                    assess how different engineered features support interpretability, offering insights into the physics of\par
+                                    the structure-property relationships.\par
+\par
+\par
+                                    Due to the impact of grain boundaries (GBs) on material properties1\u8211?4, there       what de\u64257?nes a GB\u8217?s properties. This article concentrates on the microscopic\par
+                                    is a need to better understand the relationship between the structure of a GB      structure-property relationships since the macroscopic structure acts as a\par
+                                    and its corresponding properties. With expanding computing power,                  constraint on the microscopic structure.\par
+                                    increasingly large amounts of data, and advances in data-driven approaches,             One microscopic method for de\u64257?ning a GB is the structural unit\par
+                                    there has been a push for suitable representations of GBs in order to predict      model47\u8211?50. This model describes the atomic structure of a quasi-two-\par
+                                    their properties5\u8211?37. However, accurate property prediction is not the only        dimensional GB as a series of repeating atomic \u8220?structural units" that are\par
+                                    measure of success. Models and representations that provide insight into           characteristic of the boundary\u8217?s local atomic arrangement. This simpli\u64257?es\par
+                                    structure-property relationships are key to advancing our understanding.           analysis of its geometry and properties as long as it is quasi-two-\par
+                                          Representing a GB starts with de\u64257?ning its structure, which has both          dimensional. In recent years, the structural unit model has been modi\u64257?ed\par
+                                    macroscopic and microscopic characteristics. Macroscopically, \u64257?ve degrees          to more accurately represent a GB by considering the effects of metastable\par
+                                    of freedom are used to de\u64257?ne the GB character: Three to de\u64257?ne a mis-               structures51. Other early methods for de\u64257?ning local atomic environments for\par
+                                    orientation between two crystals, (often given by a rotation axis [uvw] and        characterizing GBs include: the centrosymmetry parameter (CSP)52, Vor-\par
+                                    angle \u952?), and two to de\u64257?ne a boundary plane (hkl). Microscopically, the            onoi index53, excess volume54, common neighbor analysis (CNA)55, the\par
+                                    positions of the atoms result in 3n degrees of freedom. Additionally, a GB         Polyhedral Unit Model56, and local entropy57.\par
+                                    can assume various metastable con\u64257?gurations under any given set of                      Although the early methods have been used mainly to classify GB\par
+                                    macroscopic constraints13,24,38\u8211?42.                                                atoms29,36,58, they have also been used for machine learning predictions of\par
+                                          While there have been impressive developments in macroscopic                 atomic level properties32,37. Advanced methods, some of which are described\par
+                                    representations for better understanding GBs12,35,43\u8211?46, the atomic structure is   below, have also been used to predict atomic-level properties in GBs59.\par
+\par
+\par
+                                    1\par
+                                     Department of Computer Science, Brigham Young University, Provo, 84602 UT, USA. 2Group T-1, Theoretical Division, Los Alamos National Laboratory, Los\par
+                                    Alamos, 87544 NM, USA. 3Department of Physics and Astronomy, Brigham Young University, Provo, 84602 UT, USA. 4KBR, Inc., Intelligent Systems Division,\par
+                                    NASA Ames Research Center, Moffett Field, 94035 CA, USA. 5Department of Physics, Baylor University, Waco, 76798 TX, USA. 6Department of Mechanical\par
+                                    Engineering, Brigham Young University, Provo, 84602 UT, USA.   e-mail: gus.hart@gmail.com; eric.homer@byu.edu\par
+\par
+\par
+                                    npj Computational Materials | (2025)11:21                                                                                                                   1\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                                      Article\par
+\par
+      However, when using machine learning to predict the properties of a              probability distribution function, allowing equal sampling for each GB and\par
+GB as a whole, the descriptor must be transformed in some way to achieve a             simultaneously transforming the descriptor into a \u64257?xed length. This\par
+consistent feature size. This notion of transformation is an important one for         representation was further re\u64257?ned to the \u64257?rst two principal components,\par
+variable-sized atomic structures such as GBs because different GBs will have           constituting a second describe step, which is then used as input into a\par
+different numbers of atoms (features) in their structure. Transformation is            regression machine learning model. Dang and Yu extended Gomberg\u8217?s\par
+one step in a three-step feature engineering process common to almost all              method by incorporating the standard deviation of the pair correlation\par
+machine learning predictions for variable-sized atom structures. These steps           function through a weight parameter6.\par
+are illustrated in Fig. 1 and are described as follows: 1. Describe the atomic               More recently, the GB community has used atomic structure\par
+structure with an encoding algorithm, descriptor, or \u64257?ngerprint of some                descriptors developed by the machine-learned interatomic potential\par
+kind, which is often represented as a matrix or vector. 2. Transform the               community. These descriptors are attractive because they are inspired by\par
+mapping of the variable length descriptor for each structure to a \u64257?xed length          the symmetries and physical response inherent to the atoms, as descri-\par
+descriptor common across all structures in a dataset. 3. Apply Machine                 bed by Musil et al.62. Rosenbrock et al.30 implemented one of these\par
+Learning models or regression algorithms, to learn and then predict the                physics-inspired descriptors, called the smooth overlap of atomic\par
+property of a given atomic structure.                                                  positions (SOAP), to describe the GB and then transformed the SOAP\par
+      In the paragraphs below we illustrate the consistency of these steps,            descriptor into a \u64257?xed-length vector by averaging over the atom envir-\par
+occasionally combined in different orders or sequences, in numerous                    onments. These are then used to predict GB energy using a support\par
+applications of machine learning to predict properties based on microscopic            vector machine learning model. Later, Fujii et al.9 used SOAP to cal-\par
+GB structure. These examples will also serve to highlight the variety of               culate a local distortion factor, describing how similar a GB atom\u8217?s\par
+descriptors, transforms, and machine-learning algorithms employed by the               environment is to a bulk atom\u8217?s environment. This was then trans-\par
+community.                                                                             formed into a \u64257?xed-length using complete-linkage clustering. The GB\par
+      Snow et al.36 utilized the graphs underlying CNA to describe the atoms           thermal conductivity was then predicted by a ridge regression machine\par
+in each GB, categorizing them into 2205 distinct environments. They then               learning algorithm.\par
+performed principal component analysis to reduce these environments into                     In this paper, we examine the impact of feature engineering dif-\par
+84 principal components, which constitutes a second description step. To               ferent descriptors, transforms, and machine learning models to predict\par
+standardize the representation size, a transform was applied, representing             GB energy, as illustrated in Fig. 1. The exact descriptors, transforms,\par
+each GB by the proportions of the 84 components present. This transformed              and machine learning algorithms we employ are listed in Fig. 2 and\par
+representation was used as input to a linear regression machine learning               described in detail in the Methods Section. The feature engineering is\par
+model to predict GB energy.                                                            tested on a dataset comprising 7304 aluminum GBs, which provides\par
+      Guziewiski et al.15 also explore this concept of proportions, utilizing the      comprehensive coverage of the 5-dimensional macroscopic space of\par
+diamond-structure identi\u64257?cation and the polyhedral template matching                   crystallographic character38,63. The interplay of various descriptors,\par
+algorithms to describe GB atoms. This was transformed into a \u64257?xed-length               transforms, and machine learning algorithms are analyzed for their\par
+density metric for each GB by counting the number of atoms within each                 effect on the accuracy of their predictions. In addition, we examine how\par
+polyhedral template class and normalizing this by the GB area. Random                  feature reduction impacts the results for select cases. Finally, we assess\par
+forest machine learning models were then used to predict both the GB                   the interpretative ability of some key descriptors to establish meaningful\par
+energy and the tensile strength of the GB.                                             connections to the inherent structure of the GB. Prioritizing interpret-\par
+      Gomberg et al.29 utilized a specialized pair correlation function60,61 to        ability is imperative to increase our understanding of atomic GB\par
+describe their GB structures. This function is unique due to its use of a              structure-property relationships.\par
+\par
+\par
+\par
+\par
+Fig. 1 | The work\u64258?ow for predicting material properties from variable-sized            transformed matrices are input into a machine learning model, which predicts the\par
+atomic structures. Starting with various atomic structures (left), each structure is   material properties (right), shown as blue squares. This approach allows for sys-\par
+described using a matrix of size Ni \u215? M that captures relevant features. These         tematic analysis and prediction of properties based on the atomic-level description\par
+matrices are then transformed into a different representation of size P \u215? M. The       of materials.\par
+\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                               2\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                              Article\par
+\par
+\par
+\par
+\par
+Fig. 2 | Graphic illustrating the various combinations of descriptors, transforms, and machine learning algorithms employed. The light orange planes denote cross-\par
+sections of this space that are examined in this work.\par
+\par
+\par
+\par
+Results                                                                            many GBs concentrated about the mean GB energy value of 497 mJ/m2, it is\par
+Accuracy of Predictions                                                            possible to obtain a relatively low MAE, even in the case of the \u8220?Random\par
+As illustrated in Fig. 1, there are essentially 3 methods or \u8220?knobs\u8221? that can be   SOAP\u8221? model. It is for this reason that we report both the MAE and the R2\par
+adjusted to improve the accuracy of predictions: descriptor, transform, and        values. Caution must be exercised in assuming a model is good just because\par
+machine learning algorithm. As noted above, the descriptors, transforms,           the MAE is low. One must also see a high R2 value to show that the model\par
+and machine learning algorithms we employ are listed in Fig. 2 and                 results in correlated predictions; a negative value for the R2 metric indicates\par
+described in detail in the Methods Section.                                        that it would have been better to simply predict the mean.\par
+      We start by examining Fig. 3, which shows parity plots comparing                   Second, one can see that the \u8216?average\u8217? transform is selected as the\par
+machine learning predictions of GB energy against the GB energy values             transform providing the most accurate predictions in four of seven cases.\par
+calculated in LAMMPS, as reported in ref. 38. There is one plot for each of        Third, in three of seven cases, the machine learning algorithm that provides\par
+the 7 descriptors examined in this work: The Atomic Cluster Expansion              the highest accuracy is LinearRegression. In the other four of seven cases,\par
+(ACE), SOAP, Atom Centered Symmetry Functions (ACSF), Strain Func-                 MLPRegression is the most accurate. But the three cases with LinearRe-\par
+tional (SF) descriptors, a Graph description, CSP, and CNA. For each of            gression have much better predictions than those with MLPRegression.\par
+these 7 descriptors, the results are reported for the combination of transform     Fourth, one can see that the combination of MAE and R2 values provide a\par
+and machine learning algorithm that resulted in the highest overall accuracy       nice summary of the accuracy that can be visibly seen in the parity plots.\par
+predicted for GB energy using this dataset. The accuracy of predictions is         Fifth, the stark contrasts of the MAE and R2 values between the SOAP and\par
+measured by the mean absolute error (MAE) and R-squared (R2) values.               \u8220?Random SOAP\u8221? models illustrates that there is valuable information in the\par
+These metrics are used in tandem to best illustrate the performance of a given     features of the averaged SOAP that is correlated with the GB energy of a\par
+model. Finally, these 7 descriptors are accompanied by a parity plot labeled as    given structure. This is strictly true when comparing SOAP and \u8220?Random\par
+\u8220?Random SOAP\u8221? where the SOAP descriptor is used as input, but with the             SOAP\u8221? and likely true when comparing \u8220?Random SOAP\u8221? with the other\par
+GB energy values shuf\u64258?ed so that every SOAP vector points to a random GB           descriptors, which categorize the atomic information of the GBs in distinct\par
+energy value in the set. This serves as a worst-case reference value since a       manners.\par
+shuf\u64258?ed dataset would be expected to have no correlations.                               While important insights can be gained from these comparisons in Fig.\par
+      In examining Fig. 3, the SOAP descriptor combined with LinearRe-             3, great care must be exercised because they are not direct comparisons; the\par
+gression achieves the highest accuracy, with a low MAE of 3.89 mJ/m2 and a         models are different. Better comparisons can be made by holding as many\par
+high R2 of 0.99, indicating the near-perfect correlation between predicted         variables constant between the models as possible. The three key steps\par
+and actual values. In contrast, the Random SOAP model, where GB energies           (describe, transform, and machine learning) represent a 3-dimensional\par
+are shuf\u64258?ed, has a high MAE of 46.96 mJ/m2 and a negative R2 of -0.23,             space of combinations, as illustrated in Fig. 2. However since not all com-\par
+con\u64257?rming no predictive capability. While ACE and SF descriptors also              binations were evaluated, we choose to examine 2-dimensional subsets,\par
+achieve high accuracy, ACSF exhibit intermediate performance and                   holding constant one of the three methods, as illustrated by the yellow bands\par
+descriptors like graph (graph2vec), CNA, and CSP exhibit signi\u64257?cantly              in Fig. 2. The methods that are held constant are chosen because they\par
+higher MAE and lower R2, indicating poorer predictive performance. This            typically perform better than their counterparts for the GB energy predic-\par
+suggests that the higher complexity descriptors do indeed capture more             tions examined in this work.\par
+relevent information for predicting grain boundary energy.                               The \u64257?rst subset we analyze compares different descriptors and machine\par
+      Figure 3 illustrates key aspects of feature engineering used to predict      learning algorithms, keeping the averaging transform constant since it\par
+GB energy. First, it can be seen that due to the nature of this dataset, with      performes well for 4 of 7 descriptors in Fig. 3. The accuracy comparison for\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                       3\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                              Article\par
+\par
+\par
+\par
+\par
+Fig. 3 | Summary \u64257?gure illustrating the accuracy of each GB descriptor paired with its optimal transform and machine learning algorithm. Each subplot uses color-\par
+coded density levels to highlight the relationships between predicted and actual values. MAE is in units of mJ/m2.\par
+\par
+\par
+\par
+this subset is given in Fig. 4a. The ACE, SOAP, and SF descriptors performed      This suggests that more or different interaction pairs are probably required\par
+exceptionally well across multiple machine learning algorithms. The R2            to detect the structural features that determine GB energy with ACSF. In\par
+values were consistently above 0.95 in the majority of cases, indicating          fact, with a greater understanding of the ACSF implementation, it is possible\par
+strong predictive capabilities, while the MAE values were comparatively           that one could obtain higher accuracy even with the same number of terms.\par
+low, < 10 mJ/m2 in the majority of cases, re\u64258?ecting accuracy in the energy        Although we see that this method of \u8220?covering your bases\u8221? by increasing the\par
+predictions. ACSF had higher errors (MAE just less than 20 mJ/m2 and R2           number of features does quite well in terms of accuracy, there is power in a\par
+around 0.8). CSP, CNA, and the graph descriptor had errors around 25 mJ/          pre-training choice of basis based on physical beliefs about the material,\par
+m2 and R2 < 0.67.                                                                 which ideas are discussed in the interpretability section of the results.\par
+      One might be tempted to make quick judgements about the quality of                What is remarkable about the two singular-valued descriptors, CSP\par
+the different descriptors, but caution must be exercised because the number       and CNA, is that, despite being less accurate than the SOAP, ACE, SF, and\par
+of features for each descriptor vary drastically, as shown by Table 2 in the      ACSF descriptors, they still achieve respectable accuracy (c.f. Fig. 4a). In\par
+Methods section. Each descriptor forms a unique basis to represent an             fact, it is simple enough that we show the equation for the LinearRe-\par
+environment. For the SOAP, ACE, and SF techniques, the user speci\u64257?es the          gression model, \u947? = 280.26 \u215? xCSP + 173.14, where \u947? is the GB energy and\par
+desired order of radial basis functions, the degree of spherical harmonics, or    xCSP is the average of the scalar CSP values for a given boundary. Similarly\par
+the polynomial order to be included in the representation. Similarly, for the     for CNA, the single coef\u64257?cient linear function is \u947? = 505.88 \u215? xCNA \u8722?\par
+ASCFs, the user selects sets of 2- and 3-body functions. The graph used in        370.71, where xCNA is the average of the integer CNA values that refer to\par
+combination with graph2vec creates a nearest-neighbor-connected graph             different structure types.\par
+where the user de\u64257?nes a cutoff distance for the nearest neighbors. In con-              Finally, in Fig. 4a, we include the graph descriptor, despite its use of a\par
+trast, the CNA and CSP descriptors are both singular-valued quantities for        different transform, graph2vec. This descriptor performs worse than the\par
+each atom, though it is noted that CNA is built on top of local graphs that       CSP and CNA descriptors, even though it encodes more information than\par
+could be used instead of the integer classi\u64257?cation, as in36.                      the singular-valued descriptors. However, as with the other descriptors,\par
+      In the cases where the user picks the level of expansion, the user can      several parameters could be optimized for better predictions, including the\par
+determine what cutoff can be used to obtain a desired level of accuracy; this     cutoff distance of the graph, the weighting of the graph, and the selection of\par
+trades computation time and memory required for a larger basis that               subgraphs in the graph2vec transform.\par
+hopefully captures more of the physics. For example, when we increased the              In summary, the effect of descriptor on accuracy in Fig. 4a shows that in\par
+number of ACSF features from 8 to 37, the R2 value increased from 0.65 to         general, more features is better. The density-based descriptors, many of\par
+0.81 but it required signi\u64257?cantly more computation time. One could also           which are created for machine-learned interatomic potentials, appear to be\par
+compare the fact that ACSFs and SFs have approximately the same number            better at capturing the complex and intricate nature of the local atomic\par
+of terms, 37 and 36 respectively, but the ACSFs perform worse than SFs.           environments.\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                       4\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                                         Article\par
+\par
+\par
+\par
+\par
+Fig. 4 | Tables comparing the accuracy of different combinations of descriptors,         the accuracy on a randomized list of GB energies; values near this accuracy are\par
+transforms, and machine learning techniques. The entries in each cell list the           considered to be no better than predicting a random output. If the models did not\par
+MAE/R2 as a measure of the accuracy (with MAE units in mJ/m2), and the cell is           converge in a reasonable time their results were left as blank cells. Approaches that\par
+colored according to this accuracy. Note that in all cases the Graph descriptor uses     did not converge are labeled with DNC.\par
+the graph2vec transform. The Random SOAP is included for reference to illustrate\par
+\par
+\par
+\par
+     In examining the role of machine learning algorithms for a given                    mJ/m2 for the average transform in most cases and greater than 26 mJ/m2 for\par
+descriptor, one can see that the linear models (LinearRegression, LASSO,                 the other transforms in all cases.\par
+RidgeCV) generally outperform other types of machine learning models for                      All the transforms assume some prior on the important features to\par
+nearly all descriptors when using the average transform (c.f. Fig. 4a). The              transform. The average transform assumes that an average environment is\par
+SVM (SVR) and Nearest Neighbor (KNN) models frequently rank next in                      the most important information to preserve. KMeans clustering assumes\par
+performance, followed closely by Neural Network (MLPRegression) and                      that the clustering in the dataset and the locations of those clusters is the\par
+ensemble (AdaBoostRegressor) methods. All these models perform better                    most important information to preserve. Largest simplex assumes that it is\par
+than the \u8220?Random SOAP" input, demonstrating their ability to identify                    important to represent the data with subsections of the data that are far apart\par
+meaningful correlations between the features and GB energy.                              and maximize the simplex volume. CUR assumes that speci\u64257?c subsets,\par
+     The second subset we examine in the 3-D space holds the SOAP                        actual rows and columns of the original data, are critical and obtains these\par
+descriptor constant and varies the transform and machine learning meth-                  through matrix decomposition.\par
+ods, as illustrated in Fig. 2. The results for this subset are illustrated in Fig. 4b,        Given that GB energy is calculated from the sum of the energy of all the\par
+where it should be noted that the average column in Fig. 4b is the same as the           atoms divided by the area of the boundary, it is not surprising that the best\par
+SOAP column in Fig. 4a due to the intersection of the two 2-D cross-                     transform is an average of the atomic environments. In other words, the\par
+sections. This analysis shows that in all cases in Fig. 4b, the averaging                assumption behind the average transform aligns closely with the calculation\par
+transform signi\u64257?cantly outperforms the other methods; MAE is less than 10                method for GB energy, making it a suitable representation. Conversely, the\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                                   5\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                              Article\par
+\par
+assumptions underlying other transforms do not as accurately capture the           robust model, one could increase the dataset with a small sampling of the\par
+relationship between the atomic collection and GB energy. However, there           metastable structures and ensure the model sees a more diverse set of GB\par
+may be other cases where a different transform better matches with the             structures and energies.\par
+property of interest. For example, in some cases, extreme values of a dis-\par
+tribution control the behavior, such as in fracture, and a different transform     Feature Selection\par
+may better capture that relationship. Therefore, we hypothesize that the best      Although SOAP achieves the highest accuracy when predicting GB energy,\par
+transform for accurate predictions is one that preserves the relationship          in our implementation SOAP also uses the most features of any of the\par
+between the way a collection of atoms relates to the property of interest.         descriptors (c.f. Table 2). ACE and SF achieve comparable accuracy but only\par
+      However, it is also possible that the choices made in this work about the    use 121 and 36 terms, respectively. In fact, these two occasionally outper-\par
+transform hyperparameters resulted in poor predictions since we did not            form SOAP. It should be noted that any of these could be adjusted to use\par
+seek to optimize these hyperparameters. For example, the target rank used in       more or fewer terms to achieve higher or lower levels of accuracy. One can\par
+the CUR transform is 20 and the largest simplex transform employed 10              also use feature selection methods to remove redundant or irrelevant\par
+dimensions; it is not clear that these values are suf\u64257?cient or insuf\u64257?cient.        information in the machine-learned structure-property models. Feature\par
+Similarly, the KMeans transform employed 100 clusters and it is not clear          selection is an important step towards interpretable machine learning\par
+that this is representative of the number of clusters in any of the descriptors.   models because of the challenge of interpreting the meaning of high-\par
+      It is also worth noting that the SOAP descriptor appears to fall victim to   dimensional descriptors66.\par
+the curse of high dimensionality when transformed with KMeans clustering.               To identify lower dimensional representations we implement a feature\par
+On average, the KMeans clustering transform performs worse when applied            selection method that uses the least absolute shrinkage and selection\par
+to SOAP. This is likely because the high dimensionality of SOAP descriptors        operator (LASSO) to identify what terms are most important for retaining\par
+leads to a phenomenon known as \u8220?distance uniformity"64. In high-                   high accuracy. LASSO is formulated as a minimization of a least squares\par
+dimensional spaces, feature values tend to be equidistant from each other,         error plus an L1 norm regularization term scaled by the parameter \u955? which\par
+making it dif\u64257?cult for clustering algorithms to distinguish between similar        controls the trade-off between \u64257?tting the model accurately to the training\par
+and dissimilar data points.                                                        data and keeping the model coef\u64257?cients (parameters) small and sparse. This\par
+      The third and fourth 2-D subsets we examine from the 3-D space               LASSO model is de\u64257?ned by\par
+illustrated in Fig. 2 hold a different machine-learning algorithm constant.                                                              \par
+Speci\u64257?cally, the LinearRegression model was picked because of its high                                         1\par
+                                                                                                        min      k y  X\u946?k22 \u254? \u955? k \u946?k1                        \u240?1\u222?\par
+accuracy and MLPRegression was also picked because of the popularity of                                   \u946?    N\par
+deep learning models. The results for these subsets are presented in Fig. 4c,d\par
+where the effect of different descriptors and transforms can be seen. First, in          For this feature selection analysis, we use SOAP due to its prominence\par
+comparing the two tables, the average transform is better with LinearRe-           in GB predictions and SF for its accuracy and interpretability, as detailed in\par
+gression in all but the case of ACSF. The higher accuracy between Linear-          the following section. Figure 5 plots the number of non-zero terms (blue)\par
+Regression and MLPRegression is evenly divided for the largest simplex             and the model accuracy (red) of LASSO as the size of \u955? increases for both\par
+transform. MLPRegression is better in two of three cases for the CUR               SOAP (Fig. 5a) and SF (Fig. 5b). The sparsity of the parameters increases\par
+transform and in one of four cases for the KMeans transform. However, in           with increased \u955? values. This model is trained using the average transform\par
+many of these cases, the accuracy values approach or exceed predictions by         and illustrates just how many parameters can be neglected while main-\par
+\u8220?Random SOAP\u8221?, making it dif\u64257?cult to judge the value of the improve-               taining a high R2 value. The \u8216?elbow\u8217? of the R2 curve marks where the model\par
+ments. Furthermore, these all perform worse than the average transform.            begins to signi\u64257?cantly drop in accuracy.\par
+      In the case of CSP and CNA, the GaussianKDE transform performs                     Figure 5 illustrates that at low \u955? values SF retains all 36 terms and\par
+better than the average transform for both LinearRegression and MLPRe-             achieves an R2 value of 0.95. SOAP starts with more terms but can be\par
+gression, with the exception of CNA by LinearRegression. Also for these,           reduced to 209 terms with a comparable R2 value. At the high end of \u955? values,\par
+MLPRegression performs better than LinearRegression for three of four              SOAP and SF achieve an R2 value of 0.43 using 4 and 2 terms, respectively,.\par
+cases considered. In these singular-valued descriptors, the more sophisti-               This illustrates that although the accuracy decreases, both of these\par
+cated GaussianKDE transform and MLPRegression allow it to obtain                   descriptors can be reduced to a very small representation space while pre-\par
+slightly better predictions.                                                       serving the most important information. It is noteworthy that averaged\par
+      This examination of the effect of all three key steps (describe, trans-      values of both CSP and CNA achieve higher accuracy predictions of GB\par
+form, machine learning) shows that the descriptor plays an outsize role in         energy with a single scalar value with R2 values of 0.67 for both. Thus, these\par
+the quality of the predictions. However, the transform of the features also        two singular-valued descriptors are quite expressive and are better than just\par
+plays an important role and some important information can be lost at this         a few terms of the other descriptors. But, perhaps this is not surprising since\par
+step if care is not exercised. Finally, the machine learning algorithm appears     these descriptors were designed to easily identify defects and other changes\par
+to play more of a secondary role; if the features are correlated with the          in structure with a single value, while the other descriptors were created to\par
+property of interest, multiple algorithms can often extract the relationship       provide a more nuanced description of an environment with a much larger\par
+(though some methods appear to perform better than others depending on             number of terms. Consequently, while feature selection can be helpful in\par
+the circumstance).                                                                 removing redundant and irrelevant information, the descriptors selected\par
+      The accuracy of the model will also be affected by the dataset used as       have a big impact on identifying important features that contribute to the\par
+input to training of the model, as evidenced by recent work on machine-            machine-learned structure-property model.\par
+learned interatomic potentials65. In this work, we examined 7174 minimum\par
+energy GB structures. However, in generating the dataset, more than 43             Interpretability\par
+million metastable GB structures were generated and preserved. Since               The goal in this work is to obtain structure-property models that are both\par
+training and validating such a large set would represent a 6000-fold increase,     accurate and interpretable. Interpretability is of critical interest for the\par
+we chose to evaluate the trained model on the metastable variants of two-          advancement of science since machine learning models could easily become\par
+grain boundaries, one \u931?5 and one \u931?103e. These evaluations, detailed in the         black box models that can\u8217?t be understood. We have examined the impacts\par
+supplementary material, suggest that the energies encountered during               that the descriptor, transform, and machine learning model have on accu-\par
+training were suf\u64257?ciently representative for the model to generalize effec-        racy and methods to select the features that have the biggest impact on the\par
+tively. However, the worst predictions were for GB structures with energies        models. We now focus on extracting interpretable information from these\par
+far outside the range of energies on which the dataset was trained. For a more     models.\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                       6\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                                       Article\par
+\par
+\par
+\par
+\par
+Fig. 5 | Summary of LASSO model results for two different descriptors. The              of coef\u64257?cients. Increasing \u955? pushes the model to send coef\u64257?cients to zero. The red\par
+LASSO model is trained on averaged SOAP (a) and SF (b). The x-axis is the \u955? value       line shows the R2 value calculated from the predictions of the model. The blue line\par
+that scales the regularization term. The regularization term is the L1 norm of vector   represents the number of non-zero coef\u64257?cients.\par
+\par
+\par
+Descriptors. ACE, SOAP, SF, ACSF, CSP, and CNA all represent the                              Many of these descriptors were designed for machine-learned intera-\par
+local environment around each atom. These representations often                         tomic potentials or for classi\u64257?cation of atom neighborhoods. In other words,\par
+involve sums over neighboring atoms, where each term in the sum                         many of these descriptors were meant for forward modeling only, but to\par
+depends on the distance and/or angular relationship between the central                 extract interpretable information, we need to go backwards through forward\par
+atom and its neighbors. ACE, SOAP, and SF all represent the angular                     models. Therefore, pointing out weaknesses in backwards applications to\par
+relationships in terms of spherical harmonic expansions, while ACSF                     extract speci\u64257?c terms is not a completely fair criticism. Nevertheless, because\par
+uses a more explicit n body expansion of the angular terms. SOAP utilizes               we wish to understand which descriptors provide this backwards path to\par
+a truncated Gaussian function for the radial distribution and then recasts              interpretability we examine them anyway.\par
+its basis function in a bispectrum approach. This results in the mixing of                    In a backwards application, ACE and SOAP are less than ideal because\par
+angular and radial nodes in the invariant basis functions. ACE utilizes                 they do not retain knowledge of how their rotationally invariant descriptors\par
+multiple radial functions within a speci\u64257?ed cutoff radius to capture the                are oriented in space. In contrast, the SF approach explicitly retains such\par
+radial environments. In SF, the radial and angular nodes of the expansion               terms. Additionally, for ACE and SOAP, one can know which degree of the\par
+are kept separate resulting in descriptors that are analogous to an atomic              spherical harmonics are important as illustrated in Supplemental Figure S2,\par
+orbital expansion. SF then represents this information in the minimal set               but \u64257?ner structural detail within that degree is lost. It may be possible to\par
+of invariants required to characterise deformations up to the 4th order                 preserve some of that information if interpretability is desired. In a back-\par
+(i.e., second derivatives or curvature of the strain). ACSF uses multiple               wards application of ACSF, it is not clear to the authors how one would\par
+Gaussian radial terms which are then convolved with the angular terms.                  interpret the values of the 2- and 3-body functions. At a minimum the\par
+All of the methods carry out their expansions to a level of accuracy that               summation over neighbors makes it dif\u64257?cult to connect with speci\u64257?c atomic\par
+can be de\u64257?ned by the user.                                                              structures. However, it is possible that improved application of ACSF\par
+       In contrast to the other methods, the graph description (used in the             descriptors could be useful in extracting the local symmetries and deviations\par
+graph2vec transform) characterizes the GB in a periodic, weighted graph. In             therefrom that could result in interpretability.\par
+this framework, the nodes of the graph correspond to the spatial positions of                 Graph2vec\u8217?s interpretability suffers due to its abstract representation of\par
+atoms and the edges are weighted by the distance between neighboring                    graph embeddings. In its current implementation, there is no method by\par
+atoms within a cutoff distance. Thus, this method captures the complex                  which to go backwards and make use of the subgraphs that were extracted,\par
+arrangements of the atoms in a GB as a whole.                                           but this could be added for improved interepretability. CSP and CNA are\par
+       All the descriptors transform the 3D spatial coordinates of atoms into a         non-unique descriptors where multiple atomic con\u64257?gurations can produce\par
+high-dimensional feature space. This transformation is designed to capture              identical values, making it challenging to pinpoint speci\u64257?c structural fea-\par
+complex interactions and symmetries, but it also means that the resulting               tures responsible for observed properties.\par
+descriptors are often far removed from the intuitive, three-dimensional                       As a result, the inherent complexity of these descriptors makes it\par
+space in which atoms actually exist. The use of physical descriptors (such as           challenging to reverse-engineer the key features of the structure-property\par
+bond bending terms or spherical harmonics) leaves open the possibility that             relationships. Most of these descriptors do not support easy interpretability\par
+terms could be interpretable. However, the derivation of the terms often                because they were not designed for this purpose. However, the SF approach\par
+renders this dif\u64257?cult, and most approaches do not offer any interpretations             is distinct in characterizing the invariants of physical deformations up to the\par
+of their descriptors. This is not a criticism of these descriptors as they were         4th order. This descriptor is examined in additional detail in a case\par
+not designed for the purpose of interpretability.                                       study below.\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                                7\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                                                Article\par
+\par
+Transforms. Just like descriptors, the ability to go backwards through            Case Study of Interpretability\par
+transforms is crucial for interpretability. Averaging, the best transform         Here we examine how a combination of one descriptor, one transform, and\par
+for the most accurate descriptors, can not be applied backwards. One can          features selection in two different machine learning models provide inter-\par
+only make conclusions about the average atomic environments. As                   pretability. We employ the SF descriptor because, as noted above, it was\par
+explained in the Accuracy subsection, there are assumptions inherent to           de\u64257?ned with the express purpose of retaining a physical meaning. We\par
+each of the transforms. Averaging best matches the physics of how GB              employ the average transform because, as noted above, it retains a con-\par
+energy is calculated.                                                             nection to how our property of interest, GB energy, is calculated. Finally, we\par
+     On the other hand, the largest simplex and CUR methods actually              examine feature selection in two different machine learning methods to\par
+preserve speci\u64257?c features from the input matrix. By selecting the most            illustrate the differences related to interpretability.\par
+important rows, these techniques effectively \u64257?x the size of the matrix that              As discussed above, regularized linear models allow easy identi\u64257?cation\par
+describes the GB. In other words, they choose the atomic environments that,       of the most important features in a model. We revisit the results of the\par
+even before training on data, are likely to preserve valuable information         LASSO application to the SF illustrated in Fig. 5 and described in the Feature\par
+based on the assumptions of these transforms listed earlier. This deliberate      Selection subsection above. As the model complexity is reduced, the terms\par
+selection ensures that the matrix representation of each GB remains concise       that remain can be considered the most important for GB energy prediction\par
+and meaningful. Therefore, both CUR and largest simplex methods identify          and interpretability. The last \u64257?ve SF terms to be removed by LASSO, and\par
+original atomic environments that can be analyzed for their interpretability      therefore the top \u64257?ve terms for predicting GB energy, are listed in Table 1.\par
+and impact on the predictions.                                                    Next to each term in Table 1 is the sign of the correlation of that term in the\par
+     The KMeans clustering transform, while \u64257?xing the matrix repre-               model with its effect on the GB energy prediction.\par
+sentation, does not preserve the original rows of the matrix but rather a                To understand the impact of a non-linear model, we employ Extra\par
+number of cluster centers. Thus it is like averaging where information is lost    Trees regression. For interpretability, this is used in conjunction with\par
+in the transform application. In the case of KMeans clustering the original       SHapley Additive exPlanations (SHAP) analysis68. SHAP values explain the\par
+rows can be identi\u64257?ed by \u64257?nding the nearest neighbors to the cluster centers.     prediction of an instance by computing the contribution of each feature to\par
+Although this can be dif\u64257?cult in higher dimensions.                               the prediction. This method is based on game theory and helps in attributing\par
+     Finally, it is important to note that other properties of interest might     the prediction output to individual features, offering a fair and consistent\par
+have different relationships with the atoms involved. This will impact which      way to understand the model behavior.\par
+transform might work best, as discussed in the Accuracy subsection above.                Figure 6 plots the SHAP analysis of an Extra Trees regression, show-\par
+                                                                                  casing the top 10 SF features sorted by their average SHAP value. A SHAP\par
+Machine Learning Models. The ability to extract interpretable infor-              value indicates how much a given feature changes the output of the model\par
+mation from the machine learning models depends heavily on the model              compared to the baseline prediction; positive and negative SHAP values\par
+used. When linear models are used, one can readily identify the features          correspond to a positive and negative effect on the predicted property,\par
+that have the greatest impact on the predictions based on values of the           respectively. The colors represent the values of the features for each data\par
+coef\u64257?cients. The relationships are easily de\u64257?ned and understood. One can          point; with red and blue values corresponding to high and low values of a\par
+even reduce the features using a feature selection or regularization              particular feature, respectively. For example, if a dot is blue and located on\par
+approach66, as discussed above, to more easily identify the important             the right side (positive SHAP value), the low value of that feature increases\par
+features. However, in non-linear models identifying the most important            the value predicted by the model. The top \u64257?ve features from the SHAP\par
+features is not as simple.                                                        analysis are also listed in Table 1, along with the sign of the correlation\par
+     If a KNN performs well, that may be indicative of clustering in the          between the term and its effect on the predicted GB energy in that model.\par
+input features, which would suggest that the clustering is relevant to the               There is signi\u64257?cant alignment between the LASSO and SHAP analysis,\par
+property of interest. Ensemble methods like AdaBoostRegressor \u64257?t the data         as illustrated in Table 1. Four of the top \u64257?ve SF terms are the same in both\par
+multiple times, focusing more on dif\u64257?cult cases with additional iterations.       analyses. Furthermore, the sign on the correlation of these four terms is the\par
+While decision trees provide inherent interpretability, ensembles of them         same. These four terms are P4I8, P1I0, P2I0, and P4I9, and are accompanied\par
+make that more dif\u64257?cult. However, these algorithms can export importance          by the P3I4 and O2I0 terms that only appear in one model.\par
+scores to learn about which features are of greatest interest.                           To further con\u64257?rm the expected correlation of these top terms from the\par
+     In our Support Vector Regression (SVR) model, we utilized a linear           LASSO and SHAP analysis, we plot the average SF values for each GB\par
+kernel to \u64257?t the data with a hyperplane. The choice of a linear kernel allowed    against both excess volume and energy in Fig. 7. Excess volume is included\par
+us to maintain a straightforward relationship between the features and the        as it is known to have a positive correlation with GB energy38. It is noted that\par
+output. This approach ensured that the model remained easily interpretable,       correlation plots for all SF terms are plotted in Supplemental Figures S9-S11.\par
+as each feature\u8217?s effect on the output could be independently assessed            The top 5 features from these supplemental plots with the highest\par
+through the corresponding coef\u64257?cients. By employing a linear kernel, we\par
+avoided the complexities associated with high-dimensional transforma-\par
+tions, which are common in non-linear kernel methods.                             Table 1 | Comparison of the top \u64257?ve features identi\u64257?ed by\par
+     A neural network model uses a series of layers whose connectedness           LASSO and SHAP for the SF model to linear correlations with\par
+and construction can be highly variable. In the neural network certain layers     GB energy\par
+have non-linear activation functions to learn non-linear relationships.\par
+                                                                                   Rank                  LASSO                    SHAP                   Correlation\par
+While this may improve predictions, the overall structure of the neural\par
+                                                                                   1                     P4I8 \u8722?                   P4I8 \u8722?                 P1I0 +\par
+network makes it dif\u64257?cult to extract interpretable information.\par
+     However, in any of these cases, one can use additional tools, such as         2                     P1I0 +                   P2I0 +                 P3I4 +\par
+those that \u64257?t into the category of Explainable AI67, to extract the features of    3                     P2I0 +                   P1I0 +                 P4I8 \u8722?\par
+greatest impact or importance.                                                     4                     P4I9 \u8722?                   P3I4 +                 P2I2 \u8722?\par
+     The preceding discussion of how the method selected for each step in\par
+                                                                                   5                     O2I0 +                   P4I9 \u8722?                 P3I0 +\par
+the process of predicting structure-property relationships impacts inter-\par
+                                                                                  Each feature is ranked based on its in\u64258?uence on the model\u8217?s predictions, where the + or \u8722? indicating\par
+pretability has remained theoretical. In the following subsection, we             a positive or negative in\u64258?uence, pushing the model\u8217?s output higher or lower, respectively. This is\par
+examine a case study where we can be more speci\u64257?c about the ability to            accompanied by a column listing the features with the highest correlation with GB energy along with\par
+extract meaningful information from machine-learned models.                       the sign of the correlation.\par
+\par
+\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                                           8\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                                  Article\par
+\par
+correlation with GB energy are listed in Table 1 along with the sign of the          highest R2 for correlation with GB energy (see also Supplemental Fig-\par
+correlation. It is worth noting that \u64257?ve of the six correlations plotted in Fig. 7   ure S10).\par
+have the same sign as that of the models listed in Table 1. The exception is               The P1I0, P2I0, and P3I4 terms are all categorized as deformation\par
+the O2I0 term, which has an opposite sign in the model but only has a weak           magnitude. P1I0 characterizes the gradient in the density. P2I0 characterizes\par
+correlation with energy.                                                             the net deviatoric strain, akin to the von Mises strain invariant of the\par
+     As noted earlier, SF comes with an added interpretability bene\u64257?t since          neighborhood. There should be substantial deformations of the fcc struc-\par
+each SF descriptor characterizes something unique about the deformation.             tures in the lattice neighboring the GB and shearing will be one of the\par
+Each SF term can be classi\u64257?ed into one of \u64257?ve categories: density, defor-            primary means for this. The P3I4 term measures the extensional con-\par
+mation magnitude, deformation type, and internal and external orientation.           tribution of the strain gradient. The importance of this term can be attrib-\par
+Supplemental Figures S9-S11 identify the categories for all 36 terms, which          uted to the presence of strain gradients at GBs, especially in the case of GBs\par
+are related to the categories listed in69.                                           that can be represented as dislocation arrays. It is similar to the P1I0 term,\par
+     The P4I8 term is one of three density metrics, and is an r4 average for all     where it is a gradient term, but it is weighted by r3 rather than r1. As\par
+the atoms in the neighborhood of a given atom. This term is orthogonal to            illustrated in Fig. 7, the P1I0 and P3I4 have strong correlations with excess\par
+the other two density metrics (P2I2 and P0I0). As the GB regions are de\u64257?ned          volume and energy, while P2I0\u8217?s correlations are weak.\par
+using a \u64257?nite thickness around the non-FCC atoms, the different density                    The P4I9 metric is an internal orientation metric that de\u64257?nes the\par
+terms will have different relative contributions from the disordered atoms in        orientation between the local lattice and the P4I6 measure of the shear. The\par
+the GB region and P4I8 should have highest relative contribution due to              latter is similar to the net shear metric P2I0, except that it is weighted by r4\par
+faster decay. Figure 7 shows that there are reasonable correlations with             rather than r2. Finally, the O2I0 is an external orientation metric that is also\par
+excess volume and GB energy, which have R2 values of 0.53 and 0.72,                  highlighted by the LASSO method; this terms de\u64257?nes the orientation of the\par
+respectively. Note that among the three density terms, P4I8 displays the             lattice shearing (measured by P2I0) with respect to the normal of the GB.\par
+                                                                                     Thus, it has some similarity to P4I9. Given that aluminum is not isotropic\par
+                                                                                     (albeit with a relatively small Zener ratio), it is not surprising that the\par
+                                                                                     amount of shear necessary to accommodate the mismatch at a GB will be\par
+                                                                                     related to the direction of that shear i.e., the crystal orientation.\par
+                                                                                           Interestingly, the P4I9 and O2I0 terms both have little to no correlation\par
+                                                                                     with excess volume and energy on their own. But in conjunction with the\par
+                                                                                     other terms in the models, they are deemed more important for the pre-\par
+                                                                                     diction of GB energy than other terms that have strong correlation with\par
+                                                                                     energy. For example, the P2I2 term (a density metric based on r2 weighting)\par
+                                                                                     has much stronger correlation with energy than the P4I9 term, but the\par
+                                                                                     models are not predicting based on any single term alone, but the combined\par
+                                                                                     effect of multiple terms. Thus, some of these terms may provide more of a\par
+                                                                                     secondary effect that can distinguish nuanced variations of the GB energy\par
+                                                                                     and such effects may not be apparent in 2-D cross-sections examining\par
+                                                                                     single-value correlations.\par
+                                                                                           The consistency of the top features and their identi\u64257?able correlations\par
+                                                                                     with energy in all but one case illustrate that this combination of SF\par
+                                                                                     descriptor, average transform, and both linear and non-linear machine\par
+                                                                                     learning models is capturing useful trends. The average transform tells about\par
+                                                                                     the general trends of the atoms in the GB but not about speci\u64257?c local atomic\par
+                                                                                     environments. The linear model provides detailed insight into the in\u64258?uence\par
+                                                                                     of each parameter. The non-linear model provides this insight through the\par
+                                                                                     SHAP analysis. Most importantly, the SF descriptor connects the features\par
+Fig. 6 | SHAP analysis of an Extra Trees regression on SF results. This showcases\par
+                                                                                     with physical, interpretable attributes of the GB structure-property\par
+the \u64257?rst 10 SHAP values sorted by their impact on model output.\par
+                                                                                     relationship.\par
+\par
+\par
+\par
+\par
+Fig. 7 | Comparison of SF metrics to GB excess volume and energy. 2D histograms of SF terms from Table 1 with a excess volume, measured in lattice parameter units a0,\par
+and b GB energy.\par
+\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                           9\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                             Article\par
+\par
+      However, the analysis also uncovers the fact that different models will    that capture the important features of that property. For example, properties\par
+extract different features. While there are only minor differences in the top    controlled by extreme values in a distribution may bene\u64257?t from a transform\par
+\u64257?ve features listed in Table 1, the difference becomes more dramatic as more     that captures the structural aspects of those extreme values. However, while\par
+terms are compared. In addition, other models will extract entirely different    some transforms might provide more accurate predictions, they may make\par
+features; a Bayesian linear model applied to the data showed correlations        interpretation dif\u64257?cult. The average transform is one of these and it can not\par
+with many of the SF metrics listed above, but sometime with the same effect      be processed in reverse to tell us how the distribution of values that were\par
+and sometimes with an opposite effect on the GB energy. However, the             averaged might be critical to a certain structure-property relationship.\par
+Bayesian analysis, which is described in the Supplemental Material, required           The machine-learning models and algorithms also play a signi\u64257?cant\par
+an additional step in describing the data (subtracting the mean and dividing     role in both accuracy and interpretability. As discussed above, simpler\par
+by the standard deviation). The model input is slightly different and leads to   models are preferred to complex models and the linear models provide high\par
+different correlations as a result. Care must be taken since the machine         accuracy in many cases. The linear models are easier to interpret because the\par
+learning is only \u64257?nding correlations in the data that has been through feature   contribution of any given feature can be easily discerned. However, non-\par
+engineering, it is not \u64257?nding the causal relationships for the predictions.      linear models can make use of Explainable AI tools67, such as the SHAP\par
+                                                                                 analysis discussed above, to extract interpretable meaning from the resulting\par
+Discussion                                                                       model. Models can sometimes be overly complex; we suggest opting for\par
+Prediction in variable-sized atom-clustered structures consistently require      simpler linear models whenever feasible.\par
+three steps: describe, transform, machine learning. Each of these steps,               From an accuracy standpoint, we recognize that we have not con-\par
+illustrated in Fig. 1, plays a role in the resulting model accuracy and inter-   sidered all combinations of descriptors, transforms, and machine learning\par
+pretation. Such feature engineering is frequently employed to provide more       models. Neither have we done an exhaustive search of the hyperparameters\par
+accurate predictions or better interpretation of the results. In the fast        for each of the descriptors, transforms, and machine learning models\par
+growing environment of machine learning and arti\u64257?cial intelligence models,       beyond a simple gridsearch of hyperparameters for the machine learning\par
+the diversity in steps taken by different groups makes it challenging to know    models. We cannot guarantee that higher accuracy couldn\u8217?t be achieved\par
+which methods lead to improved accuracy and interpretability. We have            with adjustments to the models we examined. Furthermore, we have pre-\par
+examined this challenge in GBs, which, like all variable-sized atom clusters,    dicted grain boundary energy but other properties, such as grain boundary\par
+require a transform to obtain consistent feature sizes. By attempting to         mobility, might result in different architectures and feature engineering to\par
+standardize the various steps of the feature engineering process, we have        incorporate relevant features and their time-dependence. Thus, each unique\par
+aimed to understand how each step in the process affects the accuracy and        property may require a unique approach for optimal predictions. In any\par
+interpretability of the resulting model predictions.                             case, by providing a systematic approach, and a consistent dataset across all\par
+      Descriptors play an essential role in taking atom structure information,   the models evaluated in this work, we provide a framework and benchmark\par
+most often represented by Cartesian coordinates, and mapping that to a           against which new and improved models can be tested, like the MNIST\par
+feature vector that encodes the most critical information. Our \u64257?ndings           dataset has served for benchmarking machine learning efforts in optical\par
+underscore the robustness of physics-inspired structural representations62 in    character recognition70\u8211?72. Also, by providing standard steps and language\par
+capturing the intricate behaviors of GBs. Notably, descriptors such as the       for the comparison of models along with a deliberate attempt to employ\par
+SOAP, ACE, and SF demonstrated superior predictive accuracy, under-              principles of the machine learning community, we hope the grain boundary\par
+scoring their potential in advancing computational materials science. SF         community can identify the best methods to obtain structure-property\par
+stands out in this group of accurate predictors because it has a low feature     relationships that will drive innovation.\par
+count and each feature has a physical meaning in terms of the strain in the            Feature selection is a tool that can be used in conjunction with machine\par
+neighborhood of each atom. One of the interesting conclusions is that            learning models to reduce the feature vector to those items that are the most\par
+higher order deformations (i.e., strain gradients and higher) should be          critical for the accuracy in the model. The assumption from an interpret-\par
+considered for accurate predictions of GB energy. This is likely the main        ability standpoint is that these selected features are the most important for\par
+reason behind higher predictive capability of SOAP and ACE compared to           the model and can therefore be used to obtain insight into the structure-\par
+SF, as the current implementation of SF considers only up to 4th order terms,    property models.\par
+whereas spherical harmonics up to 12th order were considered for both                  The \u64257?nal case study illustrated how the SF descriptor provides insight\par
+SOAP and ACE. This is also corroborated by LASSO analysis for SOAP               into the density and deformations that correlate with GB energy. Four of the\par
+descriptors (Supplemental Figures S1 and S2), which shows persistence of l       top \u64257?ve features were shared between a linear and non-linear model. This\par
+= 8, 10 terms.                                                                   nuanced view, where some features are consistently highlighted across\par
+      In short, it appears that better accuracy can always be achieved with      methods while others are unique to speci\u64257?c approaches, offers a richer\par
+additional descriptor information. For example, there are numerous cases         understanding of the predictive landscape. It suggests that while some\par
+where concatenation of one or more descriptor improves the learning18,28,31.     attributes of GBs are universally recognized by various predictive models,\par
+But, longer feature vectors complicate interpretability. Additionally, some      others may be more method-dependent, possibly due to underlying\par
+descriptors that can encode a lot of information cannot be processed in          assumptions or mathematical formulations inherent to each technique. This\par
+reverse to provide physical insight from model predictions. Therefore, those     insight not only enriches our understanding of feature selection dynamics\par
+descriptors that encode physics that can be readily extracted from a model       but also guides further investigation into the speci\u64257?c roles these features play\par
+prediction are likely to provide the greatest insight into the resulting         in material structure-property relationships.\par
+structure-property models.                                                             The implications of these results offer a pathway towards more precise\par
+      The transforms applied to obtain consistent feature sizes from the         and ef\u64257?cient predictive models that can be instrumental in materials design\par
+variable-sized input data impact both the accuracy and interpretability of       and engineering. By enhancing our ability to predict GB properties, these\par
+the resulting model. If per-atom quantities are to be predicted, the trans-      \u64257?ndings could facilitate the development of materials with optimized\par
+formation step can be eliminated. However, for our goal of predicting overall    mechanical properties, thereby having a profound impact on various\par
+grain boundary properties, a transformation step remains necessary. As           industrial applications.\par
+hypothesized in this work, the average transform provides the best accuracy\par
+because it is the most similar to the procedure used to calculate GB energy      Methods\par
+from the atomic structure; the excess energy, relative to the bulk energy, for   In the application of machine learning grain boundaries (GBs), feature\par
+all the atoms is summed and divided by the area of the boundary. We further      engineering73 is crucial for enhancing model performance by tailoring input\par
+hypothesize that other properties of interest may bene\u64257?t from transforms         data to more accurately re\u64258?ect the underlying problem and prepare for\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                     10\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                                    Article\par
+\par
+predictive modeling. Figure 1 illustrates the three key steps taken for pre-         the sharper neighborhood cutoffs of ACE, MTP and SNAP. Second, we\par
+dicting GB properties: employing descriptors to encode or describe the               include two methods commonly used to identify GB atoms: Cen-\par
+structure (step 1), transforms to standardize the data size across different         trosymmetry Parameter (CSP) and Common Neighbor Analysis (CNA).\par
+GBs (step 2), and machine learning or prediction algorithms to predict a             Finally, we include a periodic graph description of a boundary where every\par
+GB property from the input data (step 3). The methods and techniques                 atom in the GB is de\u64257?ned by a node, which is connected by edges to\par
+employed in this work for the three key steps are described below.                   neighboring nodes (atoms) within a certain cutoff distance. Each of these\par
+                                                                                     additional methods is listed in Fig. 8 in green under the branch we\par
+Descriptors                                                                          identi\u64257?ed as most relevant. Techniques considered but not selected from\par
+The descriptors employed in this work are inspired by a phylogenetic tree of         other branches are discussed in the Supplemental Materials, with reasons\par
+structural representations shown in Fig. 8. The tree is reproduced and               being that in some cases they were not appropriate for characterization of\par
+adapted from a paper titled \u8220?Physics-Inspired Structural Representations for         single species large GB structures and in other cases, code was not readily\par
+Molecules and Materials,\u8221? by Musil et al.62. They emphasized the require-            available for implementation.\par
+ments for developing descriptors that map the atomic positions in Cartesian                The SOAP, ACE, and ACSF implementations all required user de\u64257?ned\par
+coordinates to a new metric space commonly called the feature space, the             parameters that impact how many terms are used to represent an atom\par
+representation62, descriptor74, or \u64257?ngerprint16,75\u8211?80. This mapping is required      environment. SOAP and ASCF are implemented using the \u8216?DScribe\u8217? python\par
+for predictive modeling because atom locations represented as Cartesian              library85, a powerful tool designed for creating descriptors in atomistic\par
+coordinates cannot uniquely characterise materials62. Speci\u64257?cally, atom              systems. For SOAP, all default parameters were used excluding\par
+locations do not preserve symmetries and any translation or rotation of a            rcut=3.74, lmax=12, nmax=12, and sigma=.575. ACSF are\par
+material will change the Cartesian coordinates. Thus, a descriptor should            unique in the sense that the user de\u64257?nes a list of interactions i.e. pairs, triplets\par
+address requirements of completeness, symmetry, smoothness, and addi-                for the various functions used by ACSF. We used 11 G2 term, 8 G3 terms, 8\par
+tivity. These requirements and the general process is discussed in additional        G4 terms, and 8 G5 terms. The implementation of the ACE algorithm was\par
+detail in the Supplemental Materials.                                                achieved using the \u8216?ace.jl\u8217? package within the Julia programming\par
+      In this work, we considered descriptors from all the branches;                 environment81,86. A basis was created using the following parameters: N=3,\par
+additional discussion of the selection process is provided in the Supple-            maxdeg=12, r0=2.86, rin=0.1, rcut=3.25, and pin=2. The SF\par
+mental Materials. In the end, we selected the following methods listed in            descriptors are currently 4th order, but can be extended to higher orders. SF\par
+the tree by Musil et al.62: smooth overlap of atomic positions (SOAP),               used the following parameters: sigma=1.017837 and cut-\par
+atomic cluster expansion (ACE)81, and Behler-Parinello\u8217?s atom-centered               off=5.699887. The graph description has the nodes of the periodic\par
+symmetry functions (ACSF)82,83. These three methods are boxed in green               graph listed as their spatial coordinates. The edges are weighted by the\par
+in Fig. 8. We also include several other methods. First, we include a recent         distance to their neighbors that are within rcut=3.74 \u8491? of the atom\par
+Strain Functional (SF) Descriptor, which de\u64257?ne the minimal set of                    (node) of interest. CNA55 and CSP52 both represent each atom\u8217?s environ-\par
+invariants required to characterise deformations up to the 4th order (i.e.,          ment with a single value, which is calculated during the creation of the\par
+second derivatives or curvature of the strain)84. This method is similar to          dataset using LAMMPS87. Each descriptor results in an Ni \u215? M matrix where\par
+SOAP in having smoothly declining neighborhood function, compared to                 Ni is the number of atoms in the ith GB structure and M is the feature length\par
+\par
+\par
+\par
+\par
+Fig. 8 | Philogenetic tree of structural representations adapted from Musil et al.62 under the CC-BY-4.0 license. All additions are marked in green to identify the\par
+descriptors used in the present work.\par
+\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                             11\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                               Article\par
+\par
+Table 2 | Table of output size of various descriptors\par
+\par
+Descriptor                                                          M Value\par
+ACE                                                                 121\par
+ACSF                                                                37\par
+SOAP                                                                1014\par
+SF                                                                  36\par
+Graph                                                               n/a\par
+CSP                                                                 1\par
+CNA                                                                 1\par
+\par
+\par
+\par
+\par
+Table 3 | Table of input and output shapes of various transform\par
+methods and the parameter P used to create the shapes\par
+\par
+Transform                   Input              Output              P Choice\par
+Average                     Ni \u215? M             1\u215?M                 n/a\par
+Largest Simplex             Ni \u215? M             P\u215?M                 10\par
+CUR                         Ni \u215? M             P\u215?M                 20           Fig. 9 | Illustration of the steps involved in training each machine learning model.\par
+                                                                                Step 1: 80%/20% split of the data into training and validation sets. Step 2: Use of\par
+Kmeans                      Ni \u215? M             P\u215?M                 100\par
+                                                                                sklearn GridSearchCV to optimize hyperparameters in the machine learning model\par
+KDE                         Ni \u215? 1             P                   100          with 5-fold cross-validation. Step 3: Training of the machine learning model using\par
+graph2vec                   Graph              P\u215?M                 128          the optimized hyperparameters and the 80% training set followed by validation\par
+                                                                                using the 20% validation set.\par
+\par
+of the descriptor. Table 2 shows the feature lengths of each of our\par
+descriptors.                                                                           To optimize each model\u8217?s performance, we used scikit-learn\u8217?s Grid-\par
+                                                                                SearchCV. This tool systematically searches for the best combination of\par
+Transforms                                                                      hyperparameters by applying cross-validation on the training set. Hyper-\par
+Since GBs and other variable-sized atom-clustered structures can have           parameters, which are model parameters that must be set before the learning\par
+variable numbers of features, the feature size must be standardized through     process, such as regularization strength or tree depth, can signi\u64257?cantly affect\par
+some sort of transform. This will transform the Ni \u215? M feature repre-           a model\u8217?s outcome. GridSearchCV performs an exhaustive search over a\par
+sentation from the descriptor to a P \u215? M feature representation that is         user-de\u64257?ned grid of hyperparameter values, training and validating the\par
+identical for all atomic structures.                                            model for each possible combination.\par
+      In this work we examine 6 possible transforms : average, CUR or                  The cross-validation splits the training data into several subsets (or\par
+skeleton matrices88, KMeans clustering89, the largest simplex16, kernel den-    folds), trains the model on a subset, and validates it on the remaining fold.\par
+sity estimation (GaussianKDE)89, and graph2vec90. The motivation behind         This process is repeated across all folds, ensuring the model is tested on all\par
+this set of transforms is provided in the Supplemental Materials.               portions of the training data to prevent over\u64257?tting. Once GridSearchCV\par
+      The Average, largest simplex, CUR, and Kmeans transforms are used         identi\u64257?es the optimal hyperparameters based on the average cross-\par
+with almost all descriptors. GaussianKDE is used only with CSP and CNA          validation performance, the model is retrained on the entire training set\par
+and graph2vec is used only with the graph descriptor. Table 3 lists the         using these best parameters.\par
+theoretical input and output size of each transform along with the P values            Finally, the trained model is evaluated on the validation set, which\par
+used in this work. It is noted that no attempt was made to \u64257?nd the optimal P    remains unseen during the training process, to assess its performance. This\par
+value for each implementation. Explanations for why each P value was            pipeline was implemented in an effort to provide a uniform and equitable\par
+chosen is given in the Supplemental Materials.                                  basis for comparison between models. For performance assessment, both\par
+                                                                                the Mean Absolute Error (MAE) and the Coef\u64257?cient of Determination (R2)\par
+Machine Learning                                                                were recorded. The MAE provided an understanding of the average absolute\par
+Machine learning is oftentimes yet another mapping to a different feature       error made by the models, while the R2 offered insights into the proportion\par
+space. To understand the impact of this step, the research employed a           of variance in the dependent variable that could be explained by the inde-\par
+comprehensive and systematic approach to compare a diverse set of               pendent variables, acting as another method for measuring the accuracy of\par
+machine learning algorithms. This set includes three linear models: Line-       the model.\par
+arRegession, Lasso, and RidgeCV; one support vector machine: SVR; two                  We disclose that beyond the grid search, which required user input,\par
+ensemble methods: Extra Trees and AdaBoost; one nearest neighbor                little additional effort was taken for the optimization of the hyperparameter\par
+method: KNN; and one neural network (deep learning) model: MLPRe-               values. Typically convergence was costly from a time perspective for the\par
+gresssion. All of these methods are available for implementation via the        non-averaging transforms due to the increased complexity, so the range of\par
+sklearn python library89. This set of algorithms were selected using the        hyperparameters de\u64257?ned in the grid search was customised according to\par
+sklearn documentation where various supervised methods are grouped by           convergence time and not accuracy. While we recognize that this may limit\par
+methodology.                                                                    the accuracy of these predictions, our data consisted of only a train and test\par
+      The training and validation process used in this work is illustrated in   set, so this also minimized the chances of over\u64257?tting.\par
+Fig. 9. In order to train and validate the various machine learning models,            Comprehensive documentation of all aspects of the model training\par
+the dataset was split into training and validation subsets of 80% and 20% of    process, including hyperparameter values, cross-validation details, and\par
+the GBs, respectively. The exact same subsets of GBs were used in the           performance metrics, was maintained for the reproducibility of the research.\par
+training and validation of each model to ensure a consistent and fair           A code base with a sample dataset is included to ensure that the experiments\par
+comparison between models.                                                      can be replicated and validated by others in the scienti\u64257?c community.\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                        12\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                           Article\par
+\par
+Dataset                                                                          13. Zhu, Q., Samanta, A., Li, B., Rudd, R. E. & Frolov, T. Predicting phase\par
+To compare the diverse descriptors, transforms, and machine learning                 behavior of grain boundaries with evolutionary search and machine\par
+techniques, we employ a recently published atomistic dataset of aluminum             learning. Nat. Commun. 9, 467 (2018).\par
+GBs38,63. This dataset provides a comprehensive sampling of the \u64257?ve degrees      14. Yokoi, T., Noda, Y., Nakamura, A. & Matsunaga, K. Neural-network\par
+of crystallographic character. The datasest includes 7304 pure Aluminum              interatomic potential for grain boundary structures and their\par
+GB structures and their corresponding energies. The construction and                 energetics in silicon. Phys. Rev. Mater. 4, 014605 (2020).\par
+process of obtaining the minimum energy structure for each GB is described       15. Guziewski, M., Montes de Oca Zapiain, D., Dingreville, R. & Coleman, S.\par
+in detail38 and the structures are available for download63. These GB struc-         P. Microscopic and Macroscopic Characterization of Grain Boundary\par
+tures were created with the emperical embedded atom model (EAM)                      Energy and Strength in Silicon Carbide via Machine-Learning\par
+potential created by Mishin et al.91. Thus, the physics inherent to these            Techniques. ACS Appl. Mater. Interfaces 13, 3311\u8211?3324 (2021).\par
+structures is limited to the accuracy of this emperical potential and the        16. Parsaeifard, B., Tomerini, D., De, D. S. & Goedecker, S. Maximum\par
+methods used to construct the GBs. For purposes of limiting data storage,            volume simplex method for automatic selection and classi\u64257?cation of\par
+each GB includes \u177? 15 \u8491? of atoms relative to the expected location of the GB.        atomic environments and environment descriptor compression. J.\par
+Because the size of some of the GBs in the original dataset were too large for       Chem. Phys. 153, 214104 (2020).\par
+some of the descriptor implementations, we use a subset of 7174 GBs, which       17. Cui, Y. & Chew, H. B. Machine-Learning Prediction of Atomistic Stress\par
+are those GB structures that contain less than 35,000 atoms. It is expected          along Grain Boundaries. Acta Mater. 222, 117387 (2022).\par
+that this dataset contains suf\u64257?cient diversity both in crystallographic char-    18. Homer, E. R., Hensley, D. M., Rosenbrock, C. W., Nguyen, A. H. & Hart,\par
+acter and atomic structure to serve as a robust basis for the comparisons and        G. L. W. Machine-Learning Informed Representations for Grain\par
+interpretations provided in this work.                                               Boundary Structures. Front. Mater. 6, 168 (2019).\par
+                                                                                 19. Trujillo, D., Guziewski, M. & Coleman, S. Machine learning for\par
+Data availability                                                                    predicting properties of silicon carbide grain boundaries. Technical\par
+The datasets generated and/or analysed during the current study are                  Report AD1087034, US Army Combat Capabilities and Development\par
+available in the Mendeley Data repository, https://doi.org/10.17632/                 Command, Army Research Laboratory, Aberdeen Proving Ground,\par
+4ykjz4ngwt38,63.                                                                     United States (2019).\par
+                                                                                 20. Sharp, T. A. et al. Machine learning determination of atomic dynamics\par
+Code availability                                                                    at grain boundaries. Proc. Natl Acad. Sci. 115, 10943\u8211?10947 (2018).\par
+The underlying code for this study is available at https://github.com/           21. Chesser, I., Francis, T., De Graef, M. & Holm, E. A. Learning the grain\par
+braxtonowens/gbcompare.                                                              boundary manifold: Tools for visualizing and \u64257?tting grain boundary\par
+                                                                                     properties. Acta Mater. 195, 209\u8211?218 (2020).\par
+Received: 30 July 2024; Accepted: 9 December 2024;                               22. Wagih, M., Larsen, P. M. & Schuh, C. A. Learning grain boundary\par
+                                                                                     segregation energy spectra in polycrystals. Nat. Commun. 11, 6376\par
+                                                                                     (2020).\par
+References                                                                       23. Wagih, M. & Schuh, C. A. Learning Grain-Boundary Segregation: From\par
+1.  Palumbo, G., Lehockey, E. M. & Lin, P. Applications for grain boundary           First Principles to Polycrystals. Phys. Rev. Lett. 129, 046102 (2022).\par
+    engineered materials. JOM 50, 40\u8211?43 (1998).                                  24. Han, J., Vitek, V. & Srolovitz, D. J. Grain-boundary metastability and its\par
+2. Randle, V. Grain boundary engineering: An overview after 25 years.                statistical properties. Acta Mater. 104, 259\u8211?273 (2016).\par
+    Mater. Sci. Technol. 26, 253\u8211?261 (2010).                                     25. Zheng, H. et al. Grain boundary properties of elemental metals. Acta\par
+3. Watanabe, T. Grain boundary engineering: Historical perspective and               Mater. 186, 40\u8211?49 (2020).\par
+    future prospects. J. Mater. Sci. 46, 4095\u8211?4115 (2011).                       26. Ratanaphan, S. et al. Grain boundary energies in body-centered cubic\par
+4. Rohrer, G. S. Grain boundary energy anisotropy: A review. J. Mater.               metals. Acta Mater. 88, 346\u8211?354 (2015).\par
+    Sci. 46, 5881\u8211?5895 (2011).                                                   27. Hu, C., Zuo, Y., Chen, C., Ping Ong, S. & Luo, J. Genetic algorithm-\par
+5. Echeverri Restrepo, S., Tamayo Giraldo, S. & Thijsse, B. J. Using                 guided deep learning of grain boundary diagrams: Addressing the\par
+    arti\u64257?cial neural networks to predict grain boundary energies. Comput.            challenge of \u64257?ve degrees of freedom. Mater. Today 38, 49\u8211?57 (2020).\par
+    Mater. Sci. 86, 170\u8211?173 (2014).                                              28. Tamura, T. et al. Fast and scalable prediction of local energy at grain\par
+6. Dang, R. & Yu, W. Standard Deviation Effect of Average Structure                  boundaries: Machine-learning based modeling of \u64257?rst-principles\par
+    Descriptor on Grain Boundary Energy Prediction. Materials 16, 1197               calculations. Model. Simul. Mater. Sci. Eng. 25, 075003 (2017).\par
+    (2023).                                                                      29. Gomberg, J. A., Medford, A. J. & Kalidindi, S. R. Extracting knowledge\par
+7. Noh, W. & Chew, H. B. Dislocation descriptors of low and high angle               from molecular mechanics simulations of grain boundaries using\par
+    grain boundaries with convolutional neural networks. Extrem. Mech.               machine learning. Acta Mater. 133, 100\u8211?108 (2017).\par
+    Lett. 68, 102138 (2024).                                                     30. Rosenbrock, C. W., Homer, E. R., Cs\u225?nyi, G. & Hart, G. L. W.\par
+8. Lortaraprasert, C. & Shiomi, J. Robust combined modeling of                       Discovering the building blocks of atomic systems using machine\par
+    crystalline and amorphous silicon grain boundary conductance by                  learning: Application to grain boundaries. npj Comput. Mater. 3, 29\par
+    machine learning. npj Comput. Mater. 8, 219 (2022).                              (2017).\par
+9. Fujii, S., Yokoi, T., Fisher, C. A. J., Moriwake, H. & Yoshiya, M.            31. Montes de Oca Zapiain, D., Guziewski, M., Coleman, S. P. &\par
+    Quantitative prediction of grain boundary thermal conductivities from            Dingreville, R. Characterizing the Tensile Strength of Metastable Grain\par
+    local atomic environments. Nat. Commun. 11, 1854 (2020).                         Boundaries in Silicon Carbide Using Machine Learning. J. Phys.\par
+10. Priedeman, J. L., Rosenbrock, C. W., Johnson, O. K. & Homer, E. R.               Chem. C. 124, 24809\u8211?24821 (2020).\par
+    Quantifying and connecting atomic and crystallographic grain                 32. Song, X. & Deng, C. Atomic energy in grain boundaries studied by\par
+    boundary structure using local environment representation and                    machine learning. Phys. Rev. Mater. 6, 043601 (2022).\par
+    dimensionality reduction techniques. Acta Mater. 161, 431\u8211?443 (2018).        33. Wu, X. et al. Application of Machine Learning to Predict Grain\par
+11. Kiyohara, S., Oda, H., Miyata, T. & Mizoguchi, T. Prediction of interface        Boundary Embrittlement in Metals by Combining Bonding-Breaking\par
+    structures and energies via virtual screening. Sci. Adv. 2, e1600746             and Atomic Size Effects. Materials 13, 179 (2020).\par
+    (2016).                                                                      34. Nishiyama, T., Seko, A. & Tanaka, I. Application of machine learning\par
+12. Zhang, S. et al. Predicting grain boundary damage by machine                     potentials to predict grain boundary properties in fcc elemental\par
+    learning. Int. J. Plast. 150, 103186 (2022).                                     metals. Phys. Rev. Mater. 4, 123607 (2020).\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                   13\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                           Article\par
+\par
+35. Ye, W., Zheng, H., Chen, C. & Ong, S. P. A Universal Machine Learning        57. Lej\u269?ek, P., Hofmann, S., V\u353?iansk\u225?, M. & \u352?ob, M. Entropy matters in\par
+    Model for Elemental Grain Boundary Energies. Scr. Mater. 218,                    grain boundary segregation. Acta Mater. 206, 116597 (2021).\par
+    114803 (2022).                                                               58. Tsuzuki, H., Branicio, P. S. & Rino, J. P. Structural characterization of\par
+36. Snow, B. D., Doty, D. D. & Johnson, O. K. A Simple Approach to                   deformed crystals by analysis of common atomic neighborhood.\par
+    Atomic Structure Characterization for Machine Learning of Grain                  Comput. Phys. Commun. 177, 518\u8211?523 (2007).\par
+    Boundary Structure-Property Models. Front. Mater. 6, 120 (2019).             59. Zhou, X., Marchand, D., McDowell, D. L., Zhu, T. & Song, J.\par
+37. Huber, L., Hadian, R., Grabowski, B. & Neugebauer, J. A machine                  Chemomechanical Origin of Hydrogen Trapping at Grain Boundaries\par
+    learning approach to model solute grain boundary segregation. npj                in fcc Metals. Phys. Rev. Lett. 116, 075502 (2016).\par
+    Comput. Mater. 4, 64 (2018).                                                 60. Billinge, S. & Kanatzidis, M. Beyond crystallography: The study of\par
+38. Homer, E. R. et al. Examination of computed aluminum grain                       disorder, nanocrystallinity and crystallographically challenged\par
+    boundary structures and energies that span the 5D space of                       materials with pair distribution functions. Chem. Commun. 4, 749\u8211?760\par
+    crystallographic character. Acta Mater. 234, 118006 (2022).                      (2004).\par
+39. Hart, E. W. Grain Boundary Phase Transformations. In Hu, H. (ed.) The        61. Kalinin, S. V., Sumpter, B. G. & Archibald, R. K. Big\u8211?deep\u8211?smart data in\par
+    Nature and Behavior of Grain Boundaries: A Symposium Held at the                 imaging for guiding materials design. Nat. Mater. 14, 973\u8211?980 (2015).\par
+    TMS-AIME Fall Meeting in Detroit, Michigan, October 18-19, 1971,             62. Musil, F. et al. Physics-Inspired Structural Representations for\par
+    155\u8211?170 (Springer US, New York, 1972).                                           Molecules and Materials. Chem. Rev. 121, 9759\u8211?9815 (2021).\par
+40. Frolov, T., Olmsted, D. L., Asta, M. & Mishin, Y. Structural phase           63. Homer, E. R., Hart, G. L. W., Hensley, D., Owens, C. B. & Sera\u64257?n, L. H.\par
+    transformations in metallic grain boundaries. Nat. Commun. 4, 1899               Computed al grain boundary structures and energies covering 5d space.\par
+    (2013).                                                                          Mendeley Data V1, https://doi.org/10.17632/4ykjz4ngwt (2022).\par
+41. Hickman, J. & Mishin, Y. Extra variable in grain boundary description.       64. Michael, S., Vipin, Ert\u246?z, L. & Kumar, V. New Directions in Statistical\par
+    Phys. Rev. Mater. 1, 010601 (2017).                                              Physics. In The Challenges of Clustering High Dimensional Data (ed.\par
+42. Meiners, T., Frolov, T., Rudd, R. E., Dehm, G. & Liebscher, C. H.                Wille, L.T.) 273-309 (Springer, Berlin, Heidelberg, 2004).\par
+    Observations of grain-boundary phase transformations in an                   65. Poltavsky, I. et al. Crash Testing Machine Learning Force Fields for\par
+    elemental metal. Nature 579, 375\u8211?378 (2020).                                     Molecules, Materials, and Interfaces: Molecular Dynamics in the TEA\par
+43. Orme, A. D. et al. Insights into twinning in Mg AZ31: A combined EBSD            Challenge 2023. ChemRxiv (2024).\par
+    and machine learning study. Comput. Mater. Sci. 124, 353\u8211?363                 66. Wright, J. & Ma, Y.High-Dimensional Data Analysis with Low-\par
+    (2016).                                                                          Dimensional Models: Principles, Computation, and Applications\par
+44. Francis, T., Chesser, I., Singh, S., Holm, E. A. & De Graef, M. A                (Cambridge University Press, Cambridge, 2022).\par
+    geodesic octonion metric for grain boundaries. Acta Mater. 166,              67. Longo, L. et al. Explainable Arti\u64257?cial Intelligence (XAI) 2.0: A manifesto\par
+    135\u8211?147 (2019).                                                                  of open challenges and interdisciplinary research directions. Inf.\par
+45. Zhou, T., Jog, A. & Gall, D. First-principles prediction of electron grain       Fusion 106, 102301 (2024).\par
+    boundary scattering in fcc metals. Appl. Phys. Lett. 120, 241603 (2022).     68. Lundberg, S. M. & Lee, S.-I. A uni\u64257?ed approach to interpreting model\par
+46. Baird, S. G., Homer, E. R., Fullwood, D. T. & Johnson, O. K. Five                predictions. In Guyon, I. et al. (eds.) NIPS'17: Proceedings of the 31st\par
+    degree-of-freedom property interpolation of arbitrary grain                      International Conference on Neural Information Processing, Long\par
+    boundaries via Voronoi fundamental zone framework. Comput. Mater.                Beach CA, 4765\u8211?4774 (Curran Associates Inc., Red Hook, 2017).\par
+    Sci. 200, 110756 (2021).                                                     69. Mishra, A., Suresh, S. A., Fensin, S. J., Mathew, N. & Kober, E. M.\par
+47. Sutton, A. P., Vitek, V. & Christian, J. W. On the structure of tilt grain       Learning from metastable symmetric-tilt grain boundaries using\par
+    boundaries in cubic metals I. Symmetrical tilt boundaries. Philos.               physics-based descriptors. Phys. Rev. Mat. 8, 123605 (2024).\par
+    Trans. R. Soc. Lond. Ser. A 309, 1\u8211?36 (1983).                                70. LeCun, Y., Bottou, L., Bengio, Y. & Haffner, P. Gradient-based\par
+48. Sutton, A. P., Vitek, V. & Christian, J. W. On the structure of tilt grain       learning applied to document recognition. Proc. IEEE 86, 2278\u8211?2324\par
+    boundaries in cubic metals II. Asymmetrical tilt boundaries. Philos.             (1998).\par
+    Trans. R. Soc. Lond. Ser. A 309, 37\u8211?54 (1983).                               71. Deng, L. The MNIST Database of Handwritten Digit Images for\par
+49. Sutton, A. P., Vitek, V. & Christian, J. W. On the structure of tilt grain       Machine Learning Research [Best of the Web]. IEEE Signal Process.\par
+    boundaries in cubic metals. III. Generalizations of the structural study         Mag. 29, 141\u8211?142 (2012).\par
+    and implications for the properties of grain boundaries. Philos. Trans.      72. Bengio, Y., Courville, A. & Vincent, P. Representation Learning: A\par
+    R. Soc. Lond. Ser. A 309, 55\u8211?68 (1983).                                          Review and New Perspectives. IEEE Trans. Pattern Anal. Mach. Intell.\par
+50. Bishop, G. H. & Chalmers, B. A coincidence \u8212? Ledge \u8212? Dislocation                 35, 1798\u8211?1828 (2013).\par
+    description of grain boundaries. Scr. Metall. 2, 133\u8211?139 (1968).             73. Hastie, T., Tibshirani, R. & Friedman, J. H.The Elements of Statistical\par
+51. Han, J., Vitek, V. & Srolovitz, D. J. The grain-boundary structural unit         Learning: Data Mining, Inference, and Prediction (Springer, New York,\par
+    model redux. Acta Mater. 133, 186\u8211?199 (2017).                                    2009).\par
+52. Kelchner, C. L., Plimpton, S. J. & Hamilton, J. C. Dislocation nucleation    74. Bart\u243?k, A. P., Kondor, R. & Cs\u225?nyi, G. On representing chemical\par
+    and defect structure during surface indentation. Phys. Rev. B 58,                environments. Phys. Rev. B 87, 184115 (2013).\par
+    11085\u8211?11088 (1998).                                                          75. Kearnes, S., McCloskey, K., Berndl, M., Pande, V. & Riley, P.\par
+53. \u379?ydek, A., Wermi\u324?ski, M. & Trybula, M. E. Description of grain                   Molecular Graph Convolutions: Moving Beyond Fingerprints. J.\par
+    boundary structure and topology in nanocrystalline aluminum using                Computer-Aided Mol. Des. 30, 595\u8211?608 (2016).\par
+    Voronoi analysis and order parameter. Comput. Mater. Sci. 197,               76. Sadeghi, A. et al. Metrics for measuring distances in con\u64257?guration\par
+    110660 (2021).                                                                   spaces. J. Chem. Phys. 139, 184118 (2013).\par
+54. Elliott, J. R. & Lira, C. T. Introductory Chemical Engineering               77. Parsaeifard, B. & Goedecker, S. Manifolds of quasi-constant SOAP\par
+    Thermodynamics 2nd ed. (Prentice Hall, Upper Saddle River, 2012).                and ACSF \u64257?ngerprints and the resulting failure to machine learn four-\par
+55. Honeycutt, J. D. & Andersen, H. C. Molecular dynamics study of                   body interactions. J. Chem. Phys. 156, 034302 (2022).\par
+    melting and freezing of small Lennard-Jones clusters. J. Phys. Chem.         78. Batra, R. et al. General Atomic Neighborhood Fingerprint for Machine\par
+    91, 4950\u8211?4963 (1987).                                                            Learning-Based Methods. J. Phys. Chem. C. 123, 15859\u8211?15866\par
+56. Banadaki, A. D. & Patala, S. A three-dimensional polyhedral unit                 (2019).\par
+    model for grain boundary structure in fcc metals. npj Comput. Mater.         79. Piaggi, P. M. & Parrinello, M. Entropy based \u64257?ngerprint for local\par
+    3, 13 (2017).                                                                    crystalline order. J. Chem. Phys. 147, 114112 (2017).\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                   14\par
+https://doi.org/10.1038/s41524-024-01509-x                                                                                                            Article\par
+\par
+80. Zhu, L. et al. A \u64257?ngerprint based metric for measuring similarities of       Visualization; Gus L. W. Hart, Eric R. Homer - Conceptualization,\par
+    crystalline structures. J. Chem. Phys. 144, 034203 (2016).                   Methodology, Formal analysis, Writing - Original Draft, Writing - Review &\par
+81. Drautz, R. Atomic cluster expansion for accurate and transferable            Editing, Visualization, Supervision, Funding acquisition; Tyce W. Olaveson:\par
+    interatomic potentials. Phys. Rev. B 99, 014104 (2019).                      Conceptualization, Software, Formal analysis; Nithin Mathew, Jacob P.\par
+82. Behler, J. Atom-centered symmetry functions for constructing high-           Tavenner, Edward M. Kober, Garritt J. Tucker - all performed the following\par
+    dimensional neural network potentials. J. Chem. Phys. 134, 074106 (2011).    related to the Strain Functional analysis: Formal analysis, Writing - Review &\par
+83. Behler, J. & Parrinello, M. Generalized Neural-Network                       Editing.\par
+    Representation of High-Dimensional Potential-Energy Surfaces.\par
+    Phys. Rev. Lett. 98, 146401 (2007).                                          Competing interests\par
+84. Kober, E. M., Tavenner, J. P., Adams, C. M. & Mathew, N. Strain              The authors declare no competing interests.\par
+    Functionals: A Complete and Symmetry-adapted Set of Descriptors\par
+    to Characterize Atomistic Con\u64257?gurations 2402.04191 (2024).                   Additional information\par
+85. Himanen, L. et al. DScribe: Library of descriptors for machine learning      Supplementary information The online version contains\par
+    in materials science. Computer Phys. Commun. 247, 106949 (2020).             supplementary material available at\par
+86. Dusson, G. et al. Atomic Cluster Expansion: Completeness, Ef\u64257?ciency          https://doi.org/10.1038/s41524-024-01509-x.\par
+    and Stability. J. Comp. Phys. 454, 110946 (2022).\par
+87. Thompson, A. P. et al. LAMMPS - a \u64258?exible simulation tool for particle-      Correspondence and requests for materials should be addressed to\par
+    based materials modeling at the atomic, meso, and continuum scales.          Gus L. W. Hart or Eric R. Homer.\par
+    Comp. Phys. Comm. 271, 108171 (2022).\par
+88. Virtanen, P. et al. SciPy 1.0: Fundamental Algorithms for Scienti\u64257?c          Reprints and permissions information is available at\par
+    Computing in Python. Nat. Methods 17, 261\u8211?272 (2020).                        http://www.nature.com/reprints\par
+89. Pedregosa, F. et al. Scikit-learn: Machine learning in Python. J. Mach.\par
+    Learn. Res. 12, 2825\u8211?2830 (2011).                                            Publisher\u8217?s note Springer Nature remains neutral with regard to\par
+90. Rozemberczki, B., Kiss, O. & Sarkar, R. Karate Club: An API Oriented         jurisdictional claims in published maps and institutional af\u64257?liations.\par
+    Open-source Python Framework for Unsupervised Learning on Graphs.\par
+    In Proceedings of the 29th ACM International Conference on Information       Open Access This article is licensed under a Creative Commons\par
+    and Knowledge Management (CIKM \u8217?20), 3125-3132 (ACM, 2020).                  Attribution 4.0 International License, which permits use, sharing,\par
+91. Mishin, Y., Farkas, D., Mehl, M. J. & Papaconstantopoulos, D. A.             adaptation, distribution and reproduction in any medium or format, as long\par
+    Interatomic potentials for monoatomic metals from experimental data          as you give appropriate credit to the original author(s) and the source,\par
+    and ab initio calculations. Phys. Rev. B 59, 3393\u8211?3407 (1999).               provide a link to the Creative Commons licence, and indicate if changes\par
+                                                                                 were made. The images or other third party material in this article are\par
+Acknowledgements                                                                 included in the article\u8217?s Creative Commons licence, unless indicated\par
+This work was primarily supported by the U.S. National Science Foundation        otherwise in a credit line to the material. If material is not included in the\par
+(NSF) under Award #DMR-1817321. EMK and NM were supported by                     article\u8217?s Creative Commons licence and your intended use is not permitted\par
+internal LANL LDRD funding (XX9A, XXG0).                                         by statutory regulation or exceeds the permitted use, you will need to\par
+                                                                                 obtain permission directly from the copyright holder. To view a copy of this\par
+Author contributions                                                             licence, visit http://creativecommons.org/licenses/by/4.0/.\par
+C. Braxton Owens: Conceptualization, Methodology, Software, Formal\par
+analysis, Data Curation, Writing - Original Draft, Writing - Review & Editing,   \u169? The Author(s) 2025\par
+\par
+\par
+\par
+\par
+npj Computational Materials | (2025)11:21                                                                                                                   15\par
+
+}

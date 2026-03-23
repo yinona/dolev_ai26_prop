@@ -1,0 +1,719 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+                                                                                                                                                 www.nature.com/npjcompumats\par
+\par
+\par
+\par
+\par
+                  ARTICLE                  OPEN\par
+\par
+                  On the mechanistic origins of maximum strength\par
+                  in nanocrystalline metals\par
+                                   1                                                                                                                                    1\u9993?\par
+                  Ankit Gupta          , Jacob Gruber1, Satish S. Rajaram        2\par
+                                                                                     , Gregory B. Thompson3, David L. McDowell4 and Garritt J. Tucker\par
+\par
+\par
+                      The maximum strength of polycrystalline metals/alloys has been suggested to occur at nanoscale grain sizes where the governing\par
+                      deformation mechanism transitions from dislocation plasticity to grain boundary mediated deformation. Despite tremendous\par
+                      progress recently uncovering links between transitions in nanoscale mechanisms and peak strength, the scienti\u64257?c literature is\par
+                      mostly devoid of any quantitative support, owing to the dif\u64257?culty in measuring the resolved contribution of individual mechanisms\par
+                      to microstructural strain accommodation. In this study, the contribution of individual nanoscale mechanisms to the overall\par
+                      deformation of nanocrystalline Ni is calculated from atomistic simulations leveraging continuum-based kinematic metrics to\par
+                      compute mechanistic contributions to microstructural strain. By employing such a quantitative approach to analyze deformation\par
+                      behavior, it is shown that the realization of maximum strength in nanocrystalline metals corresponds to a grain size regime where\par
+                      the operative nanoscale mechanisms transition, and are thus equally competing to accommodate strain. However, the transition\par
+                      occurs between intergranular and intragranular mediated mechanisms, as it is found that dislocation plasticity alone is not the\par
+                      governing mechanism at all grain sizes above the peak strength regime.\par
+1234567890():,;\par
+\par
+\par
+\par
+\par
+                      npj Computational Materials (2020)6:153 ; https://doi.org/10.1038/s41524-020-00425-0\par
+\par
+\par
+\par
+\par
+                  INTRODUCTION                                                                            One major gap is regarding the present understanding of the\par
+                  Materials scientists have long sought to understand and control                      role of individual mechanisms in the deformation of NC materials,\par
+                  functional properties, such as mechanical strength, of materials                     which stems predominantly from a qualitative analysis of the\par
+                  through fundamental knowledge of chemistry and structure (from                       mechanical behavior, as pointed out by Spearot et al22. In the\par
+                  atoms to the continuum). In the realm of metals and metallic                         majority of seminal studies, the operative nanoscale deformation\par
+                  alloys, a signi\u64257?cant number of efforts over the past half century                    mechanisms in disparate grain size regimes were established\par
+                  have uncovered a seemingly ubiquitous trend regarding increases                      mostly from the structural characterization of NC samples by\par
+                  in mechanical strength and hardness with decreasing average                          roughly observing the amount of dislocation slip or twinning in\par
+                  grain size of a polycrystal\u8212?the so called \u8216?Hall\u8211?Petch\u8217? relation-                     the deformed structures8,9,16,18\u8211?20. In a few MD studies, the\par
+                  ship1,2. The hardening trend continues well into the nanocrystal-                    governing deformation mechanisms were at most suggested\par
+                  line (NC) regime (grain size <100 nm)3\u8211?5, with a decrease in slope                   based on indirect evidences, such as the number (or fraction) of\par
+                  of the Hall\u8211?Petch relationship reported in this regime6,7. However,                  atoms participating in a given mechanism25. Yet the relative\par
+                  the trend appears to reverse below a critical grain size (<20 nm).                   contributions of individual mechanisms (e.g., dislocation slip,\par
+                  Softening in the strength and hardness of NC materials at such                       twinning, GB sliding/migration, etc.) towards the overall deforma-\par
+                  small grain sizes is observed in several experimental studies and                    tion should ideally be determined by the fraction of strain\par
+                  also supported by Molecular Dynamics (MD) simulations8\u8211?12. The                       accommodated by each of these mechanisms during deformation,\par
+                  maxima in the strength of NC metals were typically observed in a                     relative to the total strain accommodation within the material.\par
+                  grain-size regime of 10\u8211?20 nm in these studies. The softening                        Quanti\u64257?cation of the governing deformation mechanisms directly\par
+                  regime is generally attributed to a change in the governing                          from the strain accommodated by individual mechanisms is\par
+                  deformation mechanism from dislocation-based to grain bound-                         limited to a very few studies26\u8211?29. The quanti\u64257?cation of deforma-\par
+                  ary (GB) mediated deformation because of high interfacial volume                     tion mechanisms is necessary for verifying the notion that the\par
+                  fraction and minimal concentration of existing intragranular                         maximum strength corresponds to a grain size at which the\par
+                  defects at the smallest of grain sizes10,13\u8211?16. It is further argued                 governing deformation mechanism transitions from dislocation to\par
+                  that the grain-size where the transition in the governing                            GB mediated processes. Some previous works have quanti\u64257?ed the\par
+                  deformation mechanism occurs, should correspond to maximum                           mechanistic crossover based on in\u64258?ections observed in additional\par
+                  strength17\u8211?20. The peak strength in several theoretical models is in                 mechanical properties, such as plastic strain rate17, activation\par
+                  fact de\u64257?ned by the cross-over between the scaling laws for the                       volume30,31, activation enthalpy31; or from atomic fractions of\par
+                  strength of NC materials in the softening and the hardening                          different defect structures32. However, the notion relating the\par
+                  regimes21. Comprehensive reviews underlining the current state                       maximum strength to the mechanistic cross-over, has not been\par
+                  and the existing gaps in the understanding of mechanical                             veri\u64257?ed directly from the strain accommodated by individual\par
+                  behavior of NC materials are available in the scienti\u64257?c litera-                      mechanisms, in any previous study. The only such investigation, to\par
+                  ture22\u8211?24.                                                                           the best of the authors\u8217? knowledge, was presented by Vo et al.33,\par
+\par
+                  1\par
+                   Colorado School of Mines, Mechanical Engineering, Golden, CO 80401, USA. 2Department of Mechanical Engineering, Drexel University, Philadelphia, PA 19104, USA.\par
+                  3\par
+                   Department of Metallurgical and Materials Engineering, University of Alabama, Tuscaloosa, AL 35487, USA. 4Department of Mechanical Engineering, Georgia Institute of\par
+                  Technology, Atlanta, GA 30332, USA. \u9993?email: tucker@mines.edu\par
+\par
+\par
+                  Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences\par
+                                                                              A. Gupta et al.\par
+                  2\par
+                      although their discussion was mainly focused on the plastic                alloy is presented, to further highlight the signi\u64257?cance of the\par
+                      component of strain.                                                       \u64257?ndings of this study with respect to shifting the strongest grain\par
+                         This study investigates the mechanical behavior of NC Ni under          size regime in NC alloys by varying the contributions of underlying\par
+                      uniaxial tension as a function of average grain size using MD              mechanisms, where the trends agree well with available\par
+                      simulations. In contrast to the majority of previous investigations,       experimental data.\par
+                      we employ a set of post-processing metrics, based on continuum\par
+                      mechanics, to calculate the contribution of various mechanisms to\par
+                      the overall deformation by resolving the associated fraction of            RESULTS AND DISCUSSION\par
+                      total strain accommodation to individual operative mechanisms              Mechanical behavior of NC Ni\par
+                      during deformation. The mechanism whose contribution to total              In order to probe the mechanical behavior as a function of grain\par
+                      strain accommodation is greater than 50%, is identi\u64257?ed as the              size, we performed MD simulations on 3D atomistic structures of\par
+                      governing deformation mechanism. This quantitative approach                NC Ni with average grain sizes ranging from 6 nm to 20 nm. NC\par
+                      reveals that while GB-based mechanisms govern the mechanical               structures were loaded uniaxially at 300 K to a total tensile strain\par
+                      response during plastic \u64258?ow in the softening regime, in agreement          of 12% at constant rate of 108 s\u8722?1. More details regarding the\par
+                      with previous works, dislocation-mediated plasticity by itself is not      generation and tensile testing of these structures can be found in\par
+                      the governing deformation mechanism in the hardening regime                the \u8220?Methods\u8221? section. Figure 1a, b shows the average stress-strain\par
+                      at grain sizes below 20 nm. Instead we show it is the collective           response of different samples with varying average grain size. All\par
+                      contribution of all intragranular deformation mechanisms that              curves show an initial elastic deformation regime, where stress\par
+                      governs the overall response of NC structures in this part of the          increases linearly with strain. The initial elastic stiffness (slope of\par
+                      hardening regime. Importantly, it is also shown that the maximum           the curve below 1% strain) increases with increasing grain size, in\par
+                      strength (using calculated \u64258?ow stress) occurs within a range of            agreement with reported experimental trends34,35. Since MD\par
+                      grain size at which the governing deformation mechanism                    simulations are at much higher strain rates then what is typically\par
+                      transitions from intergranular (i.e., GB-mediated) to intragranular        achieved experimentally, such agreement adds con\u64257?dence in\par
+                      (IG)-based mechanisms. However, these intragranular mechanisms             linking simulations to experimental observations. Beyond 1%\par
+                      are not solely de\u64257?ned by dislocation slip, as suggested in past            strain, the curves begin to deviate from the apparent linear stress-\par
+1234567890():,;\par
+\par
+\par
+\par
+\par
+                      studies, but also include contributions from deformation twinning          strain behavior. The deviation from linearity is generally\par
+                      and elastic lattice deformation.                                           attributed to activation of several microplasticity events in NC\par
+                         The maximum strength corresponding to the grain size regime             structures27,36\u8211?38. The linear regime ends completely around 3\u8211?4%\par
+                      at which the governing mechanism transitions, is characterized by          strain in all grain size structures after macroscopic yielding of the\par
+                      an equal accommodation of the total strain between intergranular           samples. The grain size dependent yielding behavior of NC metals\par
+                      and intragranular mechanisms during \u64258?ow. In other words, the               including the onset of plasticity is discussed in-depth in our\par
+                      dominant deformation mechanisms are equally competing with                 previous work36. Gradual softening can be observed in the stress\par
+                      each other to accommodate microstructural strain. The validity of          response prior to \u64258?ow, especially for large grain size structures. In\par
+                      the notion relating the maximum strength to an equal competi-              this work, we mainly focus on the deformation behavior in the\par
+                      tion of nanoscale mechanisms (IG versus GB), is further examined           \u64258?ow regime beyond 5% strain, when most of the strain\par
+                      individually for elastic and plastic components of strain and in the       accommodation becomes plastic in nature. The \u64258?ow stress was\par
+                      context of potential limitations or artifacts of MD simulations, such      calculated by averaging stress values in this regime between\par
+                      as the high strain rate. Finally, the mechanical behavior of a NC Ni       5\u8211?12% strain.\par
+\par
+\par
+\par
+\par
+                      Fig. 1 Mechanical behavior of NC Ni. Stress-strain curves obtained from the uniaxial tension MD simulations of NC structures with average\par
+                      grain size ranging from (a) 6\u8211?12 nm and (b) 12\u8211?20 nm (initial elastic stiffness values are listed in the table). (c) Variation of \u64258?ow stress as a\par
+                      function of average grain size of NC structures.\par
+\par
+\par
+                      npj Computational Materials (2020) 153         Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences\par
+                                                                            A. Gupta et al.\par
+                                                                                                                                                   3\par
+\par
+\par
+\par
+\par
+Fig. 2 Deformation mechanisms in NC Ni. Slices through the NC Ni structures of average grain size of 16 nm (a, c) and 6 nm (b, d), with atoms\par
+colored according to the identi\u64257?ed nanoscale deformation mechanisms (a, b), blue: full slip, green: partial slip, red: twinning, gray: GBs, and\par
+von Mises strain accommodation (c, d) at 12% applied strain. Percentages of total strain accommodation by individual deformation\par
+mechanisms, as a function of applied strain, during uniaxial loading of (e) 16nm and (f) 6 nm grain size NC structures.\par
+\par
+   Figure 1c shows the variation of \u64258?ow stress as a function of             vector, structural environment and kinematic signatures of\par
+average grain size obtained from the tensile loading simulations            deformation (see \u8220?Methods\u8221? section). Figure 2a, b shows atoms\par
+of NC Ni. Each data point is the average of the \u64258?ow-stress values           sheared by different deformation mechanisms through slices of\par
+calculated from \u64257?ve different simulations at every grain size and           NC Ni structures of 16 nm and 6 nm grain size, respectively, at the\par
+the error bars represent the standard deviation in the values. It           end of tensile loading simulation, i.e., 12% applied strain. The\par
+should be noted here that the grain sizes mentioned here and in             complete evolution of these structures with strain is presented in\par
+the rest of the study, are initial grain sizes of the NC structures         Supplementary Movies 1 and 2, respectively. Atoms that deformed\par
+before tensile loading. Some grain growth is noticed after tensile          by either dislocations (partial or full), twinning or GB-based\par
+loading; the extent of which decreases with increasing grain size.          mechanisms are shown in these structures. The remaining grain\par
+After 12% applied strain, the average grain size increased by               atoms (rendered invisible) deformed in an elastic manner. The\par
+1.09 nm and 0.41 nm for NC Ni structures with initial grain sizes of        degree of twinning appears to be small in both grain size\par
+6 nm and 20 nm, respectively. As clearly shown, the \u64258?ow stress              structures. The 16 nm grain structure lying in the hardening\par
+increases when the grain size decreases from 20 nm to 12 nm (i.e.,          regime of the \u64258?ow stress-grain size plot, reveals more dislocation\par
+the hardening regime) but then decreases when the grain size                activity than the 6 nm NC structure, which lies in the softening\par
+reduces below 12 nm (i.e., the softening regime). In terms of the           regime. In many earlier seminal studies9,19,20, dislocations and GBs\par
+calculated \u64258?ow stress, the 12 nm grain size structure is found to be        were established as the governing deformation mechanisms in\par
+the strongest. As noted above, previous studies have also reported          the hardening and the softening regimes, respectively, based\par
+the presence of hardening and softening regimes in the strength             solely on such qualitative analysis of deformed images or\par
+versus grain size plots of several metals with a maximum                    micrographs in the two regimes and roughly comparing the\par
+appearing in the NC regime23. We further apply a quantitative               amount of defect structures. However, as mentioned earlier, it is\par
+analysis to investigate the competition/cooperation of the                  not the number of atoms in each defect or mechanism, but the\par
+nanoscale deformation mechanisms to accommodate microstruc-                 total strain accommodated by those atoms participating in a given\par
+tural strain at various grain sizes. A set of recently developed post-      mechanism, which should ideally determine the contribution of\par
+processing tools39 were employed to distinguish individual                  that mechanism to the overall deformation. Therefore, in order to\par
+mechanisms operating in NC structures and calculate their relative          calculate the amount of strain accommodated within individual\par
+contributions to microstructural strain accommodation.                      mechanisms, the strain tensors of atoms in the NC structure were\par
+                                                                            computed using continuum-based kinematic metrics26,28,40,41 by\par
+Deformation mechanisms in NC Ni                                             mapping changes in local atomic neighborhoods during deforma-\par
+Atoms participating in various deformation mechanisms (i.e.,                tion. From the calculated atomic strain tensors and the identi\u64257?ca-\par
+dislocation slip, deformation twinning, elastic lattice strain, and GB      tion of atoms participating in various deformation mechanisms,\par
+deformation) were identi\u64257?ed based upon the calculated slip                  the fraction of strain accommodated by individual mechanisms\par
+\par
+Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences     npj Computational Materials (2020) 153\par
+                                                            A. Gupta et al.\par
+4\par
+\par
+\par
+\par
+\par
+    Fig. 3 Competition of deformation mechanisms. Variation of percentages of total strain accommodation by (a) individual mechanisms and\par
+    (b) intragranular (IG) versus intergranular (GB) mechanisms during \u64258?ow; and variation of (c) percentages of total atoms and (d) strain-per atom\par
+    associated with individual mechanisms during \u64258?ow, as a function of average grain size of NC Ni structures.\par
+\par
+    was obtained. Further details can be found in the \u8221?Methods\u8221?               during the initial elastic regime and yielding, they eventually\par
+    section.                                                                  plateau during the \u64258?ow regime as also re\u64258?ected in \u64258?attening out\par
+       In Fig. 2c, d, the slices of 16 nm and 6 nm average grain size         of the stress response beyond 5% strain. In this \u64258?ow regime, the\par
+    structures are colored according to the von Mises (VM) strain in          total contribution of intragranular plastic deformation mechan-\par
+    atoms, obtained from the atomic strain tensors calculated at 12%          isms (dislocation slip + twinning) towards strain accommodation\par
+    applied strain. In particular, atoms associated with the plastic          is greater than the contribution of elastic deformation of grains,\par
+    deformation mechanisms show large VM strain. Atomic VM strain             with dislocation slip accommodating more strain than twinning.\par
+    is generally higher in the GB regions than the twinned or slipped         The percentage of total strain accommodated by the GBs also\par
+    intragranular regions. The remaining atoms that underwent elastic         increases during the \u64258?ow regime where the majority of the strain\par
+    deformation can be seen as the black shaded regions with small            accommodation is also plastic in nature. It is seen for the 6 nm\par
+    VM strain values. The percentages of total strain accommodation           case, most of the strain (around 70%) is accommodated by the\par
+    by individual mechanisms are plotted in Fig. 2e, f, as a function of      GBs during \u64258?ow, indicating that GBs can be quantitatively\par
+    applied strain for the 16 nm and 6 nm grain size structures,              identi\u64257?ed as the governing deformation mechanism for this\par
+    respectively. Plotted values are averages of the results from \u64257?ve         grain-size in the softening regime. Although the contribution of\par
+    different simulations for each grain size. Similar plots for rest of      dislocation mechanisms to strain accommodation during \u64258?ow is\par
+    the grain sizes are shown in supplementary Fig. S1. In both grain         higher in the 16 nm case (Fig. 2e), the actual percentage is only\par
+    size structures, total tensile strain is accommodated in a shared         around 25%. Since most of the strain during \u64258?ow is not\par
+    manner between GBs, dislocation slip, twinning, and elastic               accommodated by dislocation slip, dislocation plasticity cannot\par
+    deformation of grains (grain-elastic). Most of the strain is              be suggested as the governing deformation mechanisms for the\par
+    accommodated by GBs and elastic deformation of grains during              16 nm grain-size structure in the hardening regime. This is found\par
+    initial loading, corresponding to the initial linear elastic regime in    to be true for higher grain sizes (i.e., up to 20 nm) as well.\par
+    the stress-strain curves. Importantly, it will be shown in the next          To more clearly show the effect of NC grain size on the\par
+    section, where the elastic and plastic components of strain are           governing deformation mechanism, averages of the percentages\par
+    delineated, that most of the strain accommodated by GBs during            of total strain accommodation by individual mechanisms during\par
+    this early stage of loading is also elastic in nature. The ratio of       the \u64258?ow regime (5\u8211?12% strain) of mechanical loading were\par
+    strain accommodation between grains to GBs during the initial             calculated for every grain size structure and plotted in Fig. 3a. For\par
+    linear elastic regime is higher in the 16 nm grain size than the          a single grain size, the plotted value is the mean of the \u64257?ve\par
+    6 nm gain size structure.                                                 different simulations, and the error bar represents the standard\par
+       The percentages of total strain accommodated by dislocations           deviation. Since most of the strain (>50%) during \u64258?ow is\par
+    and twinning mechanisms start to rise around 3\u8211?4% strain in both          accommodated by the GBs for grain sizes lying in the softening\par
+    grain size structures (Fig. 2e, f) representative of yielding and         regime (6\u8211?12 nm), GB mediated deformation processes (e.g.,\par
+    aligning with the end of the initial elastic regime. While the            sliding, migration, atomic shuf\u64258?ing, etc.) can be established as\par
+    relative contributions of various mechanisms change rapidly               the governing deformation mechanism in this regime. However,\par
+\par
+    npj Computational Materials (2020) 153         Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences\par
+                                                                            A. Gupta et al.\par
+                                                                                                                                                     5\par
+even for the largest grain size structure (i.e., 20 nm) simulated in        strain accommodated in the intragranular and GB mechanisms\par
+the hardening regime, the percentage of total strain accommo-               during \u64258?ow, are equal. The strain-per-atom associated with each\par
+dated by dislocation slip during \u64258?ow is just 30% (Fig. 3a). Based           mechanism, obtained simply up on dividing the total strain by\par
+upon the fraction of strain accommodation, dislocation plasticity           number of atoms in a given mechanism, is averaged over the \u64258?ow\par
+by itself cannot be identi\u64257?ed as the governing deformation                  regime and plotted in Fig. 3d, as function of grain size. As\par
+mechanism in the hardening regime for structures with grain size            expected, intragranular plastic deformation mechanisms (i.e,\par
+up to 20 nm. While dislocation slip will eventually govern the              dislocations and twinning) accommodate more strain-per-atom\par
+deformation at larger grain sizes (>20 nm), it is not found to be           as compared to the elastic deformation of grain, across all grain\par
+necessarily true of all grain sizes in the hardening regime.                sizes. The strain-per-atom associated with GB mechanisms is also\par
+Moreover, it is generally suggested in the literature that NC               higher and comparable to that of intragranular plastic mechan-\par
+metals should exhibit maximum strength at a grain size where the            isms, however, the former also has some elastic contribution. It\par
+governing deformation mechanism transitions from dislocation                might then be informative to delineate the elastic and plastic\par
+slip to GB-mediated processes17,18. Our results do not support this         components of strain accommodated in intragranular and GB\par
+conjecture, as the strongest grain size calculated in this study is         mechanisms and check if the notion relating the maximum\par
+12 nm, but according to Fig. 3a, the transition between disloca-            strength to an equal competition of nanoscale mechanisms, holds\par
+tions and GB mechanisms will occur at a grain size greater than             independently for each component.\par
+20 nm. Instead of comparing the contribution of GB mechanisms\par
+with only dislocation mechanism, it is likely more logical to\par
+compare with the contribution of all intragranular mechanisms               Elastic and plastic components of strain\par
+because GB mechanisms also encompass the contributions of a                 Plastic strain was computed from the atomic strain tensors after\par
+variety of deformation processes including elastic contributions.           dynamically relaxing the deformed NC structures at several strain\par
+   The contributions or the percentages of total strain accom-              increments to a zero-stress con\u64257?guration (see \u8220?Methods\u8221? section).\par
+modation during \u64258?ow within twinning, dislocation, and grain-                Elastic strain was obtained by subtracting the plastic strain from\par
+elastic mechanisms were summed up to represent the total                    the total applied strain, calculated from the atomic strain tensors\par
+contribution of intragranular (IG) deformation. The intragranular           in the deformed NC structures before relaxation. Elastic strain can\par
+contributions are compared with the contributions of GB                     also be calculated from the stress-strain response of the sample\par
+mechanisms for different grain sizes in Fig. 3b. Clearly, GB-               during uniaxial loading, simply as \u963? divided by E33. Here, \u963? is the\par
+mediated mechanisms accommodate more strain during \u64258?ow                      stress value at the corresponding strain level and E is the initial\par
+than intragranular mechanisms in the softening regime (6\u8211?12 nm              elastic stiffness of the sample. Figure 4a plots the elastic\par
+grain size). Whereas in the hardening regime (14\u8211?20 nm grain                component of strain (as percent total strain), obtained from the\par
+size), the percentage of total strain accommodation during \u64258?ow              atomic strain tensors, as a function of applied strain for the 6 nm,\par
+within intragranular mechanisms is higher. These data and trends            12 nm, and 16 nm grain size NC Ni structures. The elastic\par
+suggest that all intragranular mechanisms acting together, not just         component of strain, calculated from the sample\u8217?s stress strain\par
+dislocation slip or twinning by itself, govern the mechanical               response, is also shown for the 6 nm grain size structure. The\par
+response of NC metals in the hardening regime. Figure 3b further            elastic strain calculated from the kinematic metrics at the atomic\par
+demonstrates that the cross-over between the contributions of               scale matches well with the values obtained from the macroscopic\par
+GB-based (i.e., intergranular) and intragranular mechanisms occurs          stress-strain response of the simulation cell. It demonstrates the\par
+in the 12\u8211?14 nm grain size regime, around which the \u64258?ow stress              high accuracy of the kinematic metrics, especially the method\par
+reaches a maximum. It indicates that the strongest grain size               used to approximate the continuum strain \u64257?eld around each atom.\par
+regime does correspond to a transition in the governing                        In addition, the plots (Fig. 4a) show that the elastic strain\par
+deformation mechanism but from intergranular (i.e., GB-based)               decreases below 50% in all grain size structures around 5%\par
+to intragranular. The latter includes the contribution of deforma-          applied strain\u8212? signifying the beginning of \u64258?ow when most of\par
+tion twinning and elastic lattice deformation, not just dislocation         the strain accommodation becomes plastic in nature. Figure 4b, c\par
+slip as previously suggested in the literature. At grain sizes where        show percentages of total strain accommodation in intragranular\par
+this transition occurs (12\u8211?14 nm), the total strain is equally\par
+                                                                            (IG) and intergranular (GB) mechanisms, delineated into plastic\par
+accommodated between intergranular and intragranular mechan-\par
+                                                                            and elastic components, as a function of applied strain for the\par
+isms during \u64258?ow (Fig. 3b). Therefore, these results indicate that\par
+                                                                            16 nm and 6 nm grain size structures, respectively. Clearly, most of\par
+maximum strength in NC metals is observed at a grain-size regime\par
+                                                                            the strain accommodation in both grains and GBs is initially elastic\par
+where intragranular and GB-based deformation mechanisms are\par
+equally competing to accommodate strain during the \u64258?ow regime.              in nature while the plastic strain dominates during the \u64258?ow\par
+   As discussed before, some previous studies have also quanti\u64257?ed           regime for the two grain size structures, hence, con\u64257?rming our\par
+the mechanistic crossover in terms of percentage/fraction of                previous assertions. However, the elastic component of strain does\par
+atoms participating in different mechanisms. In order to present            not completely vanish in the \u64258?ow regime. It can be observed from\par
+such analysis, the percentages of total atoms participating in              these plots that the contribution of elastic strain in the \u64258?ow\par
+individual mechanisms are calculated from the metric code. The              regime is higher compared to what is typically observed in coarse-\par
+values are averaged over the \u64258?ow regime and plotted as function             grained metals. The source of relatively large elastic strain during\par
+of grain size in Fig. 3c. It can be observed from the \u64257?gure that            the \u64258?ow regime is generally the high overall stress required to\par
+grain-elastic contributes the most, in terms of percentage of               carry plastic deformation in NC metals. As discussed earlier, the\par
+atoms, across all grain-sizes. Hence, no cross-over is noticed              elastic component of strain at any point during the loading is\par
+between the percentages of total atoms participating in                     equal to the applied stress \u963? divided by the initial elastic stiffness\par
+intragranular and GB mechanisms at any grain size. It should also           E33. While the variation in elastic modulus can be small, the yield\par
+be noted that a cross-over is observed between the percentage of            and \u64258?ow stresses increase signi\u64257?cantly as grain size approaches\par
+atoms in dislocation and GB mechanisms at a grain size regime of            the NC regime38, which also results in large amount of elastic\par
+18\u8211?20 nm, however, it does not correspond to the strongest grain            strain prior to yielding or \u64258?ow. Since, after yielding, only small\par
+size regime. The cross-over regime does not shift much even                 stress relaxations are noticed in the stress-strain curves of NC\par
+when the percentages of twinned and dislocation atoms are                   metals (Fig. 1), they retain majority of the large elastic strain\par
+combined. Therefore, it can be said that the maximum strength in            acquired before yielding, during the \u64258?ow regime as well.\par
+NC metals is only observed at a grain size regime, where the total          Furthermore, the competition between intragranular and\par
+\par
+Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences     npj Computational Materials (2020) 153\par
+                                                             A. Gupta et al.\par
+6\par
+\par
+\par
+\par
+\par
+    Fig. 4 Elastic versus plastic deformation. (a) Variation of elastic component of strain calculated as percent total strain and obtained from the\par
+    atomic strain tensors, as a function of applied strain during uniaxial tensile loading of 6 nm, 12 nm and 16 nm grain size NC Ni structures\par
+    (elastic strain calculated from the sample\u8217?s stress strain response is also plotted for the 6 nm case). Percentages of total strain accommodation\par
+    by intragranular (IG) and intergranular (GB) mechanisms, delineated into plastic and elastic components, as a function of applied strain for the\par
+    (b) 16 nm and (c) 6 nm grain size structures. (d) Percentages of total strain accommodation by IG and GB mechanisms during \u64258?ow, delineated\par
+    into plastic and elastic components, as a function of average grain size of NC Ni structures.\par
+\par
+    GB-mediated deformation mechanisms in accommodating elastic                 performed uniaxial tensile loading simulations of the NC Ni\par
+    and plastic deformation can be studied from these plots.                    structures of different grain sizes at the strain rate of 1010 s\u8722?1.\par
+        The average contributions of intragranular and GB mechanisms            Consideration of lower strain rate MD simulations, while desirable,\par
+    towards total strain accommodation during the \u64258?ow regime are                was not feasible with the current computational resources. Figure\par
+    plotted as a function of grain size in Fig. 4d. The percentage of           5a shows the stress-strain response during tensile loading of the\par
+    total strain accommodation are further broken down into its                 16 nm grain size NC structure at two different strain rates (e.g., 108\par
+    elastic and plastic components for the 6 nm, 12 nm, and 16 nm               s\u8722?1, 1010 s\u8722?1). While the initial slope of the curves in the linear\par
+    grain size structures in order to investigate the competition of            elastic regime is independent of the strain rate, the response\par
+    deformation mechanisms in the two components individually. As               diverges signi\u64257?cantly as strain increases further. The linear elastic\par
+    compared to the grain size where the contributions of inter-                regime extends to larger applied strains at 1010 s\u8722?1, indicating\par
+    granular and intragranular mechanisms towards total strain                  delayed onset of plasticity at higher strain rate. As a result, the\par
+    accommodation become equal (i.e., 12\u8211?14 nm), the cross-over                 peak in the stress-strain curve appears near 7% strain at 1010 s\u8722?1,\par
+    between the two mechanisms occurs at a smaller grain size for the           shifting from 3% strain at 108 s\u8722?1. The peak stress also increases in\par
+    elastic component and at a larger grain size for the plastic                magnitude at higher strain rate. The stress response eventually\par
+    component. Therefore, we can comment on the notion relating                 \u64258?attens out to a steady state \u64258?ow in the two cases. However,\par
+    the maximum strength of NC metals to the grain size where                   values of both the \u64258?ow stress and the applied strain where the\par
+    intragranular and GB mechanisms contribute equally to strain                \u64258?ow regime begins, are higher at 1010 s\u8722?1. Similar stress-strain\par
+    accommodation during \u64258?ow; this notion holds for total strain, but           behaviors of NC structures at different MD strain rates were also\par
+    not necessarily for its elastic and plastic components individually.        reported in previous modeling studies33,42,43.\par
+    It should be noted here that the relative contribution of elastic and          The delayed onset of plasticity at higher strain rate is also\par
+    plastic components of strain also depends upon the loading strain           re\u64258?ected in Fig. 5b. It plots the percentages of total strain\par
+    rate, which is extremely large in MD simulations. Thereafter, it            accommodation by individual mechanisms in the 16 nm grain size\par
+    might be interesting to discuss these \u64257?ndings within the scope of           structure, as a function of applied strain, at two different rates of\par
+    artifacts of MD simulations such as high strain rate.                       108 s\u8722?1 and 1010 s\u8722?1. Similar plots for rest of the grain sizes are\par
+                                                                                shown in supplementary Fig. S2. The plot shows that most of\par
+    Effect of strain rate                                                       strain is accommodated in the elastic deformation of grains up to\par
+    One of the biggest limitations of MD loading simulations is often           7% applied strain during loading at 1010 s\u8722?1. The contributions of\par
+    the inherent high strain rates encountered during deformation42.            intragranular plastic deformation mechanisms such as dislocation\par
+    The simulations described to this point were conducted at a strain          slip and twinning only start to increase after 6\u8211?7% strain at higher\par
+    rate of 108 s\u8722?1. To explore the effect of strain rate on the validity of    strain rate. The delayed yielding further causes the \u64258?ow regime to\par
+    the mechanistic competition notion discussed above, we also                 shift to higher strain values in the corresponding stress-strain plot\par
+\par
+    npj Computational Materials (2020) 153           Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences\par
+                                                                            A. Gupta et al.\par
+                                                                                                                                                     7\par
+\par
+\par
+\par
+\par
+Fig. 5 Effect of strain rate. (a) Stress-strain response of 16 nm grain size NC Ni structure obtained from the uniaxial tension MD simulations\par
+performed at strain rates of 108s\u8722?1 and 1010s\u8722?1. (b) Percentages of total strain accommodation by deformation mechanisms, as a function of\par
+applied strain, during uniaxial loading of 16 nm structure at strain rates of 108s\u8722?1 and 1010s\u8722?1. Variation of (c) percentages of total strain\par
+accommodation by intragranular (IG) and intergranular (GB) mechanisms during \u64258?ow and (d) \u64258?ow stress, as a function of average grain size of\par
+NC Ni structures, obtained from the loading at strain rates of 108s\u8722?1 and 1010s\u8722?1.\par
+\par
+\par
+(Fig. 5a). As seen in Fig. 5b, the contributions of individual              consequence, the cross-over between the two mechanisms occurs\par
+mechanisms at 9% applied strain at 1010 s\u8722?1 and at 5% strain at             within a grain size regime of 16\u8211?18 nm at 1010 s\u8722?1. Importantly,\par
+108 s\u8722?1 are similar for the 16 nm grain size structure. Therefore, the      the maximum \u64258?ow stress (plotted in Fig. 5d as a function of grain\par
+exact strain value, marking the beginning of the \u64258?ow regime at              size) also shifts to a larger grain size (18 nm), corresponding to the\par
+1010 s\u8722?1 strain rate, is taken to be 9%, so that the contributions of       grain size regime where the governing deformation mechanism\par
+deformation mechanisms at the beginning of the \u64258?ow regime for               once again transitions. Therefore, it can be concluded that the\par
+the two strain rates are comparable. It should also be noted that           notion relating the maximum strength to an equal competition of\par
+the NC Ni structures were loaded up to a total tensile strain of 16%        nanoscale mechanisms to accommodate strain during \u64258?ow, holds\par
+at 1010 s\u8722?1 strain rate to ensure the same length of the \u64258?ow                true even at the strain rate of 1010 s\u8722?1.\par
+regime as the lower strain rate. Figure 5b also demonstrates that              The validity of this notion for the two high strain rates\par
+in the 16 nm grain structure, the overall contribution of                   employed in MD simulations suggests generality for NC materials,\par
+intragranular plastic deformation mechanisms, such as dislocation           but detailed studies at much lower strain rates are needed for\par
+slip, during \u64258?ow is smaller at 1010 s\u8722?1; instead, the percentage of         evaluation of this assertion. At strain rates more commonly\par
+strain accommodated within GB mechanisms increases as                       observed in experiments, the strongest grain size regime might\par
+compared to their relative contributions at 108 s\u8722?1. The reduced            shift to a smaller value, due to increased contribution of\par
+contribution and the delayed activation of intragranular plastic            intragranular plastic deformation mechanisms. However, the exact\par
+deformation mechanisms, particularly dislocation plasticity as              shift can only be determined from the amount of increase in\par
+observed in this study, can be attributed to the enhanced                   dislocation/twinning activity at these small strain rates, something\par
+dif\u64257?culty of dislocation nucleation and propagation at higher               which is not quanti\u64257?ed and out of scope of a MD study. It should\par
+strain rates, as reported in the literature44\u8211?46.                           also be noted here that any extrapolation in the value of strongest\par
+   Similar trends in the variation of the contributions of                  grain size from simulation to experimental strain rates must be\par
+intergranular (GB) and intragranular (IG) deformation mechanisms            done with extreme care because the contributions of individual\par
+during the \u64258?ow regime, as a function of strain rate, can be                 deformation mechanisms might vary differently in disparate strain\par
+observed across all grain sizes of the NC Ni structure in Fig. 5c. The      rate regimes. The strain rate sensitivity of the mechanical behavior\par
+percentages of total strain accommodation at 1010 s\u8722?1 strain rate,          of NC metals, studied at different strain rates in several\par
+averaged over the \u64258?ow regime, decrease in general for                       experimental and modeling studies33,43,44,47, suggest that the\par
+intragranular mechanisms and increase for intergranular mechan-             changes in contribution of individual mechanisms might be less\par
+isms across all grain sizes. However, the relative changes in the           pronounced when strain rate decreases from 108 s\u8722?1 to experi-\par
+magnitude are higher for larger grain size structures. As a                 mental strain rates in comparison to the changes observed in this\par
+\par
+Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences     npj Computational Materials (2020) 153\par
+                                                             A. Gupta et al.\par
+8\par
+    study, when the strain rate was varied from 108 to 1010 s\u8722?1.                was also found to be smaller in Ni\u8211?P, in which case, the average\par
+    Therefore, the actual shift in the strongest grain size at                  grain size increased by 0.32 nm and 0.12 nm for NC Ni structures\par
+    experimental strain rates might be smaller than one would expect            with initial grain sizes of 6 nm and 20 nm, respectively. These\par
+    from the extrapolation of simulation results. Moreover, at very             results indicate that P segregation strengthens the NC Ni GBs\par
+    small strain rates (<1 s\u8722?1), typically used in experiments, the             against grain growth, that is perpendicular to the boundaries, and\par
+    contribution of GB mechanisms may rise again, due to activation             also against shear in parallel, as re\u64258?ected by increase in the values\par
+    of diffusion assisted sliding/creep processes44,48. The strongest           of \u64258?ow stress. Furthermore, the strongest grain size shifts from\par
+    grain size can, thus, be expected to again shift to higher values at        12 nm in pure Ni to 10 nm in Ni\u8211?P.\par
+    smallest of strain rates, where diffusion assisted GB mechanisms               Hardness values taken from experimental studies of NC Ni52\u8211?55\par
+    are active48. Thus, it might even be possible that the strongest            and Ni\u8211?P50,56\u8211?58 samples, are plotted as a function of grain size in\par
+    grain size value at two drastically different strain rates are equal, as    Fig. 6b. If the hardness values are scaled down by a factor of three\par
+    also proposed by Li et al. 44.                                              to facilitate a rough comparison with the \u64258?ow stress values59, we\par
+       With the caveats discussed above, we regard the present MD               \u64257?nd that the simulation results are higher in magnitude than\par
+    simulations as offering utility in uncovering fundamental trends            experiments for both Ni and Ni\u8211?P structures, typical of high strain\par
+    regarding the complex deformation behavior of NC materials, as              rate employed in MD simulations42. The experimental and the\par
+    also noted in previous studies42. These trends in NC behavior               modeling data can further differ in magnitude because of other\par
+    obtained from atomistic simulations can provide valuable decision           artifacts of MD simulations; and speci\u64257?c aspects of experimental\par
+    support for rationalizing the strongest grain size regime in NC             samples, such as grain size and orientation distributions, synthesis\par
+    materials. To present such an example and to further assess the             routes, pre-existing impurity and defect content, intrinsic residual\par
+    broader validity of these \u64257?ndings regarding mechanistic competi-            stress, overall solute concentration, and inherent errors in\par
+    tion and maximum strength, we next consider alloyed NC                      experimental measurements60. However, since atomistic simula-\par
+    structures. The addition of alloying elements can fundamentally             tions are capable of revealing proper trends regarding NC\par
+    alter the role of individual mechanisms during deformation by               mechanical behavior, we can still compare trends in the variation\par
+    changing their propensity to plastically deform. It has recently            of \u64258?ow stress and hardness data as a function of grain size and\par
+    been demonstrated experimentally in NC alloys that segregation              solute content, as obtained from the simulations and experiments,\par
+    of solute atoms to NC GBs shifted the strongest grain size to               respectively.\par
+    smaller values20. It was attributed to improved GB stability arising           The simulation and the experimental data reveal some identical\par
+    from solute segregation. Here, we show quantitatively that                  trends: (1) \u64258?ow stress and hardness values are higher in Ni\u8211?P than\par
+    interfacial solute segregation fundamentally alters the landscape           Ni across all grain sizes, and (2) maxima in \u64258?ow stress and\par
+    of competing nanoscale deformation mechanisms during \u64258?ow,                   hardness values occur at smaller grain sizes in Ni\u8211?P as compared\par
+    thereby, shifting the strongest grain size regime in accordance             to Ni. The similar trends noticed in the simulation and the\par
+    with the mechanistic competition conjecture discussed above.                experimental data lends further credence to the simulation results\par
+                                                                                presented in this study. The shifting of strongest grain size regime\par
+                                                                                to smaller values in Ni\u8211?P is also predicted by the notion relating\par
+    Mechanical behavior of NC Ni\u8211?P                                              maximum strength to an equal competition of governing\par
+    The Ni-P alloy system is selected for this study, since it has been         deformation mechanisms during \u64258?ow. Since, alloying strengthens\par
+    shown experimentally to have improved strength and stability                the GBs in NC Ni\u8211?P, the contribution of GB-based deformation\par
+    than NC Ni due to segregation of P atoms to Ni GBs49,50. Alloyed            mechanisms in accommodating strain during \u64258?ow should\par
+    NC structures were generated from the NC Ni structures using                decrease across all grain sizes and the transition between the\par
+    Monte Carlo (MC)/ MD simulations (see \u8220?Methods\u8221? section). In the            contributions of intragranular and GB mechanisms should, there-\par
+    alloyed con\u64257?guration, P atoms were found to strongly segregate              fore, occur at a lower grain size. In order to test the validity of this\par
+    to NC Ni GBs as seen experimentally51. Alloyed structures were              notion in the alloyed case, the relative strain contributions of\par
+    then subjected to uniaxial tension MD simulations at a strain rate          underlying mechanisms in NC Ni\u8211?P are quanti\u64257?ed.\par
+    of 108 s\u8722?1. Figure 6a shows the variation of \u64258?ow stress of alloyed             The change in the competition/cooperation of deformation\par
+    NC Ni\u8211?P as a function of average grain size\u8212?NC Ni behavior at               mechanisms in NC structures as a function of alloying and grain\par
+    108 s\u8722?1 strain rate is also shown for comparison. The data shows            size is illustrated in Fig. 7. Speci\u64257?cally, Fig. 7a shows slices through\par
+    that Ni\u8211?P \u64258?ow stress magnitudes are greater than those of pure Ni           deformed NC structures where individual grains are colored\par
+    across all grain sizes, exhibiting the expected strengthening               according to the ratio of strain accommodation in GBs to grain\par
+    arising from P segregation to Ni GBs. The amount of grain growth            interior, computed from the kinematic metrics at 5% applied\par
+\par
+\par
+\par
+\par
+    Fig. 6 Mechanical behavior of NC Ni\u8211?P. Variation of (a) \u64258?ow stress and (b) hardness of NC Ni and Ni\u8211?P structures, as a function of average\par
+    grain size, obtained from the uniaxial tension MD simulation and several past experimental studies, respectively.\par
+\par
+\par
+    npj Computational Materials (2020) 153           Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences\par
+                                                                            A. Gupta et al.\par
+                                                                                                                                                             9\par
+\par
+\par
+\par
+\par
+Fig. 7 In\u64258?uence of alloying and grain size. (a) Slices through 6 nm and 16 nm grain size NC structures of Ni and Ni\u8211?P showing computed GB\par
+to grain interior strain accommodation ratio for individual grains at 5% applied strain. (b) Percentages of total strain accommodation by\par
+intragranular (IG) and intergranular (GB) mechanisms during \u64258?ow in NC Ni and Ni\u8211?P structures, as a function of their average grain size.\par
+\par
+strain. Strain within the majority of grains in NC Ni of 6 nm and           hardening regime. Furthermore, the results show that the notion\par
+16 nm grain size is accommodated by intergranular (i.e., GB) and            holds only for total strain accommodation and not necessarily for\par
+intragranular mechanisms, respectively. In Ni\u8211?P structures, the             its elastic and plastic components. The notion held at two MD\par
+contribution of GB mechanisms decreases for both grain sizes,               strain rates tested in this study, further highlighting the effects of\par
+demonstrating the expected GB strengthening arising from the                higher strain rate on the overall mechanical response of NC\par
+presence of solute P atoms at NC Ni GBs. The in\u64258?uence of alloying           materials and the contributions of underlying mechanisms. The\par
+and grain size on the overall competition of underlying nanoscale           behavioral trends revealed by the simulation data were found to\par
+mechanisms is presented in Fig. 7b. The percentages of total strain         be in good agreement with the trends observed in experimental\par
+accommodated within intragranular (IG) and GB mechanisms,                   data or reported in previous experimental and modeling studies.\par
+averaged over the \u64258?ow regime, are shown as a function of average            Such agreements add con\u64257?dence in generalizing the \u64257?ndings of\par
+grain size. Plots for individual grain sizes are shown in                   this simulation study.\par
+supplementary Fig. S3. The contribution of GB-based deformation                Finally, the notion was veri\u64257?ed in alloyed NC Ni\u8211?P, where, the\par
+mechanisms decreases while that of intragranular mechanisms                 strongest grain size was shown to shift to smaller values due to\par
+increases in the alloyed case across all grain sizes. The results           decreased contributions of GB mechanisms, as suggested in past\par
+match well with the changes in the relative contributions of                studies. The observed transition in the strongest grain size in NC\par
+nanoscale mechanisms expected upon alloying, thereby, provid-               Ni\u8211?P, based on the insight gained through pure Ni, suggests that\par
+ing additional validation to both the MD simulations in capturing           the strongest grain size regime in NC materials may possibly be\par
+proper behavioral trends, and the kinematic metrics in accurately           tuned in other NC alloys by controlling the underlying operative\par
+quantifying the simulated mechanical behavior. Furthermore, the             deformation mechanisms at the nanoscale. Alloying is just one of\par
+transition between the two mechanisms happens at 10 nm grain                several methods that are traditionally utilized to alter the structure\par
+size corresponding to the maximum \u64258?ow stress in NC Ni\u8211?P,                    and properties of NC materials. With the knowledge provided in\par
+attesting that the strongest grain size still corresponds to an equal       this study of how these structural changes might fundamentally\par
+competition between grain-based and GB-based deformation                    affect mechanistic competition, processing and chemistry routes\par
+mechanisms towards strain accommodation. Therefore, it can be               may be rationally selected to shift the strongest grain size in NC\par
+established that the notion relating the maximum strength to an             materials to values which can be manufactured and tailored to\par
+equal competition of nanoscale mechanisms holds true in the                 each application. It will although require signi\u64257?cant research and\par
+alloyed case as well.                                                       testing in different alloys and loading conditions such as creep\par
+   In summary, we explicitly studied the notion relating the                where different operative mechanisms are competing or\par
+maximum strength to a transition in the governing deformation               governing.\par
+mechanisms from atomistic modeling by resolving the fraction of\par
+total strain accommodated by individual mechanisms using post-\par
+                                                                            METHODS\par
+processing kinematic metrics. It was found that in NC Ni, the\par
+maximum strength corresponds to the grain size regime where                 Generation of NC Ni structures\par
+the governing mechanisms transition or equally compete to                   In this study, atomistic NC Ni structures of average grain size ranging from\par
+accommodate strain during \u64258?ow, thus, verifying the notion.                  6 nm to 24 nm were created from phase \u64257?eld generated voxelated\par
+                                                                            microstructure using the method outlined by Gruber et al.61. NC structures\par
+However, dislocation plasticity was not found to be the sole                obtained from the phase \u64257?eld simulations tend to be more physically\par
+governing deformation mechanism at all grain sizes in the                   representative of topologies of grains, GBs and triple junctions and\par
+hardening regime contrary to the current understanding. Instead,            produce grain size distributions driven by thermodynamics of grain\par
+it was shown that the combined contributions of all intragranular           growth61. In order to compute statistically averaged mechanical behavior,\par
+mechanisms govern the response of NC materials in the                       \u64257?ve different instances of NC structures were created for every grain size. In\par
+\par
+\par
+Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences         npj Computational Materials (2020) 153\par
+                                                                 A. Gupta et al.\par
+10\par
+\par
+\par
+\par
+\par
+     Fig. 8 Simulation Methodology. Atomistic NC structures of (a) Ni and (b) Ni\u8211?P of 6 nm grain average grain size (red: GB atoms, blue: FCC\par
+     atoms, cyan: HCP atoms, white: P solute atoms; inset shows GB misorientation angle and axis distributions of NC Ni). (c) Schematic\par
+     representation of the calculation of atomic deformation gradient tensor by approximating continuum material \u64257?eld around each atom using\par
+     the nearest neighbor list.\par
+\par
+     each microstructural instance, the orientations of grains were chosen from    addition, the potential was parametrized against a large ab initio database\par
+     different random distributions while employing identical microstructural      of energetics, lattice parameters and stress tensors of several con\u64257?gura-\par
+     topologies. Interatomic interactions in NC Ni structures are modeled using    tions of Ni\u8211?P, including all intermetallic phases. Resulting NC structures\par
+     an embedded-atom-method (EAM) style potential62. This potential is            were then subjected to hybrid MC\u8211?MD simulations. In the MC step, a pair\par
+     parameterized to yield stacking fault energies similar to experimental        of P and Ni atoms were selected at random and swapped by probabilities\par
+     values. Other key material properties such as lattice constant, phonon        dictated by Metropolis criteria68 at 300 K. Every 1000 MC steps were\par
+     frequencies, vacancy formation energy were also \u64257?tted using ab initio         followed by thermal relaxation of the entire system for 1000 MD steps.\par
+     calculations. All atomistic simulations in this study were performed using    Thermal equilibration was performed at 300 K using an isothermal-isobaric\par
+     the LAMMPS software package63.                                                ensemble while maintaining zero normal pressure at periodic boundaries\par
+        GBs in NC Ni structures were thermally equilibrated at high temperature    in all dimensions. The hybrid MC\u8211?MD simulation continued until the\par
+     (0.5 Tm) for 1 ns to reach local minima in energy rapidly64. Grain interior   system\u8217?s total potential energy reached a local minimum. In the \u64257?nal\par
+     atoms were \u64257?xed during the high temperature equilibration to avoid grain      con\u64257?guration, P atoms segregated to NC Ni GBs across all grain sizes in\par
+     growth; and the high temperature equilibration was followed by thermal        agreement with experiments49. An in-depth analysis of the interfacial\par
+     equilibration of the whole system at 300 K with no constraint on any          solute segregation behavior in NC Ni\u8211?P as a function of GB character is\par
+     atoms. The equilibration was performed for an additional nanosecond,          provided in our recent investigation51. The bulk solute contents were\par
+     after which systems\u8217? potential energies became constant over time. The        chosen such that the total extent of solute segregation at GBs, or the GB\par
+     resulting structures had around 40 grains, and 3D periodic boundary           solute content, was 12 atomic % across all grain sizes. It should be noted\par
+     conditions. The size of the simulation cells varied from 18 nm3 and 500,000   that because of the large computational cost of hybrid MC\u8211?MD\par
+     atoms at 6 nm grain size to around 72 nm3 and 35 million atoms at 24 nm       simulations, only one instance of the microstructure for each grain size\par
+     grain size. Figure 8a shows a NC Ni structure of 6 nm average grain size      is alloyed and mechanically tested. An alloyed con\u64257?guration of NC Ni\u8211?P\par
+     along with the GB misorientation distribution. The GB misorientation angle    structure of 6 nm grain size is shown in Fig. 8b, where, segregation of P\par
+     distribution matches well with the Mackenzie distribution of a cubic          atoms at NC GBs is clearly visible.\par
+     sample65, indicating a random texture. All visualizations in this work were\par
+     performed using OVITO66.\par
+                                                                                   Mechanical testing\par
+                                                                                   Following the generation of NC structures, uniaxial tension MD simulations\par
+     Generation of NC Ni\u8211?P structures                                              were performed under isothermal-isobaric conditions (NPT ensemble),\par
+     Alloyed Ni-P structures were generated from NC Ni structures using hybrid     with a constant imposed strain rate at 300 K temperature and zero normal\par
+     MC\u8211?MD simulations. A certain number of P atoms (depending upon the            pressure along boundaries in transverse directions. NC Ni structures were\par
+     desired solute content) were \u64257?rst placed at random inside NC bulk/ grains     loaded at strain rates of 108 s\u8722?1 and 1010 s\u8722?1, Ni\u8211?P at 108 s\u8722?1. Global\par
+     in-lieu of Ni atoms. Another EAM force \u64257?eld was used to model interatomic     pressure tensor of the system is used to calculate stress during uniaxial\par
+     interactions in alloyed Ni\u8211?P67. The potential was \u64257?tted to yield              loading. In order to delineate elastic and plastic components of strain\par
+     experimental lattice parameters and cohesive energies of Ni and P. In         during loading, deformed NC structures were relaxed to drive system\u8217?s\par
+\par
+\par
+     npj Computational Materials (2020) 153             Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences\par
+                                                                                             A. Gupta et al.\par
+                                                                                                                                                                                             11\par
+elastic strain to zero. To enable a simulation restart from any point during                  5. Hughes, G. D., Smith, S. D., Pande, C. S., Johnson, H. R. & Armstrong, R. W. Hall-\par
+the loading, NC structural con\u64257?gurations (position and velocities of atoms)                      petch strengthening for the microhardness of twelve nanometer grain diameter\par
+at increments of 1% strain were stored in restart \u64257?les. These con\u64257?gurations                      electrodeposited nickel. Scr. Metall. 20, 93\u8211?97 (1986).\par
+were then dynamically relaxed to a state of zero normal stress by applying                    6. Baldwin, W. M. Yield strength of metals as a function of grain size. Acta Metall. 6,\par
+a constant strain in the direction opposite to initial loading. The plastic                      139\u8211?141 (1958).\par
+strain was calculated from the atomic strain tensors in these relaxed                         7. Dunstan, D. J. & Bushby, A. J. Grain size dependence of the strength of metals:\par
+structures. Only one instance of NC structure at a given grain size was                          The Hall\u8211?Petch effect does not scale as the inverse square root of grain size. Int. J.\par
+subjected to these relaxation simulations due to large computational cost                        Plast. 53, 56\u8211?65 (2014).\par
+associated.                                                                                   8. Schi\u248?tz, J., Di Tolla, F. D. & Jacobsen, K. W. Softening of nanocrystalline metals at\par
+                                                                                                 very small grain sizes. Nature 391, 561\u8211?563 (1998).\par
+                                                                                              9. Schi\u248?tz, J. & Jacobsen, K. W. A maximum in the strength of nanocrystalline\par
+Quanti\u64257?cation of deformation mechanisms                                                          copper. Science 301, 1357\u8211?1359 (2003).\par
+Strain tensors for every atom in the NC structure were calculated using                      10. Chokshi, A. H., Rosen, A., Karch, J. & Gleiter, H. On the validity of the hall-petch\par
+the method described by Tucker et al.26,28,40,41. The deformation                                relationship in nanocrystalline materials. Scr. Metall. 23, 1679\u8211?1683 (1989).\par
+gradient tensor F was obtained by mapping the undeformed or                                  11. Fougere, G. E., Weertman, J. R., Siegel, R. W. & Kim, S. Grain-size dependent\par
+reference con\u64257?guration to a current or deformed con\u64257?guration of NC                               hardening and softening of nanocrystalline Cu and Pd. Scr. Metall. Mater. 26,\par
+structure as shown in Fig. 8c. Here, x and X are the vectors between two                         1879\u8211?1883 (1992).\par
+material points in the deformed and reference con\u64257?gurations, respec-                         12. Konstantinidis, D. A. & Aifantis, E. C. On the \u8220?Anomalous\u8221? hardness of nanocrys-\par
+tively. However, atomic positions instead of material points were used                           talline materials. Nanostruct. Mater. 10, 1111\u8211?1118 (1998).\par
+for this mapping in the atomistic structure, as detailed by Zimmerman                        13. Carlton, C. E. & Ferreira, P. J. What is behind the inverse Hall\u8211?Petch effect in\par
+et al.69. The deformation gradient tensor was estimated for each atom by                         nanocrystalline materials? Acta Mater. 55, 3749\u8211?3756 (2007).\par
+mapping the nearest neighbor vectors of that atom in the reference and                       14. Lu, K. & Sui, M. L. An explanation to the abnormal Hall-Petch relation in nano-\par
+deformed con\u64257?gurations, as illustrated Fig. 8c. The strain tensor E was                          crystalline materials. Scr. Metall. Mater. 28, 1465\u8211?1470 (1993).\par
+calculated from the deformation gradient tensor as, E = 0.5 (FTF\u8211?I). Here,                   15. Conrad, H. & Narayan, J. On the grain size softening in nanocrystalline materials.\par
+I is the identity tensor. Nanoscale deformation mechanisms were                                  Scr. Mater. 42, 1025\u8211?1030 (2000).\par
+identi\u64257?ed from the kinematic signatures of deformation around each                           16. Lu, L., Shen, Y., Chen, X., Qian, L. & Lu, K. Ultrahigh strength and high electrical\par
+atom, their structural environments (FCC/BCC/HCP/Other) and slip                                 conductivity in copper. Science 304, 422\u8211?426 (2004).\par
+vectors26,39,70. Particular identi\u64257?cation of mechanisms (e.g., dislocation                   17. Yamakov, V., Wolf, D., Phillpot, S. R., Mukherjee, A. K. & Gleiter, H. Deformation\par
+slip, twinning, GB deformation and elastic lattice strain) from computed                         mechanism crossover and mechanical behaviour in nanocrystalline materials.\par
+atomic tensors was crucial. Based up on which, the percentage of total                           Philos. Mag. Lett. 83, 385\u8211?393 (2003).\par
+loading strain pk, accommodated within a deformation mechanism                               18. Lu, L., Chen, X., Huang, X. & Lu, K. Revealing the maximum strength in nanot-\par
+k, at any point during the uniaxial loading was calculated according to                          winned copper. Science 323, 607\u8211?610 (2009).\par
+Eq. 1.                                                                                       19. Yamakov, V., Wolf, D., Phillpot, S. R., Mukherjee, A. K. & Gleiter, H. Deformation-\par
+       Pnk i                                                                                     mechanism map for nanocrystalline metals by molecular-dynamics simulation.\par
+              E33\par
+ pk \u188? Pi\u188?1N    i\par
+                                                                        (1)                      Nat. Mater. 3, 43\u8211?47 (2004).\par
+          i\u188?1 E33                                                                            20. Hu, J., Shi, Y. N., Sauvage, X., Sha, G. & Lu, K. Grain boundary stability governs\par
+          i\par
+   Here, E33 is the normal component along the loading direction (z in this                      hardening and softening in extremely \u64257?ne nanograined metals. Science 355,\par
+case) of the strain tensor of an atom i computed at that point during the                        1292\u8211?1296 (2017).\par
+uniaxial loading. Summations in the numerator and the denominator span                       21. Chandross, M. & Argibay, N. Ultimate strength of metals. Phys. Rev. Lett. 124,\par
+over all atoms nk, participating in the mechanism k, and the total number                        125501 (2020).\par
+of atoms in the NC structure N, respectively. It should be noted that this                   22. Spearot, D. E., Tucker, G. J., Gupta, A. & Thompson, G. B. Mechanical properties of\par
+method includes contribution from all atoms that were deformed by either                         stabilized nanocrystalline FCC metals. J. Appl. Phys. 126, 110901 (2019).\par
+dislocations, twins or GBs in previous con\u64257?gurations as well, not just those                 23. Hahn, E. N. & Meyers, M. A. Grain-size dependent mechanical behavior of\par
+that are part of these defect structures in current con\u64257?guration, and thus                       nanocrystalline metals. Mater. Sci. Eng. A 646, 101\u8211?134 (2015).\par
+more accurately capturing the complex deformation that occurs within                         24. Zhang, L., Lu, C. & Tieu, K. A review on atomistic simulation of grain boundary\par
+microstructures by competing mechanisms.                                                         behaviors in face-centered cubic metals. Comput. Mater. Sci. 118, 180\u8211?191 (2016).\par
+                                                                                             25. Stukowski, A., Albe, K. & Farkas, D. Nanotwinned fcc metals: strengthening versus\par
+                                                                                                 softening mechanisms. Phys. Rev. B 82, 224103 (2010).\par
+                                                                                             26. Tucker, G. J., Tiwari, S., Zimmerman, J. A. & McDowell, D. L. Investigating the\par
+DATA AVAILABILITY\par
+                                                                                                 deformation of nanocrystalline copper with microscale kinematic metrics and\par
+All data is available within the paper and supplementary information.                            molecular dynamics. J. Mech. Phys. Solids 60, 471\u8211?486 (2012).\par
+                                                                                             27. Prakash, A., Weygand, D. & Bitzek, E. In\u64258?uence of grain boundary structure and\par
+                                                                                                 topology on the plastic deformation of nanocrystalline aluminum as studied by\par
+CODE AVAILABILITY                                                                                atomistic simulations. Int. J. Plast. 97, 107\u8211?125 (2017).\par
+LAMMPS is an open-source atomistic simulation code, freely available to download at          28. Tucker, G. J., Zimmerman, J. A. & McDowell, D. L. Continuum metrics for defor-\par
+https://lammps.sandia.gov. All post-processing code and meta-data used in the                    mation and microrotation from atomistic simulations: application to grain\par
+analysis will be provided upon request.                                                          boundaries. Int. J. Eng. Sci. 49, 1424\u8211?1434 (2011).\par
+                                                                                             29. Bitzek, E., Derlet, P. M., Anderson, P. M. & Van Swygenhoven, H. The stress\u8211?strain\par
+                                                                                                 response of nanocrystalline metals: a statistical analysis of atomistic simulations.\par
+Received: 13 May 2020; Accepted: 24 September 2020;\par
+                                                                                                 Acta Mater. 56, 4846\u8211?4857 (2008).\par
+                                                                                             30. Trelewicz, J. R. & Schuh, C. A. The Hall-Petch breakdown in nanocrystalline metals:\par
+                                                                                                 a crossover to glass-like deformation. Acta Mater. 55, 5948\u8211?5958 (2007).\par
+                                                                                             31. Trelewicz, J. R. & Schuh, C. A. Hot nanoindentation of nanocrystalline Ni-W alloys.\par
+                                                                                                 Scr. Mater. 61, 1056\u8211?1059 (2009).\par
+REFERENCES                                                                                   32. Liu, J., Fan, X., Zheng, W., Singh, D. J. & Shi, Y. Nanocrystalline gold with small size:\par
+ 1. Hall, E. O. The deformation and ageing of mild steel: III discussion of results. Proc.       inverse Hall\u8211?Petch between mixed regime and super-soft regime. Philos. Mag. 0,\par
+    Phys. Soc. Sect. B 64, 747\u8211?753 (1951).                                                       1\u8211?17 (2020).\par
+ 2. Petch, N. J. The cleavage strength of polycrystals. J. Iron Steel Inst. 174, 25\u8211?28       33. Vo, N. Q., Averback, R. S., Bellon, P., Odunuga, S. & Caro, A. Quantitative\par
+    (1953).                                                                                      description of plastic deformation in nanocrystalline Cu: Dislocation glide versus\par
+ 3. Malow, T. R. & Koch, C. C. Mechanical properties in tension of mechanically                  grain boundary sliding. Phys. Rev. B. 77, 134108 (2008).\par
+    attrited nanocrystalline iron by the use of the miniaturized disk bend test. Acta        34. Kim, H. S. & Bush, M. B. The effects of grain size and porosity on the elastic\par
+    Mater. 46, 6459\u8211?6473 (1998).                                                                 modulus of nanocrystalline materials. Nanostruct. Mater. 11, 361\u8211?367 (1999).\par
+ 4. Conrad, H. Grain-size dependence of the \u64258?ow stress of Cu from millimeters to             35. Valat-Villain, P., Durinck, J. & Renault, P. O. Grain size dependence of elastic\par
+    nanometers. Metall. Mater. Trans. A 35, 2681\u8211?2695 (2004).                                    moduli in nanocrystalline tungsten. J. Nanomater. 2017, 1\u8211?6 (2017).\par
+\par
+\par
+\par
+\par
+Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences                                npj Computational Materials (2020) 153\par
+                                                                            A. Gupta et al.\par
+12\par
+     36. Rajaram, S. S. et al. Grain-size-dependent grain boundary deformation during            63. Plimpton, S. Fast parallel algorithms for short-range molecular dynamics. J.\par
+         yielding in nanocrystalline materials using atomistic simulations. JOM 72,                  Comput. Phys. 117, 1\u8211?19 (1995).\par
+         1745\u8211?1754 (2020).                                                                       64. Tucker, G. J. & Foiles, S. M. Molecular dynamics simulations of rate-dependent\par
+     37. Maa\u223?, R. & Derlet, P. M. Micro-plasticity and recent insights from intermittent and         grain growth during the surface indentation of nanocrystalline nickel. Mater. Sci.\par
+         small-scale plasticity. Acta Mater. 143, 338\u8211?363 (2018).                                    Eng. A 571, 207\u8211?214 (2013).\par
+     38. Van Swygenhoven, H. Footprints of plastic deformation in nanocrystalline metals.        65. Mackenzie, J. K. Second paper on statistics associated with the random dis-\par
+         Mater. Sci. Eng. A 483\u8211?484, 33\u8211?39 (2008).                                                   orientation of cubes. Biometrika 45, 229\u8211?240 (1958).\par
+     39. Tucker, G. J., Foley, D. & Gruber, J. Continuum metrics for atomistic simulation        66. Stukowski, A. Visualization and analysis of atomistic simulation data\par
+         analysis. In Springer Series in Materials Science Vol. 245, 297\u8211?315 (Springer Verlag,       with OVITO\u8211?the open visualization tool. Model. Simul. Mater. Sci. Eng. 18, 015012\par
+         2016).                                                                                      (2010).\par
+     40. Tucker, G. J. & Foiles, S. M. Quantifying the in\u64258?uence of twin boundaries on the        67. Sheng, H. W., Ma, E. & Kramer, M. J. Relating dynamic properties to atomic\par
+         deformation of nanocrystalline copper using atomistic simulations. Int. J. Plast.           structure in metallic glasses. JOM 64, 856\u8211?881 (2012).\par
+         65, 191\u8211?205 (2015).                                                                     68. Metropolis, N., Rosenbluth, A. W., Rosenbluth, M. N., Teller, A. H. & Teller, E.\par
+     41. Tucker, G. J., Zimmerman, J. A. & McDowell, D. L. Shear deformation kinematics of           Equation of state calculations by fast computing machines. J. Chem. Phys. 21,\par
+         bicrystalline grain boundaries in atomistic simulations. Model. Simul. Mater. Sci.          1087\u8211?1092 (1953).\par
+         Eng. 18, 015002 (2010).                                                                 69. Zimmerman, J. A., Bammann, D. J. & Gao, H. Deformation gradients for continuum\par
+     42. Wolf, D., Yamakov, V., Phillpot, S. R., Mukherjee, A. & Gleiter, H. Deformation of          mechanical analysis of atomistic simulations. Int. J. Solids Struct. 46, 238\u8211?253\par
+         nanocrystalline materials by molecular-dynamics simulation: relationship to                 (2009).\par
+         experiments? Acta Mater. 53, 1\u8211?40 (2005).                                               70. Zimmerman, J. A., Kelchner, C. L., Klein, P. A., Hamilton, J. C. & Foiles, S. M. Surface\par
+     43. Rida, A., Micoulaut, M., Rouhaud, E. & Makke, A. Understanding the strain rate              step effects on nanoindentation. Phys. Rev. Lett. 87, 165507 (2001).\par
+         sensitivity of nanocrystalline copper using molecular dynamics simulations.\par
+         Comput. Mater. Sci. 172, 109294 (2020).\par
+     44. Li, H. et al. Mapping the strain-rate and grain-size dependence of deformation          ACKNOWLEDGEMENTS\par
+         behaviors in nanocrystalline face-centered-cubic Ni and Ni-based alloys. J. Alloy.      Authors G.J.T, G.B.T., and A.G. are grateful for the support of ARO through grant no.\par
+         Compd. 709, 566\u8211?574 (2017).                                                             W911NF-17-1-0528 and greatly acknowledge ARO Program Manager, Dr. Michael\par
+     45. Asaro, R. J. & Suresh, S. Mechanistic models for the activation volume and rate         Bakas. G.J.T. and A.G. also acknowledge XSEDE allocation charge no. TG-DMR190011\par
+         sensitivity in metals with nanocrystalline grains and nano-scale twins. Acta Mater.     and hpc resource mio at Colorado School of Mines for allowing the reported\par
+         53, 3369\u8211?3382 (2005).                                                                   atomistic simulations. D.L.M. is grateful for the support of the NSF CMMI-1761553.\par
+     46. Wang, Y. M., Hamza, A. V. & Ma, E. Temperature-dependent strain rate\par
+         sensitivity and activation volume of nanocrystalline Ni. Acta Mater. 54, 2715\u8211?2726\par
+         (2006).\par
+                                                                                                 AUTHOR CONTRIBUTIONS\par
+     47. Brandl, C., Derlet, P. M. & Van Swygenhoven, H. Strain rates in molecular\par
+         dynamics simulations of nanocrystalline metals. Philos. Mag. 89, 3465\u8211?3475              Author G.J.T. conceived the project. A.G. performed all simulations and calculations.\par
+         (2009).                                                                                 A.G., J.G., and G.J.T. developed the microstructure generation, characterization and\par
+     48. Mercier, S., Molinari, A. & Estrin, Y. Grain size dependence of strength of nano-       kinematic metric codes. A.G. and G.J.T. analyzed the calculated results. All authors\par
+         crystalline materials as exempli\u64257?ed by copper: An elastic-viscoplastic modelling        were involved in discussing the calculated results. A.G. and G.J.T. drafted the \u64257?gures\par
+         approach. J. Mater. Sci. 42, 1455\u8211?1465 (2007).                                          and manuscript with input from all authors. All authors reviewed and approved the\par
+     49. Hentschel, T., Isheim, D., Kirchheim, R., M\u252?ller, F. & Kreye, H. Nanocrystalline        manuscript.\par
+         Ni\u8211?3.6 at.% P and its transformation sequence studied by atom-probe \u64257?eld-ion\par
+         microscopy. Acta Mater. 48, 933\u8211?941 (2000).\par
+     50. McMahon, G. & Erb, U. Bulk amorphous and nanocrystalline Ni-P alloys by elec-           COMPETING INTERESTS\par
+         troplating. Microstruct. Sci. 17, 447\u8211?457 (1989).                                       The authors declare no competing interests.\par
+     51. Gupta, A., Zhou, X., Thompson, G. B. & Tucker, G. J. Role of grain boundary\par
+         character and its evolution on interfacial solute segregation behavior in nano-\par
+         crystalline Ni-P. Acta Mater. 190, 113\u8211?123 (2020).                                      ADDITIONAL INFORMATION\par
+     52. Moti, E., Shariat, M. H. & Bahrololoom, M. E. Electrodeposition of nanocrystalline      Supplementary information is available for this paper at https://doi.org/10.1038/\par
+         nickel by using rotating cylindrical electrodes. Mater. Chem. Phys. 111, 469\u8211?474        s41524-020-00425-0.\par
+         (2008).\par
+     53. Schuh, C. A., Nieh, T. G. & Yamasaki, T. Hall\u8211?Petch breakdown manifested in             Correspondence and requests for materials should be addressed to G.J.T.\par
+         abrasive wear resistance of nanocrystalline nickel. Scr. Mater. 46, 735\u8211?740 (2002).\par
+     54. Torrents, A., Yang, H. & Mohamed, F. A. Effect of annealing on hardness and the         Reprints and permission information is available at http://www.nature.com/\par
+         modulus of elasticity in bulk nanocrystalline nickel. Metall. Mater. Trans. A 41,       reprints\par
+         621\u8211?630 (2010).\par
+     55. Erb, U. Electrodeposited nanocrystals: synthesis, properties and industrial appli-      Publisher\u8217?s note Springer Nature remains neutral with regard to jurisdictional claims\par
+         cations. Nanostruct. Mater. 6, 533\u8211?538 (1995).                                          in published maps and institutional af\u64257?liations.\par
+     56. Palumbo, G., Erb, U. & Aust, K. T. Triple line disclination effects on the mechanical\par
+         behaviour of materials. Scr. Metall. Mater. 24, 2347\u8211?2350 (1990).\par
+     57. Zhou, Y., Erb, U., Aust, K. & Palumbo, G. The effects of triple junctions and grain\par
+         boundaries on hardness and Young\u8217?s modulus in nanostructured Ni\u8211?P. Scr. Mater.\par
+         48, 825\u8211?830 (2003).                                                                                        Open Access This article is licensed under a Creative Commons\par
+     58. Jeong, D., Erb, U., Aust, K. & Palumbo, G. The relationship between hardness and                           Attribution 4.0 International License, which permits use, sharing,\par
+         abrasive wear resistance of electrodeposited nanocrystalline Ni\u8211?P coatings. Scr.        adaptation, distribution and reproduction in any medium or format, as long as you give\par
+         Mater. 48, 1067\u8211?1072 (2003).                                                            appropriate credit to the original author(s) and the source, provide a link to the Creative\par
+     59. Gouldstone, A. et al. Indentation across size scales and disciplines: recent            Commons license, and indicate if changes were made. The images or other third party\par
+         developments in experimentation and modeling. Acta Mater. 55, 4015\u8211?4039                 material in this article are included in the article\u8217?s Creative Commons license, unless\par
+         (2007).                                                                                 indicated otherwise in a credit line to the material. If material is not included in the\par
+     60. Naik, S. N. & Walley, S. M. The Hall\u8211?Petch and inverse Hall\u8211?Petch relations and the     article\u8217?s Creative Commons license and your intended use is not permitted by statutory\par
+         hardness of nanocrystalline metals. J. Mater. Sci. 55, 2661\u8211?2681 (2020).                regulation or exceeds the permitted use, you will need to obtain permission directly\par
+     61. Gruber, J., Lim, H., Abdeljawad, F., Foiles, S. & Tucker, G. J. Development of          from the copyright holder. To view a copy of this license, visit http://creativecommons.\par
+         physically based atomistic microstructures: the effect on the mechanical                org/licenses/by/4.0/.\par
+         response of polycrystals. Comput. Mater. Sci. 128, 29\u8211?36 (2017).\par
+     62. Foiles, S. M. & Hoyt, J. J. Computation of grain boundary stiffness and mobility\par
+         from boundary \u64258?uctuations. Acta Mater. 54, 3351\u8211?3357 (2006).                            \u169? The Author(s) 2020\par
+\par
+\par
+\par
+\par
+     npj Computational Materials (2020) 153                      Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences\par
+
+}

@@ -1,0 +1,515 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+                                                                                                       www.nature.com/scientificdata\par
+\par
+\par
+\par
+\par
+               OPEN            Dislocation-Grain Boundary\par
+Data Descriptor                Interaction Dataset for FCC Cu\par
+                               Khanh Dang 1, Sumit Suresh2, Avanish Mishra                  3\par
+                                                                                                , Ian Chesser4, Nithin Mathew3,\par
+                               Edward M. Kober3 & Saryu Fensin2 \u9993?\par
+\par
+                               Interactions between dislocations and grain boundaries play a major role in controlling the strength\par
+                               and ductility of structural materials. Experimentally, assessing and probing geometric and stress-based\par
+                               criteria at the local level for dislocation transmission through grain boundaries remains challenging.\par
+                               Therefore, there have been many efforts to systematically generate datasets of dislocation-grain\par
+                               boundary interactions (DGI) via computational models such as molecular dynamics simulations. So\par
+                               far, most DGI datasets have focused only on the subset of nominal minimum-energy grain boundary\par
+                               structures, which limits their applicability, especially to materials processed far from equilibrium. We\par
+                               present a comprehensive database of dislocation-grain boundary interactions for edge, screw, and 60\u176?\par
+                               mixed dislocation with 330 <110> and 257 <112> symmetric tilt grain boundaries (total of 587) in\par
+                               FCC Cu consisting of 73 minimum-energy grain boundary structures and 514 metastable structures.\par
+                               The dataset contains the outcomes for 5234 unique interactions for various dislocation types, grain\par
+                               boundary structures, and applied shear stresses.\par
+\par
+\par
+\par
+                               Background & Summary\par
+                               Designing structural alloys with both high strength and excellent ductility remains one of the grand challenges\par
+                               in materials science and engineering. One strategy that has proven effective in certain alloys is known as grain\par
+                               boundary (GB) engineering, which involves manipulating the GB network via the introduction of high densities\par
+                               of specific GBs such as coherent twin boundaries1\u8211?3. At the core of this strategy is the role that GB structure\par
+                               plays in determining the outcome of dislocation-GB interactions (DGI). For a similar applied stress state, some\par
+                               boundaries may block or absorb dislocations, leading to strain localization, while other boundaries promote\par
+                               transmission. As a result, the DGIs alter the strength and ductility of a material depending on the volume frac-\par
+                               tion of boundary types in the material4\u8211?6.\par
+                                   Macroscopically, the Hall-Petch relationship hypothesizes that material strength can be increased by decreas-\par
+                               ing the grain size due to an enhanced effect of dislocation blockage (which we refer to as pinning) as the density\par
+                               of GBs is increased7. This relationship captures the effects of average grain size on yield strength without con-\par
+                               sidering local GB structure. There are many situations where local GB structure impacts mechanical behavior,\par
+                               especially far from equilibrium. For instance, Fensin et al. showed that only certain boundaries can avoid void\par
+                               nucleation under shock loading by dissipating stress through plastic deformation8. Simulations and experiments\par
+                               of irradiated metals demonstrate that non-equilibrium GB structures may have a higher sink efficiency than\par
+                               well-annealed GBs9,10. Other examples of the impact of GB metastability on mechanical behavior can be found\par
+                               in a recent review11.\par
+                                   For DGI, the role of GB structure on the dislocation transmissibility remains unknown despite many exper-\par
+                               imental, theoretical, and computational efforts over the past few decades. Microscopic geometric and stress\par
+                               criteria for dislocation transmission through grain boundaries, such as minimizing the angle between the inter-\par
+                               section lines of the incoming and outgoing dislocations or maximizing the resolved shear stress on the outgoing\par
+                               slip system, have been proposed and experimentally validated6. One of the commonly utilized geometric param-\par
+                               eters for examining slip or dislocation transmission across GB is m\u8242?, which assesses the slip system degree of\par
+                               coplanarity12. However, similar to the Hall-Petch relationship, these criteria fail to capture the role of GB struc-\par
+                               ture and the local atomic arrangement on GB-dislocation interactions.\par
+\par
+                               1\par
+                                 Materials Science and Technology Division, Los Alamos National Laboratory, Los Alamos, New Mexico, 87544,\par
+                               USA. 2Materials Physics and Applications Division, Los Alamos National Laboratory, Los Alamos, New Mexico,\par
+                               87544, USA. 3Theoretical Division, Los Alamos National Laboratory, Los Alamos, New Mexico, 87544, USA.\par
+                               4\par
+                                X Computational Physics Division, Los Alamos National Laboratory, Los Alamos, New Mexico, 87544, USA. \u9993?e-mail:\par
+                               saryuj@lanl.gov\par
+\par
+\par
+  Scientific Data |   (2025) 12:955 | https://doi.org/10.1038/s41597-025-05256-6                                                                 1\par
+www.nature.com/scientificdata/                                                                       www.nature.com/scientificdata\par
+\par
+\par
+\par
+\par
+                             Fig. 1 Workflow to generate the DGI database.\par
+\par
+\par
+                                 The lack of high-fidelity DGI datasets with details about dislocation type, applied stress, and, most impor-\par
+                             tantly, diverse GB structures, inhibits our ability to construct more accurate models for GB-dislocation interac-\par
+                             tions. Experimentally, it remains challenging to systematically and efficiently generate these datasets.\par
+                             Computationally, most DGI datasets are limited in the number of data points since these have previously\par
+                             focused only on a subset of grain boundary structures or dislocation types13\u8211?18. For instance, Cheng et al.13 stud-\par
+                             ied the interactions between edge dislocations and [110] symmetric tilt grain boundaries (STGBs) such as \u931?\par
+                             3(112), \u931?9(114), and \u931?9(221) in W. While this study found that the DGIs depend on the grain boundary struc-\par
+                             ture and the exact location of the interaction within the grain boundary, it was challenging to propose a new\par
+                             criterion for slip transmission due to limited data. Moreover, it is unfeasible to merge different DGI datasets into\par
+                             a comprehensive one since boundary conditions usually vary and significantly affect the simulation results19.\par
+                             Recent efforts to generate large datasets of GB structures by atomistic simulations have served as foundations to\par
+                             further drive the research in DGI20\u8211?22. For example, one of the most cited datasets of computed GB structures\par
+                             and properties is by Olmsted et al.20. This dataset contains 388 unique minimum-energy GB structures of Ni and\par
+                             Al and their corresponding energies. A subset of this dataset (33 different FCC Ni bicrystals) was utilized for a\par
+                             DGI study18. It was found that the minimum residual Burgers vector and the disorientation angle between the\par
+                             two grains are strong indicators of DGI transmissibility. However, the GB structures in these previous studies\par
+                             were simplified by choosing the minimum energy configurations, which are not necessarily observed in experi-\par
+                             ments. It was shown recently that metastable GB structures (i.e., those which have higher energies than the\par
+                             minimum configuration) can alter the outcome of the DGI23,24. Therefore, there is a need for a consistent and\par
+                             comprehensive dataset that explores DGI as a function of dislocation character and GB atomic structure.\par
+                                 The goal of this work is to fill this gap by establishing a comprehensive database of DGI in Cu as a model FCC\par
+                             material. While the trends for the DGI dataset are expected to vary for different material systems, the approach\par
+                             described in this work can be adapted for other material systems (especially those with FCC crystal structures). MD\par
+                             simulations of DGI are systematically performed for different type of dislocations (edge, screw, and mixed 60\u176?),\par
+                             GB structures (330<110 >and 257<112> symmetric tilt GBs with many metastable structures), and applied\par
+                             stresses (250, 500, and 750 MPa). Altogether, this database includes 5234 unique dislocation - GB interactions,\par
+                             which is the most of its kind currently. This comprehensive DGI database is expected to be useful to train AI/ML\par
+                             models to predict DGI as a function of GB structure, dislocation type, and applied stress.\par
+\par
+                             Methods\par
+                             Workflow overview.           The data and simulation workflow used to characterize and obtain DGI via MD simu-\par
+                             lations consists of three steps as shown in Fig. 1: (i) First, GB structures (including metastable states) are gener-\par
+                             ated using the standard \u947? -surface approach22,25. Dislocation dipoles are constructed using the displacement field\par
+                             of an infinitely long dislocation dipole26. Both types of defects are generated via LAMMPS input scripts. (ii)\par
+                             Second, dislocations are driven into the GBs under an applied stress19. The DGI outcomes are recorded and\par
+                             indexed into a database. Details about the database, such as the parameters needed to reproduce GB structures as\par
+                             well as DGI results, are described in the Data Records section. Each step in the workflow is described in more\par
+                             detail below.\par
+\par
+                             Dislocation-grain boundary interactions via molecular dynamics simulations.                                     All\par
+                             dislocation-grain boundary interactions in Cu are performed via the open-source simulation software Large-scale\par
+                             Atomic/Molecular Massively Parallel Simulator (LAMMPS)27. The atomic interactions between Cu atoms were\par
+                             modeled using an Embedded Atom Method (EAM) interatomic potential developed by Mishin et al.28. This inter-\par
+                             atomic potential can accurately reproduce GB and dislocation core structures as well as their corresponding\par
+                             energies28. Therefore, it has been widely used in DGI studies23,29,30. The simulation results are manually recorded\par
+                             by analyzing atomic snapshots before and after the interaction via the visualization software OVITO and the\par
+                             dislocation extraction algorithm (DXA)31. Simulation details about (i) the construction of the GB structure, (ii)\par
+                             the DGI simulation setup, and (iii) the determination of the geometrical criteria (m\u8242?) are discussed in greater\par
+                             details below.\par
+\par
+                             Grain boundary structures and energies. Figure 2 shows the simulation setup to generate the dataset. Both\par
+                             <110> and <112> STGBs are generated using the \u947? -surface approach22,25. The X direction is always oriented\par
+                             along the tilt axes, and the Y direction is normal to the GB plane (which can be found in the database for all\par
+                             interactions). Periodic boundary conditions are applied in all three directions to allow for complete control of\par
+                             the stress state. This simulation setup has been demonstrated to be efficient for DGI in previous work19. For the\par
+\par
+\par
+Scientific Data |   (2025) 12:955 | https://doi.org/10.1038/s41597-025-05256-6                                                                  2\par
+www.nature.com/scientificdata/                                                                       www.nature.com/scientificdata\par
+\par
+\par
+\par
+\par
+                             Fig. 2 Simulation setup with a bicrystal composed of two symmetric tilt GBs (<112> or <110>). An infinitely\par
+                             long dislocation dipole with edge, screw and mixed (60\u176?) character angles is generated in grain 1 using a\par
+                             dislocation loop algorithm developed by Dang et al.26 (Disclaimer: the dimensions of the schematics are not\par
+                             scaled with the dimensions used in this work).\par
+\par
+\par
+\par
+\par
+                             Fig. 3 Grain boundary energies for all 1000 possible (open circle) and chosen (solid red) grain boundary\par
+                             structures for <112> and <110> symmetric tilt grain boundary. Due to the infinitely long dislocation setup,\par
+                             the dislocation line has to be aligned with one of the dimensions. As a result, <112> STGB is used to study\par
+                             edge dislocation-GB interaction, while <110> STGB can be used to study screw and 60\u176? mixed dislocation-GB\par
+                             interaction.\par
+\par
+\par
+                             <110> STGBs, the simulation cell is approximately 1.0 \u215? 100.0 \u215? 48.0 nm3 in the X, Y, and Z directions, respec-\par
+                             tively. Similarly, the simulation cell is approximately 1.8 \u215? 150.0 \u215? 80.0 nm3 in the X, Y, and Z directions, respec-\par
+                             tively, for the <112> STGBs. This is to ensure that the boundary image force does not affect the results of the\par
+                             DGI. Due to varying boundary periodicity, different system sizes may be used for different grain boundary\par
+                             structures. The exact values of box sizes can be found in the GB data files.\par
+                                  To determine the structure of the tilt boundaries, different starting configurations are considered by translat-\par
+                             ing grain 2 relative to grain 1, as shown in Fig. 2. The grain boundary region is defined as a 5 nm thick region\par
+                             across the Z direction (with the GB in the center), extending along the periodicity of X and Y directions. The\par
+                             grain boundary energy (GBE) is determined by normalizing the excess energy within the grain boundary region\par
+                             by the grain boundary area. Compared to previous studies where only minimum-energy structures are chosen,\par
+                             this dataset also considers DGI for high-energy metastable grain boundary structures. Figure 3 shows all chosen\par
+                             GB structures and their corresponding energies as a function of misorientation angles. For each misorientation\par
+                             angle, 1000 initial GB structures are generated. Among them, the ones with GB energies approximately 35 mJ/\par
+                             m2 apart are chosen to evaluate interaction with dislocations. Although many GBs are considered in this work,\par
+                             it is now well known that grand canonical optimization strategies32 may find structures missed by the standard\par
+                             \u947? -surface approach. Such structures could be computed to augment this dataset in the future.\par
+\par
+                             Dislocation-grain boundary interactions. To model DGIs, an infinitely long edge dislocation dipole is generated\par
+                             in Grain 1 of < 112 > STGBs using a dislocation loop algorithm developed by Dang et al.26,33. This same approach\par
+                             is used to generate screw and mixed (60\u176?) dislocation dipoles in Grain 1 of < 110 > STGBs. The dipole arm is\par
+                             approximately 36 nm to minimize interactions between individual dislocations. The chosen slip systems for the\par
+                             edge, screw, and mixed dislocations are [110](111), [011](111) and [110](111), respectively. Since the boundary\par
+                             is periodic in all three directions, there are two possible DGIs, of which only the interaction with the center GB\par
+                             is analyzed and reported. The dislocation dipole is positioned in a way that the right dislocation is approximately\par
+                             10 nm away from the center of the GB region to minimize any short-range interactions initially. The system with\par
+                             the dislocation configuration is then equilibrated at 10 K via a Nos\u233?-Hoover style thermostat and barostat34. To\par
+\par
+\par
+Scientific Data |   (2025) 12:955 | https://doi.org/10.1038/s41597-025-05256-6                                                                  3\par
+www.nature.com/scientificdata/                                                                                             www.nature.com/scientificdata\par
+\par
+\par
+                              Attribute                Value Datatype            Description                               Notes\par
+                              tx,ty,tz                 Vector                    GB tilt axis [h,k,l]\par
+                              nx,ny,nz                 Vector                    GB plane inclination [u,v,w]\par
+                                                                                 Indices of grid search over microscopic\par
+                              a,b,c                    Vector                                                              Grid spacing of d[h,k,l]/10 for a and b\par
+                                                                                 translational degrees of freedom\par
+                              d                        Integer                   Crystal chosen to delete atoms\par
+                              type                     String                    Dislocation type                          Edge, screw, or mixed\par
+                              Applied stress           Decimal                   Applied stress (MPa)\par
+                              Misorientation angle     Decimal                   Misorientation angle (degrees)\par
+                              Initial Velocity         Integer                   Index of velocity seed\par
+                                                                                                                           GB energy of the center grain where the\par
+                              GBE                      Decimal                   GB energy (mJ/m2)\par
+                                                                                                                           interaction happens\par
+                              Reaction                 Integer                   Dislocation-GB reaction label             See Table 2 for reaction categories\par
+\par
+                             Table 1. Details of the attributes and values contained in the Dislocation-GB interaction dataset.\par
+\par
+\par
+                                           Reaction\par
+                              0            Undefined\par
+                              1            Absorbed/Pinned\par
+                              2            Partially transmitted\par
+                              3            Fully transmitted\par
+                              4            Reflected\par
+\par
+                             Table 2. Dislocation-GB reaction labels.\par
+\par
+\par
+                              Slip plane                       Slip directions\par
+                              (1,1,1)                          [0,1, \u8722?1], [ \u8722? 1,0,1], [1, \u8722?1,0]\par
+                              (1, \u8722?1, \u8722?1)                      [0, \u8722?1,1], [ \u8722? 1,0, \u8722?1], [1,1,0]\par
+                              (\u8722? 1, \u8722?1,1)                      [0, \u8722?1, \u8722?1], [1,0,1], [ \u8722? 1,1,0]\par
+                              (\u8722? 1,1, \u8722?1)                      [0,1,1], [1,0, \u8722?1], [ \u8722? 1, \u8722?1,0]\par
+\par
+\par
+                             Table 3. 12 slip systems for FCC materials considered for calculating the m\u8242? parameter. For each plane, there are\par
+                             three slip directions, resulting in 12 possible slip systems.\par
+\par
+\par
+\par
+                             allow for comparison between different DGIs, a uniform stress state of pure resolved shear stress acting on the\par
+                             slip plane in the slip direction (pure Schmid stress) is applied in all cases19. Based on this local resolved shear\par
+                             stress, the macroscopically applied stress is determined for each DGI using a standard stress transformation\par
+                             operation. Three resolved shear stresses of 250, 500, and 750 MPa to glide the dislocation toward the GB are\par
+                             chosen to assess the effect of the driving force on the DGI. The DGI database also includes data for higher shear\par
+                             stress of 1 and 1.5 GPa for some <112> STGB where all DGI results are dislocation reflections from the GB at\par
+                             lower applied stress. Four different initial locations of the dislocation are also considered for <112> STGB.\par
+                             Moreover, the database also includes a subset of <110> STGBs where each interaction is repeated three times\par
+                             with different random initial atom velocities within a thermal distribution to determine if the results are statis-\par
+                             tically meaningful. The integration timestep in all simulations is 2 fs.\par
+\par
+                             Geometrical criteria for DGI. To assist in the training of a future AI/ML model,\par
+                                                                                                                m\u8242? values for all possible DGIs\par
+                             are also included. To compute m\u8242?, the slip plane normal (n ) and slip direction ( d ) are projected onto the respec-\par
+                                                                                             \par
+                             tive grains using their orientation matrix. For example, ng = n \u183? g and dg = d \u183? g .\par
+\par
+                                                                                       m\u8242? = (ng 1 \u183? ng 2 )(dg 1 \u183? dg 2 )                                             (1)\par
+                                 Here, ng 1 \u183? ng 2 measures the angle between slip planes normals, and dg 1 \u183? dg 2 the angle between slip direc-\par
+                             tions. A m\u8242? of 1 suggests that the GB is transparent to dislocation, leading to effortless dislocation transmission,\par
+                             hence, no strengthening effect. A m\u8242? of 0 indicates no transmission across the GB but perhaps dislocation\par
+                             absorption or pinning at the GB. A negative value of m\u8242? highlights the different directions between slip plane\par
+                             normals and slip plane directions. The first step for calculating m\u8242? involves constructing the orientation matrix\par
+                             g for both grains. The symmetric tilt direction and GB plane are along the X and Y directions\par
+                                                                                                                             of the orientation\par
+                             matrix for the first grain ( g1, where dislocation is inserted), and their cross-product ( X \u215? Y ) is used to define\par
+\par
+\par
+\par
+\par
+Scientific Data |   (2025) 12:955 | https://doi.org/10.1038/s41597-025-05256-6                                                                                        4\par
+www.nature.com/scientificdata/                                                                        www.nature.com/scientificdata\par
+\par
+\par
+\par
+\par
+                             Fig. 4 Heatmaps showing the distribution of m\u8242? values across all possible slip systems for (a) <110> symmetric\par
+                             tilt grain boundary (GB) with a misorientation angle of 109.47\u176? and (1,1,1) GB plane, and (b) <112>\par
+                             symmetric tilt GB with a misorientation angle of 11.66\u176? and (11,13,1) GB plane. Panels (c,d) show contour plots\par
+                             of the m\u8242? values as functions of angular orientations of slip-plane normals and slip directions corresponding to\par
+                             cases (a,b), respectively. The background contour plots, using a jet colormap, illustrate the full range of possible\par
+                             m\u8242? values for FCC slip systems, covering angles from 0\u176? to 180\u176? for both slip directions and slip-plane normals.\par
+                             Black scatter points indicate the calculated m\u8242? values specific to the GB configurations presented in panels (a,b).\par
+\par
+\par
+\par
+                             the Z-direction. The misorientation angle (\u920?) is used to derive the orientation matrix for the second grain ( g 2).\par
+                             The following are two examples for calculating the m\u8242? value for <110> and <112> symmetric tilts.\par
+                                The misorientation angle, \u920?, between g1 and g 2 is calculated by constructing \u8710?g = g 2 \u183? g1\u8722?1 and\par
+                             \u920? = cos\u8722?1   (     2      )\par
+                                          Trace (\u8710? g ) \u8722? 1\par
+                                                           . The 12 slip systems mentioned in Table 3 are considered for calculating the m\u8242? param-\par
+                             eter. These angles are used to plot the distribution showing possible m\u8242? values for slip transmission. For all 12 slip\par
+                             systems mentioned in Table 3, Eq. 1 gives 144 m\u8242? values. However, a note should be made that the stress in the\par
+                             first grain is applied in such a way that only one slip system is activated. Therefore, only 12 m\u8242? values would be of\par
+                             interest to examine the DGI based on the geometrical criteria. The database includes a total of 31 distinct <110 >\par
+                             symmetric tilt grain boundaries that have different misorientation angles or (minimum energy structures) and\par
+                             similarly 42 distinct <112> symmetric tilt structures. Note that these values do not change for metastable\par
+                             boundaries. Hence, this highlights the importance of considering metastable GB structure for DGI. For each\par
+                             case, m\u8242? values for slip transmission are calculated for all 144 combinations and plotted as a heatmap, which can\par
+                             be found in the heatmap excel spreadsheets in the Materials Cloud Archive repository35. Figure 4 shows example\par
+                             for <110> symmetric tilt with (1,1,1) GB plane and <112> symmetric tilt with (11,13,1) GB plane.\par
+\par
+\par
+\par
+\par
+Scientific Data |   (2025) 12:955 | https://doi.org/10.1038/s41597-025-05256-6                                                                   5\par
+www.nature.com/scientificdata/                                                                      www.nature.com/scientificdata\par
+\par
+\par
+\par
+\par
+                             Fig. 5 Visualization of the DGI outcome database for <110> and <112>.\par
+\par
+\par
+\par
+                             Data Records\par
+                             The raw simulation data is not included in the database due to its inherently large size. Instead, the input files\par
+                             and the GB structures to reproduce these results are included in the template.zip file that can be retrieved from\par
+                             the Materials Cloud Archive repository35. Specifically, each misorientation contains subfolders of different GB\par
+                             structures whose folder name is their GB energy. For each GB structure, there are two folders named \u8220?screw\u8221?\par
+                             and \u8220?mixed\u8221? for screw and 60\u176? mixed dislocations, respectively. Each of these folders contains LAMMPS input\par
+                             and data files to reproduce the dislocation-GB interactions. The dislocation-GB dataset of <110> and <112>\par
+                             STGBs in Cu is reported in DisGBDatabase.xlsx and can be retrieved from the Materials Cloud Archive reposi-\par
+                             tory35. The dataset contains 5234 unique dislocation-GB interaction entries (rows or data points). All the attrib-\par
+                             utes (column headers) for these entries and their descriptions are listed in Table 1. The attributes \u8216?tx,ty,tz\u8217? and\par
+                             \u8216?nx,ny,nz\u8217? define the orientation of the GB tilt axis and plane normal, respectively. These values represent the\par
+                             macroscopic degree of freedom of the GB structure. Based on this, for each of the GB families, one can deter-\par
+                             mine the \u8216?misorientation angle\u8217? attribute. On the other hand, the attributes \u8216?a,b,c\u8217? represents the indices of the\par
+                             grid search for the microscopic degrees of freedom for the local grain boundary structures. Attribute \u8216?type\u8217? rep-\par
+                             resents the type of incoming lattice dislocation. It can be either edge, screw, or 60\u176? mixed dislocations. Attribute\par
+                             \u8216?applied stress\u8217? indicates the Schmid applied stress (pure shear stress in the slip direction on the slip plane) to\par
+                             drive the dislocation toward the GB. Attribute \u8216?GBE\u8217? details the GB energy corresponding to the center grain\par
+                             where the interaction happens. Finally, the attribute \u8216?reaction\u8217? describes the outcome of the interaction. Based\par
+                             on simulation results manually analyzed via DXA in OVITO, the results are manually binned in one of the\par
+                             following outcomes: (1) dislocation reflection from the GB, (2) dislocation absorption/pinning at the GB, (3)\par
+                             dislocation partially transmitted through the GB when only leading partial can transmit and trailing partial is\par
+                             pinned at the GB, or (4) dislocation fully transmitted through the GB. The outcome of DGI can also be unde-\par
+                             fined if different outcomes occur simultaneously.\par
+                             Technical Validation\par
+                             Comparison with previous MD simulations.                 Figure 5 shows the summary of the DGI outcomes for\par
+                             this database. For edge dislocations, very few transmissions are observed, even at the applied stress of 750 MPa.\par
+                             Moreover, about 20 to 30% of edge dislocation was reflected/repelled from the GB. As the applied stress increased,\par
+                             more edge dislocations get absorbed into the <112> GB instead of repelling. For screw and mixed dislocation\par
+                             interactions with <110> tilt boundaries, the propensity to transmit (both partial and full transmission) increases\par
+                             with increasing applied shear stress. The results from this database show that the dislocation transmissibility\par
+                             generally follows: screw > mixed > edge.\par
+                                 Figure 6 plots the results of DGIs for different applied stress, dislocation types, misorientation angles, GB\par
+                             types, and GBE. From this plot, the transmission and repulsion cluster of data can be observed. This indicates\par
+                             that macroscopic factors such as the misorientation angles are important to DGI. Overall, higher misorientation\par
+                             angles make slip transmission more difficult, which was supported by many previous experimental results5,36\u8211?38.\par
+                             For the same misorientation angle, there are metastable GBs with different structures and corresponding GBEs\par
+                             whose reactions are different from each other23. Importantly, the effects are more evident for high applied shear\par
+                             stresses (500 and 750 MPa). Together, this indicates that microscopic parameters such as the GB local structures\par
+                             and dislocation types are also important to the outcomes of the DGIs.\par
+\par
+\par
+Scientific Data |   (2025) 12:955 | https://doi.org/10.1038/s41597-025-05256-6                                                                 6\par
+www.nature.com/scientificdata/                                                                                     www.nature.com/scientificdata\par
+\par
+\par
+\par
+\par
+                             Fig. 6 DGI outcome database for different dislocation types, applied stress, misorientation angles, as well\par
+                             as <110> and<112> STGBs at fixed initial velocity and dislocation-GB interaction site. Each data point\par
+                             represents a dislocation-GB interaction where the color represents the outcome. Red is undefined results,\par
+                             orange is reflection of the dislocation from the GB, black is pinning and/or absorption of the dislocation into\par
+                             the GB, blue is transmission of the leading partial dislocation through the GB, and green is transmission of both\par
+                             leading and trailing dislocations through the GB.\par
+\par
+\par
+                                 To further validate the database, DGI results for two of the most well-studied grain boundaries were checked.\par
+                             They are the coherent and incoherent twin boundary (CTB and ITB, respectively) (misorientation angles of\par
+                             70.5\u176? and 109.5\u176? as shown in Fig. 6, respectively) with simple structures and important role in deformation29,30.\par
+                             Indeed, our results show that the screw dislocation absorbs into the minimum-energy CTB similar to previous\par
+                             atomistic simulations using the same interatomic potentials29,30 and experiments where the coherent TB can\par
+                             absorb the dislocation, thus providing resistance to slip transmission30. Furthermore, our variations in disloca-\par
+                             tion transmission and pinning when 60\u176? mixed dislocations interact with ITB depending on the interaction sites\par
+                             are also consistent with previous MD simulations39,40.\par
+                                 Interestingly, in Fig. 6, the first-row data indicate that for a 109\u176? misorientation GB, screw dislocation\par
+                             transmission occurs at 250 MPa, but not at 500 MPa. These results demonstrated that the outcome of the\par
+                             dislocation-GB interaction for each interaction can be statistically varying. Indeed, for the case where transmis-\par
+                             sion occurs at 250 MPa, the simulations were repeated twice with different initial sampling of the starting veloc-\par
+                             ities. In both cases, the transmission does not occur, which is consistent with observation for higher stress at 500\par
+                             and 750 MPa. These results further highlight the importance of including statistical variation in generating MD\par
+                             simulation dataset, which was done in this work.\par
+\par
+                             Code availability\par
+                             The input files and the GB structures to reproduce these results are included in the template.zip file that can be\par
+                             retrieved from the Materials Cloud Archive repository35.\par
+\par
+                             Received: 20 February 2025; Accepted: 19 May 2025;\par
+                             Published: xx xx xxxx\par
+\par
+                             References\par
+                              1. Lu, K., Lu, L. & Suresh, S. Strengthening Materials by Engineering Coherent Internal Boundaries at the Nanoscale. Science (1979)\par
+                                 324, 349\u8211?352, https://doi.org/10.1126/science.1159610 (2009).\par
+                              2. Lin, Y., Pan, J., Zhou, H. F., Gao, H. J. & Li, Y. Mechanical properties and optimal grain size distribution profile of gradient grained\par
+                                 nickel. Acta Mater 153, 279\u8211?289, https://doi.org/10.1016/j.actamat.2018.04.065 (2018).\par
+\par
+\par
+\par
+Scientific Data |   (2025) 12:955 | https://doi.org/10.1038/s41597-025-05256-6                                                                                         7\par
+www.nature.com/scientificdata/                                                                                       www.nature.com/scientificdata\par
+\par
+\par
+                              3. Zhu, Y. et al. Ultrastrong nanotwinned titanium alloys through additive manufacturing. Nat Mater 21, 1258\u8211?1262, https://doi.\par
+                                 org/10.1038/s41563-022-01359-2 (2022).\par
+                              4. Liu, W. et al. Dislocation-grain boundary interaction in metallic materials: Competition between dislocation transmission and\par
+                                 dislocation source activation. J Mech Phys Solids 145, 104158, https://doi.org/10.1016/j.jmps.2020.104158 (2020).\par
+                              5. Kacher, J., Eftink, B. P., Cui, B. & Robertson, I. M. Dislocation interactions with grain boundaries. Curr Opin Solid State Mater Sci 18,\par
+                                 227\u8211?243, https://doi.org/10.1016/j.cossms.2014.05.004 (2014).\par
+                              6. Javaid, F., Pouriayevali, H. & Durst, K. Dislocation\u8211?grain boundary interactions: recent advances on the underlying mechanisms\par
+                                 studied via nanoindentation testing. J Mater Res 36, 2545\u8211?2557, https://doi.org/10.1557/s43578-020-00096-z (2021).\par
+                              7. Hansen, N. Hall\u8211?Petch relation and boundary strengthening. Scr Mater 51, 801\u8211?806, https://doi.org/10.1016/j.\par
+                                 scriptamat.2004.06.002 (2004).\par
+                              8. Fensin, S. J., Cerreta, E. K., Gray, G. T. III & Valone, S. M. Why are some Interfaces in Materials Stronger than others? Sci Rep 4, 5461,\par
+                                 https://doi.org/10.1038/srep05461 (2014).\par
+                              9. Vetterick, G. A. et al. Achieving Radiation Tolerance through Non-Equilibrium Grain Boundary Structures. Sci Rep 7, 12275,\par
+                                 https://doi.org/10.1038/s41598-017-12407-2 (2017).\par
+                             10. El-Atwani, O. et al. Grain boundary metastability controls irradiation resistance in nanocrystalline metals (2024).\par
+                             11. He, M., Wang, Y. & Fan, Y. Metastable grain boundaries: the roles of structural and chemical disorders in their energetics, non-\par
+                                 equilibrium kinetic evolution, and mechanical behaviors. Journal of Physics: Condensed Matter 36, 343001, https://doi.\par
+                                 org/10.1088/1361-648X/ad4aab (2024).\par
+                             12. Luster, J. & Morris, M. A. Compatibility of deformation in two-phase Ti-Al alloys: Dependence on microstructure and orientation\par
+                                 relationships. Metallurgical and Materials Transactions A 26, 1745\u8211?1756, https://doi.org/10.1007/BF02670762 (1995).\par
+                             13. Cheng, Y., Mrovec, M. & Gumbsch, P. Atomistic simulations of interactions between the 1/2<111> edge dislocation and symmetric\par
+                                 tilt grain boundaries in tungsten. Philosophical Magazine 88, 547\u8211?560, https://doi.org/10.1080/14786430801894577 (2008).\par
+                             14. Dewald, M. & Curtin, W. A. Multiscale modeling of dislocation/grain-boundary interactions: III. 60\u176? dislocations impinging on \u931?3,\par
+                                 \u931?9 and \u931?11 tilt boundaries in Al. Model Simul Mat Sci Eng 19, 055002, https://doi.org/10.1088/0965-0393/19/5/055002 (2011).\par
+                             15. Bachurin, D. V., Weygand, D. & Gumbsch, P. Dislocation\u8211?grain boundary interaction in <111> textured thin metal films. Acta\par
+                                 Mater 58, 5232\u8211?5241, https://doi.org/10.1016/j.actamat.2010.05.037 (2010).\par
+                             16. Ezaz, T., Sangid, M. D. & Sehitoglu, H. Energy barriers associated with slip\u8211?twin interactions. Philosophical Magazine 91, 1464\u8211?1488,\par
+                                 https://doi.org/10.1080/14786435.2010.541166 (2011).\par
+                             17. Li, L., Liu, L. & Shibutani, Y. Defect interaction summary between edge dislocations and &lt;112&gt;-axis symmetric tilt grain\par
+                                 boundaries in copper on activation barriers and critical stresses. Int J Plast 149, 103153, https://doi.org/10.1016/j.ijplas.2021.103153\par
+                                 (2022).\par
+                             18. Adams, D. W., Fullwood, D. T., Wagoner, R. H. & Homer, E. R. Atomistic survey of grain boundary-dislocation interactions in FCC\par
+                                 nickel. Comput Mater Sci 164, 171\u8211?185, https://doi.org/10.1016/j.commatsci.2019.04.007 (2019).\par
+                             19. Suresh, S., Dang, K. & Fensin, S. J. Sensitivity of Dislocation-GB interactions to simulation setups in atomistic models. Comput\par
+                                 Mater Sci 221, 112085, https://doi.org/10.1016/j.commatsci.2023.112085 (2023).\par
+                             20. Olmsted, D. L., Foiles, S. M. & Holm, E. A. Survey of computed grain boundary properties in face-centered cubic metals: I. Grain\par
+                                 boundary energy. Acta Mater 57, 3694\u8211?3703, https://doi.org/10.1016/j.actamat.2009.04.007 (2009).\par
+                             21. Homer, E. R. et al. Examination of computed aluminum grain boundary structures and energies that span the 5D space of\par
+                                 crystallographic character. Acta Mater 234, 118006, https://doi.org/10.1016/j.actamat.2022.118006 (2022).\par
+                             22. Tschopp, M. A., Coleman, S. P. & McDowell, D. L. Symmetric and asymmetric tilt grain boundary structure and energy in Cu and\par
+                                 Al (and transferability to other fcc metals). Integr Mater Manuf Innov 4, 176\u8211?189, https://doi.org/10.1186/s40192-015-0040-1\par
+                                 (2015).\par
+                             23. Dang, K. et al. Interplay between dislocation type and local structure in dislocation-twin boundary reactions in Cu. Phys Rev Mater\par
+                                 8, 063604, https://doi.org/10.1103/PhysRevMaterials.8.063604 (2024).\par
+                             24. Page, D. E., Fullwood, D. T., Wagoner, R. H. & Homer, E. R. Atomistic simulations of incident dislocation interactions with nickel\par
+                                 grain boundaries. Model Simul Mat Sci Eng 32, 075006, https://doi.org/10.1088/1361-651X/ad6eab (2024).\par
+                             25. Fensin, S. J., Asta, M. & Hoagland, R. G. Temperature dependence of the structure and shear response of a \u931?11 asymmetric tilt grain\par
+                                 boundary in copper from molecular-dynamics. Philosophical Magazine 92, 4320\u8211?4333, https://doi.org/10.1080/14786435.2012.705\par
+                                 911 (2012).\par
+                             26. Dang, K., Capolungo, L. & Spearot, D. E. Nanoscale dislocation shear loops at static equilibrium and finite temperature. Model Simul\par
+                                 Mat Sci Eng 25, 085014, https://doi.org/10.1088/1361-651X/aa9390 (2017).\par
+                             27. Thompson, A. P. et al. LAMMPS - a flexible simulation tool for particle-based materials modeling at the atomic, meso, and\par
+                                 continuum scales. Comput Phys Commun 271, 108171, https://doi.org/10.1016/j.cpc.2021.108171 (2022).\par
+                             28. Mishin, Y., Mehl, M. J., Papaconstantopoulos, D. A., Voter, A. F. & Kress, J. D. Structural stability and lattice defects in copper: Ab\par
+                                 initio, tight-binding, and embedded-atom calculations. Phys Rev B 63, 224106, https://doi.org/10.1103/PhysRevB.63.224106 (2001).\par
+                             29. Jin, Z.-H. et al. The interaction mechanism of screw dislocations with coherent twin boundaries in different face-centred cubic\par
+                                 metals. Scr Mater 54, 1163\u8211?1168, https://doi.org/10.1016/j.scriptamat.2005.11.072 (2006).\par
+                             30. Chassagne, M., Legros, M. & Rodney, D. Atomic-scale simulation of screw dislocation/coherent twin boundary interaction in Al,\par
+                                 Au, Cu and Ni. Acta Mater 59, 1456\u8211?1463, https://doi.org/10.1016/j.actamat.2010.11.007 (2011).\par
+                             31. Stukowski, A. Visualization and analysis of atomistic simulation data with OVITO\u8211?the Open Visualization Tool. Model Simul Mat\par
+                                 Sci Eng 18, 015012, https://doi.org/10.1088/0965-0393/18/1/015012 (2010).\par
+                             32. Chen, E., Heo, T. W., Wood, B. C., Asta, M. & Frolov, T. Grand canonically optimized grain boundary phases in hexagonal close-\par
+                                 packed titanium. Nat Commun 15, 7049, https://doi.org/10.1038/s41467-024-51330-9 (2024).\par
+                             33. Dang K., Bamney D., Bootsita K., Capolungo L. & Spearot D. E. Mobility of dislocations in Aluminum: Faceting and asymmetry\par
+                                 during nanoscale dislocation shear loop expansion, Acta Mater 168, https://doi.org/10.1016/j.actamat.2019.02.034 (2019).\par
+                             34. Melchionna, S., Ciccotti, G. & Lee Holian, B. Hoover NPT dynamics for systems varying in shape and size. Mol Phys 78, 533\u8211?544,\par
+                                 https://doi.org/10.1080/00268979300100371 (1993).\par
+                             35. Dang, K. et al. Dislocation-grain boundary interaction dataset for FCC Cu, (2025). https://archive.materialscloud.org/\par
+                                 record/2025.65 (accessed May 26, 2025).\par
+                             36. Livingston, J. D. & Chalmers, B. Multiple slip in bicrystal deformation. Acta Metallurgica 5, 322\u8211?327, https://doi.org/10.1016/0001-\par
+                                 6160(57)90044-5 (1957).\par
+                             37. Shen, Z., Wagoner, R. H. & Clark, W. A. T. Dislocation and grain boundary interactions in metals. Acta Metallurgica 36, 3231\u8211?3242,\par
+                                 https://doi.org/10.1016/0001-6160(88)90058-2 (1988).\par
+                             38. Lee, T. C., Robertson, I. M. & Birnbaum, H. K. Prediction of slip transfer mechanisms across grain boundaries. Scripta Metallurgica\par
+                                 23, 799\u8211?803, https://doi.org/10.1016/0036-9748(89)90534-6 (1989).\par
+                             39. Liang, Y. et al. Slip transmission for dislocations across incoherent twin boundary. Scr Mater 166, 39\u8211?43, https://doi.org/10.1016/j.\par
+                                 scriptamat.2019.02.042 (2019).\par
+                             40. Ma, T. et al. Dislocation transmission across \u931?3\{112\} incoherent twin boundary: a combined atomistic and phase-field study. Acta\par
+                                 Mater 223, 117447, https://doi.org/10.1016/j.actamat.2021.117447 (2022).\par
+\par
+\par
+\par
+\par
+Scientific Data |   (2025) 12:955 | https://doi.org/10.1038/s41597-025-05256-6                                                                                           8\par
+www.nature.com/scientificdata/                                                                      www.nature.com/scientificdata\par
+\par
+\par
+                             Acknowledgements\par
+                             Research presented in this work was fully supported by the Laboratory Directed Research and Development\par
+                             program of Los Alamos National Laboratory, United States under Grant No. 20210036DR, \u8220?Investigating How\par
+                             Material\u8217?s Interfaces and Dislocations Affect Strength\u8221? (iMIDAS). This research used resources provided by the\par
+                             Los Alamos National Laboratory Institutional Computing Program, which is supported by the U.S. Department\par
+                             of Energy National Nuclear Security Administration under Contract No. 89233218CNA000001.\par
+\par
+                             Author contributions\par
+                             S.F. conceived the project, K.D. and S.S. conceived the data acquisition process. K.D., S.S., A.M., I.C. oversaw and\par
+                             carried out the data extraction. All authors contributed to the database verification and writing the manuscript.\par
+\par
+                             Competing interests\par
+                             The authors declare no competing interests.\par
+\par
+                             Additional information\par
+                             Correspondence and requests for materials should be addressed to S.F.\par
+                             Reprints and permissions information is available at www.nature.com/reprints.\par
+                             Publisher\u8217?s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and\par
+                             institutional affiliations.\par
+                                          Open Access This article is licensed under a Creative Commons Attribution-NonCommercial-\par
+                                          NoDerivatives 4.0 International License, which permits any non-commercial use, sharing, distribu-\par
+                             tion and reproduction in any medium or format, as long as you give appropriate credit to the original author(s)\par
+                             and the source, provide a link to the Creative Commons licence, and indicate if you modified the licensed mate-\par
+                             rial. You do not have permission under this licence to share adapted material derived from this article or parts of\par
+                             it. The images or other third party material in this article are included in the article\u8217?s Creative Commons licence,\par
+                             unless indicated otherwise in a credit line to the material. If material is not included in the article\u8217?s Creative\par
+                             Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted\par
+                             use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit\par
+                             http://creativecommons.org/licenses/by-nc-nd/4.0/.\par
+\par
+                             \u169? The Author(s) 2025\par
+\par
+\par
+\par
+\par
+Scientific Data |   (2025) 12:955 | https://doi.org/10.1038/s41597-025-05256-6                                                                 9\par
+
+}

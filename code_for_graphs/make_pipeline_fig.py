@@ -116,8 +116,8 @@ ax.annotate(
 
 # Loss → CNN (backprop, dashed upward)
 bp_x = loss_l + loss_w / 2
-varr(bp_x, y_fb + BH_SM / 2 + 0.03, y_t - BH / 2 - 0.03,
-     c=C["bp"], lw=0.6, ls="dashed")
+varr(bp_x, y_fb + BH_SM / 2 + 0.02, y_t - BH / 2 - 0.02,
+     c=C["bp"], lw=0.8)
 
 # ================================================================
 #  APPLICATION

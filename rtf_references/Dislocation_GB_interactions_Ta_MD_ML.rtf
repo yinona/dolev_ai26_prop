@@ -1,0 +1,662 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+J Mater Sci (2024) 59:243\u8211?257\par
+\par
+Metals & corrosion\par
+\par
+\par
+\par
+Dislocation\u8211?grain boundary interactions in Ta:\par
+numerical, molecular dynamics, and machine\par
+learning approaches\par
+A. Kedharnath1,2,* , Rajeev Kapoor1,2, and Apu Sarkar1,2\par
+\par
+1\par
+    Mechanical Metallurgy Division, Bhabha Atomic Research Centre, Mumbai 400085, India\par
+2\par
+    Division of Engineering Sciences, Homi Bhabha National Institute, Anushaktinagar, Mumbai 400094, India\par
+\par
+\par
+\par
+\par
+    Received: 25 September 2023         ABSTRACT\par
+    Accepted: 11 November 2023          The motivation of this work was to find the appropriate molecular dynamics\par
+    Published online:                   (MD) and slip transmission parameters of dislocation\u8211?grain boundary (GB) inter-\par
+    21 December 2023                    action in tantalum that correlate with the stress required for the grain boundary\par
+                                        to deform. GBs were modeled using [ 112], [ 110], and [111] as rotation axes and\par
+    \u169? The Author(s), under              rotation angle between 0\u176? and 90\u176?. Dislocation on either \{110\} or \{112\} slip planes\par
+    exclusive licence to Springer       was simulated to interact with various GB configurations. Drop in shear stress,\par
+    Science+Business Media, LLC,        drop in potential energy, critical distance between dislocation and GB, and critical\par
+    part of Springer Nature, 2023       shear stress for dislocation absorption by the GB were the parameters calculated\par
+                                        from MD simulations of dislocation\u8211?GB interactions. Machine learning models\par
+                                        eXtreme Gradient Boosting and SHapley Additive exPlanations (SHAP) were\par
+                                        used to find the correlation between the various parameters and yield stress of the\par
+                                        GB configurations. Machine learning results showed that the MD parameters\u8212?\par
+                                        critical distance between the dislocation and GB, drop in shear stress; and slip\par
+                                        transmission parameter\u8212?m\u8242? have a stronger correlation with yield stress. The\par
+                                        SHAP results sorted the prominent slip plane and rotation axis affecting the yield\par
+                                        stress. The configurations with dislocation on \{112\} slip plane, and configurations\par
+                                        with [111] rotation axis were difficult to deform (higher yield stress of GB) than\par
+                                        \{110\} slip plane and [ 11 2] and [ 110] rotation axes configurations.\par
+\par
+\par
+\par
+\par
+Handling Editor: Ghanshyam Pilania.\par
+\par
+Address correspondence to E-mail: kedharnath1992@gmail.com; kedharnath@barc.gov.in\par
+\par
+\par
+https://doi.org/10.1007/s10853-023-09167-y\par
+\par
+\par
+                                                                                                             Vol.:(0123456789)\par
+244                                                                                  J Mater Sci (2024) 59:243\u8211?257\par
+\par
+\par
+\par
+                                GRAPHICAL ABSTRACT\par
+\par
+\par
+\par
+\par
+Introduction                                               et al. found a cutoff value of 0.7 for the modified m\u8242?\par
+                                                           parameter below which slip transmission was dif-\par
+The plastic deformation of crystalline materials is        ficult [3]. Patriarca et al. identified strain field and\par
+governed by the movement of a large number of dis-         residual burger vector ( RBV which is the magnitude\par
+locations. By creating obstacles to dislocations, the      of the difference between the Burgers vectors of the\par
+strength of a material can be improved. Obstacles          incoming and outgoing dislocations) to be the prom-\par
+can be other dislocations, grain boundaries (GBs),         ising parameters to study dislocation\u8211?\u8211?GB interac-\par
+precipitates, or solute atoms. Dislocation\u8211?GB inter-       tions in bcc FeCr [2]. These experimental results\par
+action plays an important role in the GB strength-         helped us understand the effect of GB types on slip\par
+ening mechanism. The type of interactions disloca-         transmission. However, the researchers also reported\par
+tions have with GBs determine their strengthening          ambiguity in the STPs. Hansen et al. did not find\par
+ability. The interactions can be either the pileup         a correlation between modified m\u8242? and RBV param-\par
+mechanism, absorption of dislocation in the GB, or         eters with the GB dislocation density [16]. Bieler\par
+transmission of the dislocation to the neighboring         et al. found scatter in the observed and theoretical\par
+grain. These interactions depend on the dislocation        results of slip transfer for bcc Ta [4]. Bayerschen et al.\par
+and GB types. Hall\u8211?Petch relation [1], which relates       opened several questions on the use of these param-\par
+the yield strength of the material with the GB spac-       eters from experimental and computational points of\par
+ing, lacks the knowledge of the type of GB. Electron       view for general types of GBs other than \u931? GBs [17].\par
+microscopic experiments [2\u8211?7] and atomistic simula-        The usefulness of these STPs in identifying the slip\par
+tions [8\u8211?13] have been carried out to understand the       transmission with various slip planes of bcc materi-\par
+dislocation\u8211?GB interaction, specifically the slip trans-   als is still not studied.\par
+mission through various GBs. The slip transmission            Molecular dynamics (MD) technique is a power-\par
+was quantified through slip transmission parameters        ful tool for studying atomistic behavior of materials\par
+(STPs) based on the crystallographic orientation of        [18\u8211?22]. Spearot et al. brought out the challenges in\par
+the bicrystals forming the GB. The barrier for dislo-      MD simulations and showed that most of the inves-\par
+cations to transmit through \u931? GBs was found to be          tigations were in \u931? GBs [23]. Tsuru et al. found that\par
+dependent on their GB energies [14]. Kacher et al.         the results of atomistic simulations of slip trans-\par
+concluded that the residual strain in the GB of tita-      mission through \u931?3 GBs were in contrast to the\par
+nium was the primary parameter for slip transmis-          predictions by STPs [24]. Kapoor et al. performed\par
+sion irrespective of the type of dislocation [15]. Guo     dislocation dynamics simulations of dislocations\par
+J Mater Sci (2024) 59:243\u8211?257                                                                                             245\par
+\par
+\par
+\par
+interaction with low angle GBs (LAGBs) and found           STPs (32 configurations with each configuration hav-\par
+that the shear stress to overcome the GB followed the      ing either the \{110\} or \{112\} slip plane, thus making 64\par
+Hall\u8211?Petch relation [25]. There is a need for studying     such configurations).\par
+other types of GBs for their slip-resistance property.        As the orientation of the IN grain was fixed, the vectors\par
+Though the above-mentioned experiments and simu-           n\u119842?\u119847?, b\u119842?\u119847?, and l\u119842?\u119847? were fixed for a slip system. Depending on\par
+lations studies provided a reasonable understand-          the rotation of the neighboring grain, the vectors n\u119848?\u119854?\u119853?, b\u119848?\u119854?\u119853?,\par
+ing on the dislocation\u8211?GB interactions, the relation       and l\u119848?\u119854?\u119853? changed and so the angle between these vectors\par
+between STPs and the strength of a material is still       changed which led to the change in the values of the STP.\par
+unresolved. This is essential for understanding the        The STPs are listed here:\par
+physical meaning of the STPs.                                     (          )(          )\par
+   The motivation of this article is to find the appro-    m\u65533? = n\u119842?\u119847? \u8901? n\u119848?\u119854?\u119853? b\u119842?\u119847? \u8901? b\u119848?\u119854?\u119853? = cos\u120595? cos\u120581?                    (1)\par
+priate dislocation\u8211?GB interaction parameters that best\par
+                                                              (          )(         ) (          )(          )\par
+represent the yield stress of the GB with dislocation      N = n\u119842?\u119847? \u8901? n\u119848?\u119854?\u119853? b\u119842?\u119847? \u8901? b\u119848?\u119854?\u119853? + n\u119842?\u119847? \u8901? b\u119848?\u119854?\u119853? b\u119842?\u119847? \u8901? n\u119848?\u119854?\u119853?\par
+on either \{110\} or \{112\} slip planes in bcc tantalum. To                                                                  (2)\par
+                                                                = cos\u120595? cos\u120581? + cos\u120574? cos\u120575?\par
+do this, numerical calculations of STPs, MD simula-\par
+tions of dislocation\u8211?GB interactions, and explainable           (          )(         )\par
+machine learning (ML) approaches were used. STPs\par
+                                                           LRB = l\u119842?\u119847? \u8901? l\u119848?\u119854?\u119853? b\u119842?\u119847? \u8901? b\u119848?\u119854?\u119853? = cos\u120579? cos\u120581?                        (3)\par
+available in the literature were numerically calcu-\par
+                                                              (          )(         )(         )\par
+lated. MD, a versatile atomistic simulation technique      s = n\u119842?\u119847? \u8901? n\u119848?\u119854?\u119853? b\u119842?\u119847? \u8901? b\u119848?\u119854?\u119853? l\u119842?\u119847? \u8901? l\u119848?\u119854?\u119853? = cos\u120595? cos\u120581? cos\u120579?\par
+to study the mechanical behavior of metallic systems                                                                      (4)\par
+at the atomic level [26], was used for simulating the             90\par
+                                                                    (\u9702?\par
+                                                                             (        )\par
+                                                                                       )      ( \u9702?\par
+                                                                                               90       (           )\par
+                                                                                                                      )\par
+dislocation\u8211?GB interactions. The slip transmission         \u120582? =cos\par
+                                                                   \u120595?c\par
+                                                                       arccos n\u119842?\u119847? \u8901? n\u119848?\u119854?\u119853?   cos\par
+                                                                                               \u120581?c\par
+                                                                                                  arccos b\u119842?\u119847? \u8901? b\u119848?\u119854?\u119853?\par
+parameters and parameters computed from MD simu-                    ( \u9702? ) ( \u9702? )\par
+                                                                      90 \u120595?          90 \u120581?\par
+lations were used as input to eXtreme Gradient Boost-         = cos\par
+                                                                        \u120595?c\par
+                                                                             cos\par
+                                                                                     \u120581?c\par
+                                                                                         ,\par
+                                                                                                                          (5)\par
+ing (XGBoost) [27] and SHapley Additive exPlanations\par
+(SHAP) [28] to determine and explain which of these        where \u120595?c and \u120581?c are critical values for slip transmis-\par
+parameters most importantly affect the yield stress of     sion, taken to be \u120595?c = 15\u9702? and \u120581?c = 45\u9702? [29]. Resolved\par
+the GB.                                                    shear stress ( RSS) was calculated using the rotation of\par
+                                                           the applied stress state \u120648? applied onto the rotated OUT\par
+                                                           grain as,\par
+Methodology                                                       (             )        ((            )      )\par
+                                                           RSS = \u120648? rotate \u8901? n\u119848?\u119854?\u119853? \u8901? b\u119848?\u119854?\u119853? = R\u120648? applied R\u119827? \u8901? n\u119848?\u119854?\u119853? \u8901? b\u119848?\u119854?\u119853? ,\par
+                                                                                                                  (6)\par
+The article contains three parts\u8212?dislocation\u8211?GB inter-\par
+action using MD simulations, numerical calculations        where R is the rotation matrix [30] calculated with\par
+of STPs, and feature analysis using ML. Each sub-sec-      rotation angle \u120579?r and rotation axis t as [30],\par
+tion will detail each part of the work. The orientations             |1 0 0|                | t2 t t t t |\par
+of the grains and GB configurations were similar in                  |\par
+                                                                     |\par
+                                                                             | (\par
+                                                                             |            )|| 1 122 1 3 ||\par
+                                                            R =cos\u120579?r | 0 1 0 | + 1 \u8722? cos\u120579?r | t2 t1 t2 t2 t3 |\par
+MD simulations and numerical calculations of STPs.                   |\par
+                                                                     |0 0 1|\par
+                                                                             |              |                 |\par
+                                                                                            | t3 t1 t3 t2 t 2 |\par
+                                                                     |       |              |              3 |\par
+\par
+Slip transmission parameters\par
+                                                                        | 0 \u8722?t t |\par
+                                                                        |       3  2 |\par
+                                                                        |             |\par
+                                                                + sin\u120579?r | t3 0 \u8722?t1 |,\par
+                                                                        |             |\par
+Slip transmission through GBs can be quantified using                   | \u8722?t2 t1 0 |\par
+                                                                        |             |                                   (7)\par
+parameters based on the vectors shown in Fig. 1a. In\par
+the numerical calculations, a non-inclined bicrystal GB    where t1 , t2 , and t3 are the unit vector components of\par
+configuration was used with one grain (IN) contain-        the rotation axis t. The \u120648? applied was chosen such that\par
+ing the in-coming dislocation and the other neighbor-      RSS = 1 on the slip plane of IN grain for both \{110\} and\par
+ing grain (OUT) was rotated about either [ 112]/[110]/     \{112\} cases. That is, if Eq. (6) had n\u119842?\u119847? and b\u119842?\u119847? , then the\par
+[111] axes as shown in Fig. 1b. The dislocation was        RSS = 1 for both \{110\} and \{112\} slip plane cases. To\par
+modeled to slip on either the \{110\} or \{112\} planes as     calculate these parameters for a given GB configura-\par
+shown in Fig. 1c resulting in 64 data points of various    tion, the slip system in the IN grain was fixed and the\par
+246                                                                                                   J Mater Sci (2024) 59:243\u8211?257\par
+\par
+\par
+\par
+\par
+Figure 1\u8194?\u8201?a Schematic illustration of slip transmission from IN        Schematic illustrations of GB configurations with dislocation on\par
+grain to OUT grain through GBP. The slip plane in the IN grain         two different slip planes for a given rotation axis. For [ 1 1 2] and\par
+containing the dislocation is shown in blue color and the pos-         [111] rotation axes, slip plane 1 represent \{110\} and slip plane 2\par
+sible slip plane of the rotated OUT grain is shown in red color.       represent \{112\} while for [ 110] rotation axis slip plane 1 repre-\par
+By the slip transmission theory, the misorientation between the        sent \{112\} and slip plane 2 represent \{110\}. The arrows represent\par
+OUT and IN grains can be by any arbitrary rotation axis and rota-      the shear direction. d Orientations along X direction shown on a\par
+tion angle. The GBP between two differently oriented grains is         standard triangle of the stereographic projection. The red colored\par
+shown in green color. n\u119842?\u119847? and n\u119848?\u119854?\u119853? are the slip plane normals of       symbols represent [ 1 1 2] tilt GB configurations, the blue colored\par
+the incoming and outgoing dislocations, respectively. b\u119842?\u119847? and          symbols represent [ 110] tilt GB configurations, and the green\par
+b\u119848?\u119854?\u119853? are the Burger vectors of incoming and outgoing disloca-          colored symbols represent [111] twist GB configurations. The\par
+tions, respectively. l\u119842?\u119847? and l\u119848?\u119854?\u119853? are dislocation line directions of   central grain in each of the GB configurations ([1 1 2] tilt, [ 110]\par
+the incoming and outgoing dislocations, respectively. The angle        tilt, [111] twist) are 1, 12, and 23, respectively. The orientation of\par
+between n\u119842?\u119847? and n\u119848?\u119854?\u119853? is \u936?, between b\u119842?\u119847? and b\u119848?\u119854?\u119853? is \u954?, between l\u119842?\u119847?      the other numberings is referred in Table s1 in the supplementary\par
+and l\u119848?\u119854?\u119853? is \u952?, between b\u119842?\u119847? and n\u119848?\u119854?\u119853? is \u947?, and between b\u119848?\u119854?\u119853? and n\u119842?\u119847?     file. e GBE as a function of the rotation angle\par
+is \u948?. b Coordinate axes and directions for three rotation axes. c\par
+\par
+\par
+script containing the code stabix [31] and the program                 looped over every slip system, the vectors n\u119848?\u119854?\u119853? , b\u119848?\u119854?\u119853? ,\par
+MTEX [32] was run for all the possible 48 slip systems                 and l\u119848?\u119854?\u119853? changed accordingly.\par
+in the rotated OUT grain to obtain STP. As the script                     Residual burger vector (RBV) is the magnitude of the\par
+                                                                       difference between b\u119842?\u119847? and b\u119848?\u119854?\u119853? as,\par
+J Mater Sci (2024) 59:243\u8211?257                                                                                        247\par
+\par
+\par
+\par
+RBV = ||br || = ||b\u119842?\u119847? \u8722? b\u119848?\u119854?\u119853? || = ||b\u119842?\u119847? \u8722? Rbin ||,    (8)   Simulations were run using LAMMPS [38] and visual-\par
+                                                            ized using OVITO [39].\par
+where b\u119848?\u119854?\u119853? was calculated directly by b\u119848?\u119854?\u119853? = Rbin . For\par
+slip transmission to occur m\u8242? , N , LRB , \u955?, s , and RSS    Machine learning models\par
+should be maximum, while RBV should be minimum.\par
+                                                            Machine learning was used to correlate the STPs and\par
+Molecular dynamics simulations                              MD parameters to the stress at which the GB either\par
+                                                            absorbs or transmits the incoming dislocation, called\par
+The transmission of dislocations through various GBs        as yield stress of the GB. To do this, the slip trans-\par
+was also simulated using molecular dynamics. The            mission and MD parameters were taken as input \u8216?fea-\par
+asymmetric tilt/twist GB configurations were modeled        tures\u8217? and yield of the GB was taken as output target\par
+with [ 1 1 2] and [ 110] as tilt axes and [111] as twist    for ML models\u8212?XGBoost (version 1.7.6) and SHAP.\par
+axis (Fig. 1b). The central grain (similar to IN grain in   The pre-processing step involved feature engineering\par
+"Slip transmission parameters" section) was fixed to        in which a Pearson correlation plot was used to find\par
+enable the slip of an edge dislocation on either \{110\}      the dependence between the features so as to decide\par
+or \{112\} slip planes and the neighboring grains were        on the features to use during ML. Randomly selected\par
+rotated about either [ 1 12]/[110]/[111] between 0\u176? and     75% of the data was used for training and the remain-\par
+90\u176?. Thus, with 32 different GB configurations and 2        ing 25% for testing. XGBoost minimizes the objective\par
+slip planes, 64 MD simulations were carried out. The        function\par
+orientation of the rotated grains is shown in Fig. 1d.            [K                         ]\par
+The two rotated grains on either side of the central                \u8721? (                    )\par
+                                                                                                               (9)\par
+                                                                                                  1\par
+                                                            obj =       L yi , p0i + Ovalue + \u120574?T + \u120582?ML Ovalue\par
+                                                                                                        2\par
+grain had similar orientations/rotations and the grain\u8217?s            i=1\par
+                                                                                                  2\par
+dimensions were equal to the integer multiple of the\par
+magnitude of the direction vectors to obtain periodic       to predict the output value Ovalue using gradient-\par
+boundaries along GB normal (GBN) and GB plane               boosted trees [27]. The first term of Eq. (9) is the sum-\par
+(GBP). The central grain was translated along GBP           mation of the loss function L for K number of observa-\par
+and equilibrated using conjugate gradient method            tions in the training data [40]. L is a function of the\par
+to arrive at the lowest energy configuration. The GB        observed output target values from MD simulations\par
+energy (GBE) was calculated as the excess of cohesive       yi , the initially predicted value p0i which is usually\par
+energy due to the GB [33, 34]. The GBE as a function        taken as 0.5, and the predicted output value Ovalue . \u120574? is\par
+of rotation angle is shown in Fig. 1e and the values are    for pruning and T is the number of terminal nodes in\par
+tabulated in Table s1. Atomsk [35] was used to insert       a tree. The last term is the regularization term with the\par
+an edge dislocation by adding an extra plane of atoms       regularization parameter \u120582?ML . The XGBoost hyperpa-\par
+along \u9001?110\u9002? in the central grain. The configurations        rameters were optimized to arrive at the lowest root\par
+were sheared by altering the simulation box with a          mean square\u65533? error (RMSE) possible calculated as,\par
+shear strain of \u173?10\u8211?5 along [111] and equilibrated using\par
+                                                                          \u8721?M\par
+                                                                            t=1 (yt \u8722?Ovalue )\par
+                                                                                             2\par
+                                                            RMSE =                             , where M is the number of\par
+conjugate gradient method [36]. The direction [111]                                M\par
+\par
+was selected as the shear direction as it is the slip       observations in the test data. The explanation of the\par
+direction for the dislocation in bcc system. All simula-    XGBoost model f was carried out using SHAP. SHAP\par
+tions were carried out with a system temperature of         trains the model on each feature subset S taken from\par
+0 K using an interatomic potential developed by Chen        the set of all features F . The importance of each feature\par
+et al. [37]. The system temperature of 0 K was chosen       is calculated\par
+                                                                  (         )by training the model with( the   feature\par
+                                                                                                             )\par
+to exclude any effect due to thermal fluctuations. The      fS\u8746?\{j\} xS\u8746?\{j\} and without the feature fS xS where x\par
+choice of this potential was made after checking the        is the value of the input feature. The SHAP value of a\par
+lattice constant, cohesive energy, elastic constants and    feature is calculated as,\par
+core structure of screw dislocation in bulk Ta predicted           \u8721? |S|!(|F| \u8722? |S| \u8722? 1)! [       (      )    ( )]\par
+by the potential with that of the experimental and first    \u120601?j =                            fS\u8746?\{j\} xS\u8746?\{j\} \u8722? fS xS .\par
+                                                                             |F|!\par
+principles data. The configurations were referred to by            S\u8838?F\par
+                                  \u65533?          \u65533?\par
+the notation \u10216?rotation_axis\u10217?\u8725?\u120579? \u9702? \u8725? slip_plane represent-                                                          (10)\par
+ing the rotation axis, rotation angle, and slip plane.\par
+248                                                                                                   J Mater Sci (2024) 59:243\u8211?257\par
+\par
+\par
+\par
+\par
+Figure 2\u8194?\u8201?Schematic flowchart of the work carried out in this article. MD parameters \u120591?cr , \u916?\u120591? , \u916?PE, and Dcr are discussed in Sect. "Molec-\par
+ular dynamics simulations"\par
+\par
+\par
+   All data were used for SHAP analysis. The data                       Molecular dynamics simulations\par
+and scripts for numerical calculation, MD, and ML are\par
+available in the GitHub link. The schematic flowchart                   The slip transmission through GB can be visual-\par
+of the work carried out is shown in Fig. 2.                             ized as a three-stage process of pile-up, absorption,\par
+                                                                        and transmission. The pile-up of dislocations was\par
+                                                                        observed in \u10216?112\u10217?\u8725?16\u9702? \u8725?\{110\} , \u10216?110\u10217?\u8725?8\u9702? \u8725?\{112\} , and\par
+Results and discussion                                                  \u10216?110\u10217?\u8725?11\u9702? \u8725?\{112\}. Partial pile-up similar to a discon-\par
+                                                                        nection formation in the GB surface was observed\par
+Slip transmission parameters                                            in \u10216?110\u10217?\u8725?86\u9702? \u8725?\{112\} and \u10216?111\u10217?\u8725?81\u9702? \u8725?\{110\} . Absorp-\par
+                                                                        tion followed by transmission was observed in\par
+The main observations from Fig. 3 were as follows.                      \u10216?112\u10217?\u8725?11\u9702? \u8725?\{110\} , \u10216?112\u10217?\u8725?11\u9702? \u8725?\{112\} , \u10216?112\u10217?\u8725?16\u9702? \u8725?\{112\},\par
+First, m\u8242? , LRB , and RSS (i.e., Eqs. 1,3, and 6) did not               \u10216?110\u10217?\u8725?8\u9702? \u8725?\{110\} , \u10216?110\u10217?\u8725?11\u9702? \u8725?\{110\} , \u10216?110\u10217?\u8725?70\u9702? \u8725?\{112\} ,\par
+show sensitivity to [111] twist GB configurations. The                  \u10216?111\u10217?\u8725?8\u9702? \u8725?\{110\} , \u10216?111\u10217?\u8725?16\u9702? \u8725?\{110\} , \u10216?111\u10217?\u8725?8\u9702? \u8725?\{112\} ,\par
+prediction of slip transmission in twist GB configura-                  \u10216?111\u10217?\u8725?16\u9702? \u8725?\{112\}, and \u10216?111\u10217?\u8725?60\u9702? \u8725?\{112\}. The interaction\par
+tions is of importance because the orientations in twist                of dislocation with the LAGB showed the formation\par
+GB configurations correspond to the orientations of                     of dislocation networks during pinning and looping.\par
+\u947? fiber in bcc which are formed during plastic defor-                   The snapshots of configurations in which disloca-\par
+mation [41, 42]. Further, RBV and LRB could not dif-                    tions in the GB were visible are shown in Fig. 4 and\par
+ferentiate between dislocations on \{110\} or \{112\} slip                  their videos are attached as supplementary file.\par
+planes, but experimental and simulation results have                        The dislocation\u8211?GB interactions using MD simula-\par
+shown that \{110\}\u10216?111\u10217? and \{112\}\u10216?111\u10217? slip systems have                  tions were quantified using parameters such as critical\par
+different CRSS values [43].                                             shear stress for absorption of dislocation by the GB\par
+                                                                        ( \u120591?cr in MPa), drop in shear stress ( \u916?\u120591? in MPa), drop\par
+J Mater Sci (2024) 59:243\u8211?257                                                                                                 249\par
+\par
+\par
+\par
+\par
+Figure 3\u8194?\u8201?Slip transmission parameters calculated with orientations of the rotated grains for various GB configurations\par
+\par
+\par
+\par
+in potential energy ( \u916?PE in eV), and critical distance                where T = \u120572?Gb2 , and the distance between the source\par
+between the dislocation and GB just before the absorp-                 and GB is L = d\u8725?2 with d being the GB spacing. Hence,\par
+tion of a dislocation ( Dcr in nm). These were recorded                          \u8730?\par
+at the event of dislocation absorption or piling-up near                           2\u120591?cr \u120572?Gb\par
+                                                                                                                        (12)\par
+                                                                       \u120591?y = \u120591?o +\par
+the GB as shown in Figs. S1 and S2 in the supplemen-\par
+                                                                                            .\par
+                                                                                       d\par
+tary file. Figure 5a shows that \u120591?cr was high for [ 11 2]\par
+                                                                          The yield stress ( \u120590?y ) and shear stress at yield of the\par
+tilt axis configurations with \{110\} slip being dominant.\par
+                                                                       GB configuration \u120591?y are related through a constant A\par
+According to the dislocation pile-up model [25, 44,\par
+                                                                       as,\par
+45], the shear stress reaches a critical value \u120591?y when\par
+                                                                                           \u65533?\par
+the dislocation gets either absorbed by or transmitted                                         2\u120591?cr \u120572?Gb         kHP\par
+through the GB and is expressed as,                                    \u120590?y = A\u120591?y = A\u120591?o + A               = \u120590?o + \u8730?              (13)\par
+                                                                                                   d              d\par
+           \u8730?\par
+              \u120591?cr T                                                                                               \u8730?\par
+\u120591?y = \u120591?o +                                           (11)               where the Hall\u8211?Petch constant is kHP = A 2\u120591?cr \u120572?Gb .\par
+                                                                       For pure Ta, \u120572? \u8776? 1, G = 69 GPa, b = 0.2863 nm, and \u120590?o\par
+               Lb\par
+250                                                                                                 J Mater Sci (2024) 59:243\u8211?257\par
+\par
+\par
+\par
+\par
+Figure 4\u8194?\u8201?MD snapshots of dislocation interaction with GB configurations which had dislocations. The dislocations with Burgers vector\par
+type \u10216?111\u10217? are colored green, \u10216?110\u10217? are colored blue, \u10216?100\u10217? are colored pink, other types are colored red. The GB configurations which\par
+are difficult to visualize using the above are shown using atoms only whose neighbors are not equal to eight. Atoms with eight neighbors\par
+are removed for better visualization. The incoming dislocation is shown using dotted red colored oval/circle. a Interactions of parallel\par
+dislocations while b interactions of perpendicular dislocations where one dislocation is the incoming and other is in the GB. This is\par
+independent for twist GB configurations\par
+J Mater Sci (2024) 59:243\u8211?257                                                                                                         251\par
+\par
+\par
+\par
+\par
+Figure 5\u8194?\u8201?The values of the parameters calculated from MD             as symbols in the key figure. The orientations of the rotated\par
+simulations are represented as circles with the orientation of the    grains (numbering as in Table s1) lie on the lines represented by\par
+rotated grain for various GB configurations as the location on the    various colors and rotation axes. The value of \u966?1 lies between\par
+Euler space. The pink open circles represent \{110\} slip plane and     0\u176? and 90\u176? as orthotropic symmetry was assumed. And also, for\par
+the cyan open circles represent \{112\} slip plane for a\u8211?d and f.       ease of representation of [ 1 1 2] and [ 110] tilt GB configurations,\par
+The size/radius of the circle is proportional to the values of the    \u966?2 of these two configurations are shifted from 225\u176? and 315\u176? to\par
+MD parameters but the scaling factor is different between the         45\u176?. Figures 5e and 5 g represent the variation of drop in shear\par
+parameters. The key figure for 5a-5d and 5f is shown in 5 h. The      stress and critical distance as a function of rotation angle con-\par
+orientations of the central grains for each rotation axis are shown   nected by the b-spline curve\par
+\par
+\par
+                                                                               [       ( )]\par
+= 80 MPa. The value of A = 7 is chosen so as to get a                     K\u120579?\u120574?m           \u120579?\par
+                                                                                                                                      (14)\par
+                         \u8730?                                            E\par
+value of kHP = 476MPa \u956?m close to that found in the                     =        1 \u8722? ln     .\par
+                                                                      V   d\u120579?m           \u120579?m\par
+literature [42].\par
+   The stored energy due to the GB ( E ) per molar vol-               where K = 3.31 , \u120574?m = 966mJ\u8725?m2 , and \u120579?m = 23\u9702? [46].\par
+ume ( V ) of Ta for rotation angle \u120579? is [46],                         The stored energy can be substituted by the GBE\par
+                                                                      ( Egb ) occupying a unit meter squared area of Agb , thus\par
+                                                                      Eq. (14) becomes,\par
+252                                                                                               J Mater Sci (2024) 59:243\u8211?257\par
+\par
+\par
+\par
+Egb Agb       K\u120579?\u120574?m\par
+                   [       ( )]\par
+                             \u120579?                                       of coarse-grained Ta [42]. Negligible variation in \u120590?y\par
+          =          1 \u8722? ln     .                          (15)      between slip planes was observed except in case of\par
+  V           d\u120579?m           \u120579?m\par
+                                                                     \u10216?112\u10217?\u8725?63\u9702? \u8725?\{112\} as in Fig. 5b.\par
+  Rearranging Eq. (15) gives                                            During the initial deformation, the increase in the\par
+          [      ( )]                                                PE and shear stress \u964? corresponds to the energy and\par
+   VK\u120579?\u120574?m           \u120579?                                                 stress accumulation, respectively. The sudden drop\par
+d=\par
+   Egb \u120579?m\par
+           1 \u8722? ln\par
+                  \u120579?m\par
+                       .                                   (16)\par
+                                                                     in PE and \u964? corresponds to the absorption of the dis-\par
+                                                                     location by the GB. GBs act as sinks for dislocations\par
+   Substituting the expression of d in Eq. (13) gives\par
+                                                                     that results in a reduction in the strain energy. As\par
+           \u8730?\par
+           \u8730?\par
+                  2\u120591?cr GbEgb \u120579?m                                      the strain energy of an edge dislocation is constant\par
+           \u8730?\par
+\u120590?y = \u120590?o + A\u8730?\par
+           \u8730?         [       ( )] .                (17)              in the present cases, the significance of \u916?PE and \u916?\u120591?\par
+              VK\u120579?\u120574?m 1 \u8722? ln \u120579?\u120579?                                        can be correlated to the energy and stress relaxa-\par
+                                                                     tion of the GB, respectively, during the absorption\par
+                                   m\par
+\par
+\par
+   For pure Ta, V = 10.85 \u215? 10\u8722?6 m3 mol\u8722?1 . Taking \u120591?cr ,             event. \u10216?112\u10217?\u8725?\{112\} showed a significant \u916?PE and \u916?\u120591?\par
+Egb , and their corresponding \u120579? from MD simula-                      as in Fig. 5c, d. Figure 5e has similarities to that of\par
+tion results, the mean value of \u120590?y was found to be                   N and s in Figs. 3c, f; for example, the variation of\par
+206 MPa which corresponds to the yield strength                      values in \u10216?112\u10217?\u8725?\{110\} was lower than \u10216?112\u10217?\u8725?\{112\}\par
+\par
+\par
+\par
+\par
+Figure 6\u8194?\u8201?Pearson correlation plot between various features. The values of the features showing strong correlation (here, greater than\par
+0.7) are shown as bold text\par
+J Mater Sci (2024) 59:243\u8211?257                                                                                   253\par
+\par
+\par
+\par
+while \u10216?110\u10217?\u8725?\{110\} was higher than \u10216?110\u10217?\u8725?\{112\}. Dcr is      were optimized until RMSE between the XGBoost pre-\par
+dependent on the extent of attraction of the disloca-      dicted and calculated yield stress during testing was\par
+tion to the GB. Dcr increased with initial values of       as low as possible, here 37 MPa. RMSE during testing\par
+rotation angles for LAGBs and then decreased for           was 37 MPa while RMSE during training was 12 MPa\par
+higher values of rotation angles as in Figs. 5f, g.        ensuring that there was no overfitting. The optimized\par
+                                                           values of XGBoost hyperparameters are shown in\par
+Feature analysis using SHAP                                Table 1. The cross-validation of the optimized model\par
+                                                           was carried out with 5 splits and their RMSEs were\par
+Using the Pearson correlation plot in Fig. 6, only the     112, 109, 125, 49, and 63 MPa. The average RMSE\par
+least correlated features were used as inputs while        across data was 92 MPa with a standard deviation of\par
+other features with correlation coefficient greater than   29 MPa.\par
+0.7 such as N , LRB, \u955?, and RSS were not used. The out-       The ML predicted values matched reasonably well\par
+liers belonging to \u10216?112\u10217?\u8725?15\u9702? \u8725?\{110\}, \u10216?112\u10217?\u8725?88\u9702? \u8725?\{110\},     with the MD calculated values of the yield stress\par
+and \u10216?112\u10217?\u8725?63\u9702? \u8725?\{112\} were removed due to the higher        (Fig. 7a). The sorted feature with decreasing mean\par
+shear stress values.                                       SHAP values in Fig. 7b is a quantitative dependence\par
+   The rotation axis and slip plane along with MD          on yield stress. The features Dcr , \u916?\u120591? and m\u8242? showed\par
+parameters \u916?\u120591? , \u916?PE and Dcr ; and the STPs m\u8242? , RBV,       maximum correlation with yield stress. m\u8242? was found\par
+and s were taken as input features. The yield stress       to contribute significantly to the yield stress as com-\par
+calculated from Eq. (17) was the output target. The        pared to any other STP. The low/high feature value\par
+other MD parameters such as \u120591?cr , Egb , and rotation       and its corresponding negative/positive SHAP value\par
+angle were neglected as they were already correlated       represent direct proportionality between the feature\par
+to the yield stress by Eq. (17).                           and the yield stress. Whereas a low/high feature value\par
+   The XGBoost hyperparameters used in the current         and its corresponding positive/negative SHAP value\par
+model were max depth, gamma, colsample bytree,             represents inverse proportionality between the feature\par
+sub-sample, learning rate, max delta step, random          and the yield stress. For example, an increase in \u916?\u120591? , or\par
+state, n estimators, alpha, and seed. To avoid local       a decrease in Dcr or m\u8242? corresponds to an increase the\par
+optima, surrogate model with any two hyperparam-           yield stress which can be attributed to strengthening\par
+eters were optimized using grid search and the other       of GBs. That is, if a GB configuration A has higher \u916?\u120591?\par
+hyperparameters were fixed to their default or initial     or lower Dcr/m\u8242? than that of B GB configuration, then\par
+seed values. The surrogate model was again used            A is stronger than B. When Dcr was less than 40 \u197?,\par
+with another two hyperparameters being optimized           there was a stronger contribution toward increase\par
+using grid search. This process was repeated using         of the yield stress as in Fig. 7c. So, the GB configura-\par
+other hyperparameters to arrive at the final optimized     tions that resulted in Dcr being less than 40 \u197? were\par
+XGBoost model. This method was used to save compu-         stronger than those with Dcr greater than 40 \u197?. There\par
+tational time and cost. The XGBoost hyperparameters        were 44 GB configurations with Dcr less than 40 \u197?. The\par
+                                                           complete data is available in the GitHub link. A high\par
+                                                           value of \u916?\u120591? was due to the large relaxation (during\par
+Table 1\u8194?\u8201?Optimized XGBoost hyperparameters                 dislocation absorption) of strained GB, which can be\par
+XGBoost hyperparameters                        Values      attributed to the higher strength of the GB configura-\par
+                                                           tion and hence an increase in yield stress. So, the GB\par
+Max depth                                      3           configurations with the value of \u916?\u120591? between 15 and\par
+Gamma                                          85          70 MPa and SHAP values less than zero were weaker\par
+Colsample bytree                               0.191421    than that with SHAP values greater than zero as in\par
+Subsample                                      0.284894    Fig. 7d. \{110\} slip plane had negative SHAP values\par
+Learning rate                                  0.843006    indicating it would decrease the yield stress while\par
+Max delta step                                 67\par
+                                                           \{112\} would increase the yield stress (Fig. 7e). This\par
+Random state                                   1\par
+                                                           implied that the configurations with dislocation on\par
+n estimators                                   99\par
+                                                           \{110\} were weaker than that with dislocation on \{112\}\par
+Alpha                                          6\par
+                                                           slip plane. [111] rotation axis showed higher SHAP\par
+Seed                                           19\par
+                                                           values as in Fig. 7f. This implied that microstructures\par
+254                                                                                              J Mater Sci (2024) 59:243\u8211?257\par
+\par
+\par
+\par
+\par
+Figure 7\u8194?\u8201?a MD calculated and XGBoost predicted yield stress        critical distance and d drop in shear stress. The histogram shows\par
+values for both the training and testing data. b SHAP violin plot   the distribution of number of data points. SHAP dependence plot\par
+for all features. SHAP values are in the units of log-odds. The     of e slip plane and f rotation axis. The points in Figs. c\u8211?f were\par
+maximum and minimum value of the feature is represented on          colored using values of m\u8242?\par
+a color bar on the right side of b. SHAP dependence plot of c\par
+\par
+\par
+with continuous grains of \u947? fiber will be difficult to              complex process and is determined by several factors.\par
+deform due to their [111] rotation axis configurations.             The orientations and types of GBs studied in the pre-\par
+                                                                    sent work are a small subset of the total possibilities.\par
+                                                                    Even with these limitations, the results obtained from\par
+Conclusions                                                         the study helped to an extent in solving the ambiguity\par
+                                                                    of the slip transmission parameters and gave a path to\par
+Dislocation\u8211?GB interaction plays a critical role in gov-            relate these parameters with the yield strength relat-\par
+erning the plastic deformation of a material. Slip trans-           ing to deformation of GB. The results were also help-\par
+mission across the GBs during plastic deformation is a              ful in distinguishing the effect of GB configurations\par
+J Mater Sci (2024) 59:243\u8211?257                                                                                                   255\par
+\par
+\par
+\par
+with different rotation axes and slip planes on the           Acknowledgements\par
+yield stress. The MD simulation results can be useful\par
+in crystal plasticity simulations where dislocation\u8211?GB        This work was supported under the BARC project\par
+interactions require atomistic inputs.                        RBA4012 \u8216?Development of new generation alloys for\par
+   The main conclusions are listed below.                     nuclear reactor system and joining technologies for\par
+                                                              ceramics, metals and special materials\u8217?.\par
+1. Numerical calculations of STPs revealed that m\u8242? ,\par
+   LRB, and RSS could not explain the slip transmis-\par
+   sion through [111] twist GB configurations. RBV            Author contributions\par
+   and LRB could not distinguish between dislocation\par
+   slipping on \{110\} and \{112\} planes. N , LRB, \u955?, and        AK contributed to conceptualization, methodology,\par
+   RSS were not considered for ML analysis as they            simulation, data collection, analysis, evaluation, and\par
+   showed a strong correlation with other param-              writing of the original manuscript. RK contributed to\par
+   eters.                                                     supervision, critical discussion, review, and editing of\par
+2. The yield stress of the GB configurations were esti-       the manuscript. AS contributed to simulation, critical\par
+   mated using GB properties such as GBE, rotation            discussion, review, and editing of the manuscript.\par
+   angle, \u120591?cr , and their mean value was found to be\par
+   206 MPa.\par
+3. XGBoost and SHAP were used to explain the cor-             Declarations\par
+   relation of various STPs and MD parameters with\par
+   yield stress. The yield stress can be best quantified      Conflict of interest The authors declare that they\par
+   using Dcr , \u916?\u120591? and m\u8242? . The configurations with Dcr        have no known competing financial interests or per-\par
+   less than 40 \u197? and with higher \u916?\u120591? values were dif-         sonal relationships that could have appeared to influ-\par
+   ficult to deform relative to other configurations.         ence the work reported in this paper.\par
+   The SHAP results sorted the prominent slip plane\par
+   and rotation axis affecting the yield stress. Disloca-     Ethical approval         Not applicable.\par
+   tions on \{110\} slip plane could yield the GB rela-\par
+   tively easy (negative SHAP value) as compared to           Supplementary Information The online version\par
+   those on \{112\} (positive SHAP value). The yield            contains supplementary material available at https://\u8203?\par
+   stress was highest for GB configurations with rota-        doi.\u8203?org/\u8203?10.\u8203?1007/\u8203?s10853-\u8203?023-\u8203?09167-y.\par
+   tion axis [111], followed by [ 11 2] and [ 110].\par
+\par
+   Quantifying the dislocation transmission through a GB\par
+via slip is essential in predicting the strength of materi-   References\par
+als and has till now been done through slip transmission\par
+parameters. Our work presents a novel methodology of          [ 1] Hansen N (2004) Hall-petch relation and boundary\par
+integrating the slip transmission parameters and parame-           strengthening. Scr Mater 51:801\u8211?806. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?\par
+ters from molecular dynamics simulations, using explain-           1016/j.\u8203?scrip\u8203?tamat.\u8203?2004.\u8203?06.\u8203?002\par
+able machine learning to bring out the specific parameters    [ 2] Patriarca L, Abuzaid W, Sehitoglu H, Maier HJ (2013) Slip\par
+that correlate well with the yield of the GB. The use of           transmission in bcc FeCr polycrystal. Mater Sci Eng A\par
+machine learning toward solving this essential scientific          588:308\u8211?317. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?msea.\u8203?2013.\u8203?08.\u8203?050\par
+problem opens a new avenue revolutionizing the slip           [ 3] Guo Y, Britton TB, Wilkinson AJ (2014) Slip band-grain\par
+transmission theory.                                               boundary interactions in commercial-purity titanium. Acta\par
+                                                                   Mater 76:1\u8211?12. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?actam\u8203?at.\u8203?2014.\u8203?05.\u8203?\par
+                                                                   015\par
+Data and code availability                                    [ 4] Bieler TR, Eisenlohr P, Zhang C, Phukan HJ, Crimp MA\par
+                                                                   (2014) Grain boundaries and interfaces in slip transfer.\par
+The data that support the findings of this study are               Curr Opin Solid State Mater Sci 18:212\u8211?226. https://\u8203?doi.\u8203?\par
+openly available in Github, at https://\u8203?github.\u8203?com/\u8203?              org/\u8203?10.\u8203?1016/j.\u8203?cossms.\u8203?2014.\u8203?05.\u8203?003\par
+kedha\u8203?r1992/\u8203?dislo\u8203?cation-\u8203?GB.\par
+256                                                                                                      J Mater Sci (2024) 59:243\u8211?257\par
+\par
+\par
+[ 5] Weaver JS, Li N, Mara NA, Jones DR, Cho H, Bronkhorst               [16] Hansen LT, Fullwood DT, Homer ER, Wagoner RH, Lim H,\par
+     CA, Fensin SJ, Gray GT (2018) Slip transmission of high                  Carroll JD, Zhou G, Bong HJ (2020) An investigation of geo-\par
+     angle grain boundaries in body-centered cubic metals:                    metrically necessary dislocations and back stress in large grained\par
+     micropillar compression of pure Ta single and bi-crystals.               tantalum via EBSD and CPFEM. Mater Sci Eng, A 772:138704.\par
+     Acta Mater 156:356\u8211?368. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?actam\u8203?            https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?msea.\u8203?2019.\u8203?138704\par
+     at.\u8203?2018.\u8203?06.\u8203?046                                                   [17] Bayerschen E, McBride AT, Reddy BD, B\u246?hlke T (2016)\par
+[ 6] Kondo S, Mitsuma T, Shibata N, Ikuhara Y (2016) Direct                   Review on slip transmission criteria in experiments and\par
+     observation of individual dislocation interaction processes              crystal plasticity models. J Mater Sci 51:2243\u8211?2258.\par
+     with grain boundaries, Science. Advances 2:1\u8211?8. https://\u8203?                https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1007/\u8203?s10853-\u8203?015-\u8203?9553-4\par
+     doi.\u8203?org/\u8203?10.\u8203?1126/\u8203?sciadv.\u8203?15019\u8203?26                                [18] Ren Y, Huang Z, Wang Y, Zhou Q, Yang T, Li Q, Jia Q, Wang H\par
+[ 7] Shen Z, Wagoner RH, Clark WAT (1988) Dislocation                         (2023) Friction-induced rapid amorphization in a wear-resistant\par
+     and grain boundary interactions in metals. Acta Metall                   (CoCrNi)88Mo12 dual-phase medium-entropy alloy at cryo-\par
+     36:3231\u8211?3242. https://\u8203?d oi.\u8203?o rg/\u8203?1 0.\u8203?1 016/\u8203?0 001-\u8203?6 160(88)\u8203?         genic temperature. Compos B Eng 263:110833. https://\u8203?doi.\u8203?org/\u8203?\par
+     90058-2                                                                  10.\u8203?1016/j.\u8203?compo\u8203?sitesb.\u8203?2023.\u8203?110833\par
+[ 8] De Koning M, Kurtz RJ, Bulatov VV, Henager CH,                      [19] Mortazavi B, Silani M, Podryabinkin EV, Rabczuk T,\par
+     Hoagland RG, Cai W, Nomura M (2003) Modeling of                          Zhuang X, Shapeev AV (2021) First-principles multiscale\par
+     dislocation-grain boundary interactions in FCC metals. J                 modeling of mechanical properties in graphene/borophene\par
+     Nucl Mater 323:281\u8211?289. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?jnucm\u8203?            heterostructures empowered by machine-learning intera-\par
+     at.\u8203?2003.\u8203?08.\u8203?008                                                        tomic potentials. Adv Mater. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1002/\u8203?adma.\u8203?\par
+[ 9] Shimokawa T, Kinari T, Shintaku S (2007) Interaction                     20210\u8203?2807\par
+     mechanism between edge dislocations and asymmetrical                [20] Zhou Q, Luo D, Hua D, Ye W, Li S, Zou Q, Chen Z,\par
+     tilt grain boundaries investigated via quasicontinuum simu-              Wang H (2022) Design and characterization of metallic\par
+     lations. Phys Rev B 75:1\u8211?11. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1103/\u8203?PhysR\u8203?         glass/graphene multilayer with excellent nanowear prop-\par
+     evB.\u8203?75.\u8203?144108                                                          erties. Friction 10:1913\u8211?1926. https://\u8203?d oi.\u8203?o rg/\u8203?1 0.\u8203?1 007/\u8203?\par
+[10] Yu W, Wang Z (2012) Interactions between edge lattice                    s40544-\u8203?021-\u8203?0581-6\par
+     dislocations and \u931?11 symmetrical tilt grain boundaries              [21] Yang C, Yin C, Wu Y, Zhou Q, Liu X (2023) Atomic\par
+     in copper: a quasi-continuum method study. Acta Mater                    insights into the deformation mechanism of an amorphous\par
+     60:5010\u8211?5021. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?actam\u8203?at.\u8203?2012.\u8203?06.\u8203?        wrapped nanolamellar heterostructure and its effect on self-\par
+     037                                                                      lubrication. J Market Res 26:4206\u8211?4218. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?\par
+[11] Wang J (2015) Atomistic simulations of dislocation pileup:               1016/j.\u8203?jmrt.\u8203?2023.\u8203?08.\u8203?215\par
+     grain boundaries interaction. Jom 67:1515\u8211?1525. https://\u8203?           [22] Talebi H, Silani M, Bordas SPA, Kerfriden P, Rabczuk T\par
+     doi.\u8203?org/\u8203?10.\u8203?1007/\u8203?s11837-\u8203?015-\u8203?1454-0                                  (2014) A computational library for multiscale modeling of\par
+[12] Liang Y, Yang X, Gong M, Liu G, Liu Q, Wang J (2019)                     material failure. Comput Mech 53:1047\u8211?1071. https://\u8203?doi.\u8203?\par
+     Interactions between dislocations and three-dimensional                  org/\u8203?10.\u8203?1007/\u8203?s00466-\u8203?013-\u8203?0948-2\par
+     annealing twins in face centered cubic metals. Comput               [23] Spearot DE, Sangid MD (2014) Insights on slip transmis-\par
+     Mater Sci 161:371\u8211?378. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?comma\u8203?             sion at grain boundaries from atomistic simulations. Curr\par
+     tsci.\u8203?2019.\u8203?02.\u8203?024                                                      Opin Solid State Mater Sci 18:188\u8211?195. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?\par
+[13] Chandra S, Samal MK, Chavan VM, Patel RJ (2015) Atom-                    1016/j.\u8203?cossms.\u8203?2014.\u8203?04.\u8203?001\par
+     istic simulations of interaction of edge dislocation with           [24] Tsuru T, Shibutani Y, Hirouchi T (2016) A predictive\par
+     twist grain boundaries in Al-effect of temperature and                   model for transferability of plastic deformation through\par
+     boundary misorientation. Mater Sci Eng A 646:25\u8211?32.                      grain boundaries. AIP Adv. https://\u8203?d oi.\u8203?o rg/\u8203?1 0.\u8203?1 063/1.\u8203?\par
+     https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?msea.\u8203?2015.\u8203?08.\u8203?049                       49398\u8203?19\par
+[14] Kacher J, Eftink BP, Cui B, Robertson IM (2014) Disloca-            [25] Kapoor R, Verdhan N (2017) Interaction of dislocation\par
+     tion interactions with grain boundaries. Curr Opin Solid                 pile-up with a low-angle tilt boundary: a discrete disloca-\par
+     State Mater Sci 18:227\u8211?243. https://\u8203?d oi.\u8203?o rg/\u8203?1 0.\u8203?1 016/j.\u8203?          tion dynamics study. Philos Mag 97:465\u8211?488. https://\u8203?doi.\u8203?\par
+     cossms.\u8203?2014.\u8203?05.\u8203?004                                                    org/\u8203?10.\u8203?1080/\u8203?14786\u8203?435.\u8203?2016.\u8203?12661\u8203?02\par
+[15] Kacher J, Robertson IM (2014) In situ and tomographic               [26] Kedharnath A, Kapoor R, Sarkar A (2021) Classical molecular\par
+     analysis of dislocation/grain boundary interactions in tita-             dynamics simulations of the deformation of metals under uni-\par
+     nium. Philos Mag 94:814\u8211?829. https://\u8203?d oi.\u8203?o rg/\u8203?1 0.\u8203?1 080/\u8203?           axial monotonic loading: a review. Comput Struct 254:106614.\par
+     14786\u8203?435.\u8203?2013.\u8203?868942                                                  https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?comps\u8203?truc.\u8203?2021.\u8203?106614\par
+J Mater Sci (2024) 59:243\u8211?257                                                                                                           257\par
+\par
+\par
+[27] Chen T, Guestrin C (2016) XGBoost: A scalable tree boost-        [39] Stukowski A (2010) Visualization and analysis of atomistic\par
+     ing system. In: Proceedings of the ACM SIGKDD interna-                simulation data with OVITO-the open visualization Tool.\par
+     tional conference on knowledge discovery and data mining.             Modell Simul Mater Sci Eng 18:015012. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?\par
+     ACM, New York, NY, USA, pp 785\u8211?794. https://\u8203?doi.\u8203?org/\u8203?               1088/\u8203?0965-\u8203?0393/\u8203?18/1/\u8203?015012\par
+     10.\u8203?1145/\u8203?29396\u8203?72.\u8203?29397\u8203?85                                     [40] Samaniego E, Anitescu C, Goswami S, Nguyen-Thanh VM,\par
+[28] Lundberg SM, Lee SI (2017) A unified approach to inter-               Guo H, Hamdia K, Zhuang X, Rabczuk T (2020) An energy\par
+     preting model predictions. Adv Neural Inf Process Syst                approach to the solution of partial differential equations in\par
+     30:4766\u8211?4775                                                          computational mechanics via machine learning: Concepts,\par
+[29] Werner E, Prantl W (1990) Slip transfer across grain and              implementation and applications. Comput Methods Appl\par
+     phase boundaries. Acta Metall Mater 38:533\u8211?537. https://\u8203?             Mech Eng 362:112790. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?cma.\u8203?2019.\u8203?\par
+     doi.\u8203?org/\u8203?10.\u8203?1016/\u8203?0956-\u8203?7151(90)\u8203?90159-E                            112790\par
+[30] Priester L, Boundaries G (1976). From Theory to Engineer-        [41] Baton J, Geslin W, Moussa C (2021) Influence of pre-\par
+     ing. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1017/\u8203?cbo97\u8203?81316\u8203?389508.\u8203?016             recovery on the recrystallization of pure tantalum. J\par
+[31] Mercier D, Zambaldi C, Bieler TR (2015) A Matlab tool-                Mater Sci 56:15354\u8211?15378. https:// \u8203? d oi. \u8203? o rg/ \u8203? 1 0. \u8203? 1 007/\u8203?\par
+     box to analyze slip transfer through grain boundaries. IOP            s10853-\u8203?021-\u8203?06218-0\par
+     Conf Ser Mater Sci Eng 82:11\u8211?15. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1088/\u8203?   [42] Kedharnath A, Kapoor R, Sarkar A (2023) Evolution of dis-\par
+     1757-\u8203?899X/\u8203?82/1/\u8203?012090                                              locations and grain boundaries during multi-axial forging\par
+[32] Mainprice D, Bachmann F, Hielscher R, Schaeben H (2015)               of tantalum. Int J Refract Metal Hard Mater 112:106120.\par
+     Descriptive tools for the analysis of texture projects with           https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?ijrmhm.\u8203?2023.\u8203?106120\par
+     large datasets using MTEX: strength, symmetry and com-           [43] Weinberger CR, Boyce BL, Battaile CC (2013) Slip planes\par
+     ponents. Geol Soc Spec Pub 409:251\u8211?271. https://\u8203?doi.\u8203?org/\u8203?           in bcc transition metals. Int Mater Rev 58:296\u8211?314. https://\u8203?\par
+     10.\u8203?1144/\u8203?SP409.8                                                     doi.\u8203?org/\u8203?10.\u8203?1179/\u8203?17432\u8203?80412Y.\u8203?00000\u8203?00015\par
+[33] Kedharnath A, Kapoor R, Sarkar A (2019) Atomistic sim-           [44] Pande CS, Masumura RA, Armstrong RW (1993) Pile-up\par
+     ulation of interaction of collision cascade with different            based hall-petch relation for nanoscale materials. Nano-\par
+     types of grain boundaries in \u945?-Fe. J Nucl Mater 523:444\u8211?              struct Mater 2:323\u8211?331. https://\u8203?d oi.\u8203?o rg/\u8203?1 0.\u8203?1 016/\u8203?0 965-\u8203?\par
+     457. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?jnucm\u8203?at.\u8203?2019.\u8203?06.\u8203?021           9773(93)\u8203?90159-9\par
+[34] Kedharnath A, Panwar AS, Kapoor R (2017) Molecular               [45] John JL, Hirth P (1992) Theory of dislocations, 2nd edn.\par
+     dynamics simulation of the interaction of a nano-scale crack          Krieger Publishing Company, Malabar. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?\par
+     with grain boundaries in \u945?-Fe. Comput Mater Sci 137:85\u8211?               1016/\u8203?0502-\u8203?8205(49)\u8203?90004-0\par
+     99. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?comma\u8203?tsci.\u8203?2017.\u8203?05.\u8203?026     [46] Fressengeas C, Beausir B, Kerisit C, Helbert AL, Baudin\par
+[35] Hirel P (2015) Atomsk: a tool for manipulating and con-               T, Brisset F, Mathon MH, Besnard R, Bozzolo N (2018)\par
+     verting atomic data files. Comput Phys Commun 197:212\u8211?                On the evaluation of dislocation densities in pure tantalum\par
+     219. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?cpc.\u8203?2015.\u8203?07.\u8203?012                from EBSD orientation data. Mater Techn 10:6. https://\u8203?doi.\u8203?\par
+[36] W.R. Jian, S. Xu, I.J. Beyerlein, On the significance of              org/\u8203?10.\u8203?1051/\u8203?matte\u8203?ch/\u8203?20180\u8203?58\par
+     model design in atomistic calculations of the Peierls stress\par
+     in Nb, Computational Materials Science. 188 (2021).              Publisher\u8217?s Note Springer Nature remains neutral with\par
+     https://\u8203?doi.\u8203?org/\u8203?10.\u8203?1016/j.\u8203?comma\u8203?tsci.\u8203?2020.\u8203?110150.         regard to jurisdictional claims in published maps and\par
+[37] Chen Y, Fang J, Liu L, Hu W, Gao N, Gao F, Deng H                institutional affiliations.\par
+     (2019) Development of the interatomic potentials for W-Ta\par
+                                                                      Springer Nature or its licensor (e.g. a society or other partner)\par
+     system. Comput Mater Sci 163:91\u8211?99. https://\u8203?doi.\u8203?org/\u8203?10.\u8203?\par
+                                                                      holds exclusive rights to this article under a publishing\par
+     1016/j.\u8203?comma\u8203?tsci.\u8203?2019.\u8203?03.\u8203?021\par
+                                                                      agreement with the author(s) or other rightsholder(s);\par
+[38] Plimpton S (1995) Fast parallel algorithms for short-range\par
+                                                                      author self-archiving of the accepted manuscript version of\par
+     molecular dynamics. J Comput Phys 117:1\u8211?19. https://\u8203?doi.\u8203?\par
+                                                                      this article is solely governed by the terms of such publishing\par
+     org/\u8203?10.\u8203?1006/\u8203?jcph.\u8203?1995.\u8203?1039\par
+                                                                      agreement and applicable law.\par
+
+}

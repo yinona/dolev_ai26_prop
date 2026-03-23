@@ -1,0 +1,601 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+                                    npj | computational materials                                                                                                                  Article\par
+                                    Published in partnership with the Shanghai Institute of Ceramics of the Chinese Academy of Sciences\par
+\par
+\par
+\par
+\par
+                                                                                                                                              https://doi.org/10.1038/s41524-024-01378-4\par
+\par
+\par
+                                    Learning dislocation dynamics mobility\par
+                                    laws from large-scale MD simulations\par
+                                                                                                                                                                              Check for updates\par
+\par
+                                    Nicolas Bertin         , Vasily V. Bulatov      & Fei Zhou\par
+\par
+\par
+                                    By dispensing with all the atoms and only focusing on dislocation lines, the computational method of\par
+                                    Discrete Dislocation Dynamics (DDD) gains greatly over Molecular Dynamics (MD) in simulation\par
+                                    ef\u64257?ciency of metal plasticity. But whereas in MD dislocations follow natural dynamics of atomic\par
+                                    motion, DDD must rely on a dislocation mobility function to prescribe how a dislocation line should\par
+                  1234567890():,;\par
+1234567890():,;\par
+\par
+\par
+\par
+\par
+                                    respond to the driving force exerted on it. However, re\u64258?ecting our still incomplete understanding of\par
+                                    ways in which dislocations move, mobility functions presently employed in DDD simulations entail\par
+                                    simpli\u64257?cations and approximations of limited or, worse still, unknown accuracy and applicability. Here\par
+                                    we introduce a data-driven approach in which the dislocation mobility function is modeled as a graph\par
+                                    neural network (GNN) trained on large-scale MD simulations of crystal plasticity. We apply our\par
+                                    proposed approach to predicting plastic strength of body-centered-cubic (BCC) metal tungsten and\par
+                                    show that, once implemented in a DDD model, our GNN dislocation mobility function accurately\par
+                                    reproduces the challenging tension/compression asymmetry of plastic \u64258?ow observed both in ground-\par
+                                    truth MD simulations and in experiment. Furthermore, subsequently validated by MD simulations, the\par
+                                    same function accurately predicts plastic response of tungsten under conditions not previously seen\par
+                                    in training. By demonstrating its ability to learn relevant physics of dislocation motion, our DDD+ML\par
+                                    approach opens a promising avenue to bringing \u64257?delity of DDD models closer in line with direct MD\par
+                                    simulations at a much reduced computational cost.\par
+\par
+                                    The mesoscopic method of Discrete Dislocation Dynamics (DDD) aims                  The key material-speci\u64257?c ingredient of a DDD model encapsulating\par
+                                    to compute crystal plasticity response from the motion and interaction of     the physics of dislocation motion is a dislocation mobility function used to\par
+                                    dislocations1\u8211?7. DDD is de\u64257?ned on dislocation lines represented as            predict velocity of a dislocation segment in response to mechanical force or\par
+                                    interconnected dislocation segments thus reducing the number of               stress seen by the segment. Typically, dislocation motion is assumed to be\par
+                                    degrees of freedom by many orders of magnitude compared to an ato-            over-damped (ignoring inertia) and its velocity is computed as\par
+                                    mistic model of the same crystal. Given its relative computational ef\u64257?-\par
+                                    ciency, DDD has been long regarded as a promising scale-bridging                                          dr i    h                 i\par
+                                                                                                                                       Vi \u188?        \u188? M F i fr j g; fbjk g                   \u240?1\u222?\par
+                                    method capable of directly connecting macroscopic crystal plasticity to                                   dt\par
+                                    the underlying microscopic mechanisms of dislocation motion. It is only\par
+                                    relatively recently, owing to the steadily growing HPC capabilities, that     where rj and bjk are positions of nodes and the Burgers vectors of segments\par
+                                    fully atomistic Molecular Dynamics (MD) simulations of bulk crystal           de\u64257?ning the set of vertices and edges of a geometric graph G \u188? \u240?V; E\u222?\par
+                                    plasticity have become possible8\u8211?11. Still, owing to their high computa-      representing the dislocation network.\par
+                                    tional cost, MD simulations of crystal plasticity remain limited to                Physical \u64257?delity of a DDD simulation is predicated on availability of an\par
+                                    deformation rates many orders higher than rates typical of quasistatic        accurate dislocation mobility function M. Owing to dif\u64257?culties in extracting\par
+                                    mechanical tests. Furthermore, MD simulations are presently limited to        the force-velocity relationship from experiments, dislocation theory has\par
+                                    sub-micron length scales that are too small compared to length scales         been used to predict dislocation mobility, e.g. by computing the nucleation\par
+                                    characteristic of dislocation microstructures observed under quasistatic      energy barrier and the critical stress for dislocation motion controlled by\par
+                                    deformation conditions. Thus, when it comes to quasistatic deformation,       kink-pair mechanisms12\u8211?14 or by extracting a dislocation drag coef\u64257?cient\par
+                                    DDD is likely to remain the method of choice for predicting crystal           from the spectrum of thermal \u64258?uctuations15. It has become common\par
+                                    plasticity from dislocation motion for years to come.                         practice to calibrate dislocation mobility functions against MD simulations\par
+\par
+\par
+                                    Lawrence Livermore National Laboratory, Livermore, CA, USA.     e-mail: bertin1@llnl.gov\par
+\par
+\par
+                                    npj Computational Materials | (2024)10:192                                                                                                               1\par
+https://doi.org/10.1038/s41524-024-01378-4                                                                                                           Article\par
+\par
+of individual dislocations. Within this approach, a parametric functional         Results\par
+form of the mobility function is \u8220?hand-crafted\u8221? based on physical knowl-          DDD+ML model\par
+edge or intuition and its parameters are \u64257?tted to reproduce dislocation           Viewed as a network, dislocation microstructure is a natural geometric\par
+velocities observed in MD calculations of isolated dislocations of various line   graph (Fig. 1). Recently explored in a simpli\u64257?ed model25, this correspon-\par
+orientations (e.g. edge, screw, mixed) performed under stress and tem-            dence is further exploited here by training a GNN to predict mobility of\par
+perature conditions of interest14,16\u8211?22. Widely adopted, the conventional         dislocation segments comprising dislocation networks. For training the\par
+calibration work\u64258?ow is based on a rarely articulated assumption of                GNN we use dislocation network con\u64257?gurations extracted using the dis-\par
+transferability23, namely that mobility of individual/isolated dislocations is    location extraction algorithm (DXA)26,27 from large-scale (ground-truth)\par
+representative of mobility of dislocation segments incorporated in a dis-         MD simulations.\par
+location networks formed under deformation. Such an assumption leaves                  In a nodal version of DDD widely adopted by its practitioners, training\par
+aside possible effects of dislocation connectedness on dislocation mobility,      a GNN to serve as a dislocation mobility function entails learning a rela-\par
+such as was recently observed in ref. 24.                                         tionship between the input (force on the node) and the output (node\par
+     Here we propose an alternative approach to calibration of dis-               velocity) vectors given the instantaneous geometry and topology of the\par
+location mobility functions that does not rely on the assumption of               dislocation network (Eq. (1)). Although the task may appear straightfor-\par
+transferability and accounts for network effects on dislocation motion.           ward, two practical complications arise. First, it is dif\u64257?cult to accurately\par
+Instead of extracting mobility parameters from MD simulations of                  de\u64257?ne mechanical force acting on a dislocation node in an atomistic MD\par
+individual dislocations, in our proposed DDD+ML approach dis-                     model (more on this later). Second, the DXA algorithm extracts only\par
+location mobility is predicted by a graph neural network (GNN) trained            instantaneous con\u64257?gurations of dislocation networks thus velocities of\par
+on dislocation trajectories extracted from massive MD simulations of              dislocation nodes have to be inferred from displacements of dislocation\par
+crystal plasticity. In training our GNN-based mobility functions we               nodes over the time interval between two subsequent DXA snapshots.\par
+regard MD simulations as the ground-truth that subsequent DDD+ML                  Consider two graphs Gt and Gt\u254?\u916?t representing consecutive states of a\par
+simulations are intended to reproduce. Using body-centered cubic                  dislocation network at times t and t + \u916?t, respectively (Fig. 1a). More often\par
+(BCC) tungsten as a testbed material model, we show that GNN can                  than not, graphs Gt and Gt\u254?\u916?t constructed by the DXA algorithm are not\par
+learn non-trivial physics of dislocation motion and, when subsequently            topologically isomorphic, meaning in particular that some of the graph\par
+used as a mobility function in DDD simulations, matches plasticity                nodes present at time t no longer exist at time t + \u916?t and vice versa. This\par
+response observed in MD simulations used in training as well as in                complication is due to different meshing of dislocation lines in two DXA\par
+MD simulations performed under previously unseen deformation                      networks as well as due to topological events (e.g. dislocation collisions,\par
+conditions.                                                                       cutting, etc) taking place over the time interval between t and t + \u916?t. This\par
+\par
+\par
+Fig. 1 | The DDD+ML approach. a A schematic\par
+showing two consecutive dislocation networks Gt\par
+and Gt\u254?\u916?t extracted using DXA from two MD tra-\par
+jectory snapshots at times t (solid lines) and t + \u916?t\par
+(dashed lines). As returned by DXA, two network\par
+con\u64257?gurations are de\u64257?ned by nodal positions r = \{ri\}\par
+and Burgers vectors of their dislocation segments b =\par
+\{bij\}, but are generally non-isomorphic and contain\par
+no information about mechanical forces driving\par
+dislocation motion. Not having the same nodes\par
+present in both networks leaves it uncertain how to\par
+de\u64257?ne nodal velocities. For instance, three arrows of\par
+different colors pointing out of node 2 show three\par
+possible ways to de\u64257?ne its velocity V2. b A schematic\par
+of inference and training loops of our proposed\par
+work\u64258?ow for developing a GNN dislocation mobi-\par
+lity function. c An illustration of the Nye\u8217?s tensor\par
+\u64257?eld-matching approach circumventing the ill-\par
+de\u64257?ned problem of matching nodal velocities. As\par
+exempli\u64257?ed here, our \u64257?eld-matching procedure is\par
+agnostic to details of line discretization and network\par
+topology.\par
+\par
+\par
+\par
+\par
+npj Computational Materials | (2024)10:192                                                                                                                   2\par
+https://doi.org/10.1038/s41524-024-01378-4                                                                                                                      Article\par
+\par
+lack of isomorphism makes it impossible to establish a one-to-one corre-                 the \u64257?eld representation of the network at a later time ts + \u916?ts, Fig. 1c.\par
+spondence between dislocation nodes in two consecutive network con\u64257?g-                    De\u64257?ning and computing training loss on a static grid addresses the see-\par
+urations as needed to de\u64257?ne nodal velocities. As such, learning on nodal                 mingly ill-de\u64257?ned problem of matching topology of two generally non-\par
+velocity vectors is not a well-de\u64257?ned task for machine-learning (ML).                    isomorphic graphs.\par
+     We propose to address both these challenges of unknown ground-                           Calculations of the Nye\u8217?s tensor \u64257?eld produced by dislocation networks\par
+truth force and velocity vectors in the following way. First, to address the             are only required for computing and back-propagating parameters \u952? during\par
+issue of de\u64257?ning the mechanical force Fi on a dislocation node i, we assume              training. Once trained, only the GNN-based mobility function in Eq. (4)\par
+that a substantial part of it seen by each node in an MD simulation can be               needs to be evaluated at the inference time, Fig. 1b. Our GNN model and its\par
+estimated from the standard solutions of dislocation theory commonly                     training protocol are implemented in PyTorch30.\par
+employed in DDD simulations, e.g.\par
+                                                                                         Validation on DDD trajectories\par
+                            F DDD\par
+                              i   \u188? F ext\par
+                                      i \u254? Fi \u254? Fi\par
+                                           int  core\par
+                                                                                   \u240?2\u222?   Although our intent is to train GNN-based mobility functions on disloca-\par
+                                                                                         tion trajectories extracted from MD simulations, it can be insightful to \u64257?rst\par
+         i is mechanical force due to an externally applied stress, F i is due\par
+where F ext                                                           int\par
+                                                                                         test the method by observing if and how well a GNN trained on a DDD\par
+to elastic interactions among dislocation segments, and F i is associated\par
+                                                            core\par
+                                                                                         simulation itself can reproduce its known (user-de\u64257?ned) mobility function.\par
+with the dislocation core. That this DDD force is only an approximation of               For this purpose here we use a generic linear function previously developed\par
+the true force F MD\par
+                 i   exerted on node i in an MD simulation can be expressed              for BCC metals31 and implemented in our DDD code ParaDiS7\par
+as\par
+                                                                                                                 V i \u188? MDDD \u240?M e ; M s \u222?  F DDD\par
+                                                                                                                                             i                        \u240?6\u222?\par
+                               F MD\par
+                                 i  \u188? F DDD\par
+                                        i   \u254? F corr\par
+                                                i                                  \u240?3\u222?\par
+                                                                                         where MDDD is a mobility tensor parameterized by two scalar coef\u64257?cients\par
+where F corr\par
+        i    is an unknown correction term accounting for the error made in              Me = 2600(Pa\u8901?s)\u8722?1 and Ms = 20(Pa\u8901?s)\u8722?1 de\u64257?ning mobility of an isolated edge\par
+approximating the true force using Eq. (2). Given that the external and the              and an isolated screw dislocation, respectively.\par
+interaction terms in the DDD force are smoothly varying functions that are                     To generate training data, we ran \u64257?ve DDD simulations starting from\par
+accurately and ef\u64257?ciently computed in DDD, the correction term in Eq. (3)                \u64257?ve different initial distributions of 12 prismatic loops seeded at random\par
+is expected to be a \u8221?shortsighted\u8221? function of the local network topology and            positions. Identical except for their initial states, \u64257?ve crystals were subjected\par
+geometry which we leave for the GNN model to learn. Thus we de\u64257?ne the                    to compressive straining along their [001] axes at a constant strain rate of\par
+nodal mobility function MGNN   \u952?    as a parametric function with learnable              2 \u215? 108/s which are also the conditions of MD simulations intended for\par
+parameters \u952?,                                                                            training (see next section). The \u64257?ve simulations were run to 0.5 ns over\par
+                                                                                       which time dislocation networks were saved at regular intervals of 0.25 ps\par
+                       V i \u188? MGNN   F DDD ; fN j g; fEjk g ;                       \u240?4\u222?   thus producing 10,000 con\u64257?gurations for training. Following the procedure\par
+                              \u952?       i\par
+                                                                                         described in \u8220?DDD+ML model\u8221?, for each training con\u64257?guration the DDD\par
+                                                                                         nodal forces and Nye\u8217?s tensor \u64257?elds were computed and the loss\par
+and let the GNN model learn the resulting nodal velocity vector Vi as a                  (Nye\u8217?s tensor mismatch, Eq. (5)) was minimized by back propagation.\par
+function of the estimated force F DDD\par
+                                    i     and a local graph neighborhood of                    Once trained, the resulting GNN-based mobility function can be used\par
+node i with nodal and edge attributes Nj and Ejk (see Methods for a detailed             to infer nodal velocities in any dislocation con\u64257?guration, including two\par
+de\u64257?nition of the local graph and its attributes). So-de\u64257?ned and properly                 simple cases of in\u64257?nite edge and screw dislocations moving in response to\par
+trained, the mobility function in Eq. (4) is expected to learn the unknown but           applied shear stress \u964?. Such simple exercise allows us to pick into the\par
+local correction to the nodal force F corr\par
+                                        i . To the extent that the correction            otherwise \u8220?black-box\u8221? trained mobility function. As shown in Fig. 2a,\par
+term is indeed learnable from the ground-truth MD data and considering                   the linear mobility employed in the DDD simulations is well reproduced by\par
+that nodal forces in DDD are always computed using Eq. (2), our                          the learned GNN mobility function. Linear regression on predicted stress-\par
+formulation should ensure accuracy of subsequent rollout DDD                             velocity curves yields mobility coef\u64257?cients of M        ^ e \u8776?2564 \u240?Pa  s\u222?1 and\par
+simulations.                                                                              ^\par
+                                                                                         M s \u8776?6 \u240?Pa  s\u222?  1\par
+                                                                                                               for the edge and screw dislocations, respectively, in\par
+     To address uncertainty of de\u64257?ning nodal velocity vectors in the                     agreement with our-de\u64257?ned mobility parameters for pure screw and pure\par
+ground-truth MD data we resort to a recently proposed sweep-tracing                      edge dislocations. A notable discrepancy in the screw mobility is likely\par
+algorithm (STA)10 that deals with precisely the same uncertainty. STA                    caused by relative scarcity in the training data of instances in which screw\par
+employs a dual line/\u64257?eld representation of a dislocation network to                      dislocations actually move. Under assumed extreme anisotropy of dis-\par
+\u8220?reconnect\u8221? any two successive dislocation networks even when they are not               location mobility (ratio Me/Ms = 23) and initiated from 12 prismatic loops of\par
+topologically isomorphic. In STA, Nye\u8217?s tensor \u64257?elds produced by two                     pure edge character, it is mostly edge and mixed dislocations that move over\par
+dislocation networks are \u64257?rst computed and mapped on a static spatial grid.              the \u64257?rst 0.1 of strain covered by \u64257?ve DDD simulations while the screws\par
+The task of reconnection is then de\u64257?ned as an optimization problem that                  are passively drawn while remaining largely motionless. Training on more\par
+seeks to minimize a properly de\u64257?ned distance between Nye\u8217?s tensor28 \u64257?eld                 extended DDD simulations reaching strains at which screws become more\par
+representations of two networks10.                                                       active, is likely to bring the learned MGNN\par
+                                                                                                                                 \u952?     in closer agreement with the user-\par
+     Borrowing from the STA approach, training of the GNN-based                          de\u64257?ned mobility parameter for screw dislocations.\par
+mobility function MGNN \u952?    in Eq. (4) is achieved by minimizing over para-\par
+meters \u952? the following loss function                                                     Training on MD trajectories\par
+                                                                                         We now apply our method to learning a dislocation mobility function on\par
+          XXX               g                          g                      2\par
+ L\u240?\u952?\u222? \u188?                     \u945?kl r ts \u254? MGNN\par
+                                        \u952?   \u916?t s ; bts  \u945?kl r ts \u254?\u916?ts ; bts \u254?\u916?ts        data from large-scale MD simulations. To illustrate the approach, here we\par
+               s   g   kl                                                                focus on plasticity in body-centered-cubic (BCC) metals challenging for its\par
+                                                                                   \u240?5\u222?   strong plastic anisotropy32\u8211?34 manifested in the notorious tension/com-\par
+                                                                                         pression asymmetry10,35,36 and rather uncommon slip crystallography37. We\par
+where the sums are over the set of training examples s, grid points g and                choose BCC tungsten as a testbed material because it is nearly elastically\par
+Cartesian components of the Nye\u8217?s tensor \u64257?eld computed on the grid points                isotropic making it particularly convenient for comparisons with DDD\par
+using the method introduced in29. During training, the GNN learns to                     simulations which are simpler and much more expedient to perform in an\par
+predict nodal velocity vectors Vi at time ts, by best matching its predictions to        elastically isotropic crystal. For MD simulations here we employ a\par
+\par
+\par
+npj Computational Materials | (2024)10:192                                                                                                                              3\par
+https://doi.org/10.1038/s41524-024-01378-4                                                                                                            Article\par
+\par
+Fig. 2 | Stress-velocity predictions. a Velocities of\par
+isolated edge and screw dislocations predicted using\par
+a GNN mobility function trained on DDD trajec-\par
+tories. The learned GNN model accurately repro-\par
+duces linear mobilities employed in DDD\par
+simulation. b Velocities of isolated edge and screw\par
+dislocations predicted using a GNN mobility func-\par
+tion trained on large-scale MD trajectories of BCC\par
+tungsten deformed under [001] tension and com-\par
+pression. The trained GNN mobility function pre-\par
+dicts a non-linear force-velocity relation for the edge\par
+dislocation and a strong asymmetry in the velocities\par
+of screw dislocations sheared in the twinning (T)\par
+and anti-twinning (AT) direction.\par
+\par
+\par
+\par
+\par
+computationally ef\u64257?cient inter-atomic potential (IAP) of the embedded-            DDD+ML simulations with learned mobility\par
+atom (EAM) type previously developed for tungsten38 with its Zener ani-           To fully assess validity of our DDD+ML approach, we implemented\par
+sotropy ratio computed at 300 K close to 1.0 at A = 2C44/(C11 \u8722? C12) = 1.15.      our learned GNN dislocation mobility function in the ParaDiS DDD\par
+      We \u64257?rst perform two MD simulations with ~35 millions atoms, much            code7 via the C++ PyTorch interface. For a one-to-one comparison,\par
+the same way as in the DDD validation simulations described earlier. BCC          DDD simulations were performed under conditions identical to those\par
+crystals are initially seeded with prismatic dislocation loops and then           used in the ground-truth MD simulations. Cube-shaped simulation\par
+deformed at 300 K under uniaxial tension and compression along the [001]          boxes with the side length 296b (here b = 0.2743 nm is the magnitude of\par
+direction. Again consistent with the earlier DDD simulations, the crystals        the Burgers vector), were initially seeded with randomly positioned\par
+are deformed at a true strain rate of 2 \u215? 108/s until reaching a true strain of   prismatic loops and then deformed under tension and compression\par
+1.0. Consistent with our previous results for BCC tantalum10,39, the simu-        along the [001] axis at a strain rate of 2 \u215? 108/s. For consistency, the\par
+lations predict a well de\u64257?ned tension/compression asymmetry, with \u64258?ow             shear modulus \u956? = 149.78 GPa, the Poisson ratio \u957? = 0.289 and\par
+stress of ~4.2 GPa under compression and ~2.8 GPa under tension. During           the dislocation core terms42 have been all computed at 300 K using the\par
+both runs, DXA is used to extract dislocation con\u64257?gurations at equal time         same IAP as in MD simulations38.\par
+intervals of 1 ps thus producing a total of 10,000 DXA snapshots subse-                 As shown in Fig. 3, DDD predictions for \u64258?ow stress agree closely with\par
+quently used to train a GNN-based mobility function as previously                 the ground-truth MD simulations. In particular, the asymmetry in \u64258?ow\par
+described.                                                                        stress under tension and under compression is fully captured in the learned\par
+      When initially tested in predicting velocities of isolated edge and         GNN mobility function. However, in comparison to MD, DDD under-\par
+screw dislocations, the model exhibits smooth and well-behaved                    predicts dislocation densities (Fig. 3b) both under tension and under\par
+functions, Fig. 2b. Velocity predicted for an edge dislocation is linearly        compression, even if asymmetry of two densities predicted in DDD is\par
+proportional to stress up to ~300 MPa, followed by a non-linear regime            approximately the same as in MD. Potential sources of these discrepancies\par
+reaching an asymptotic velocity of ~2000 m/s at a stress of 2 GPa.                will be discussed in the next section.\par
+Qualitatively, this behavior is fully consistent with the expected                      To further test accuracy of our learned GNN mobility function, we now\par
+phonon-drag controlled motion of edge dislocations14 con\u64257?rmed ear-                compare DDD and MD simulations performed under conditions never\par
+lier in MD simulations of BCC metals18,40.                                        seen in training. For this purpose, we ran DDD and MD simulations under\par
+      Of particular interest are velocities predicted from our learned            compression at a lower rate of 2 \u215? 107/s, an order of magnitude lower than\par
+mobility function for pure screw dislocations. When shear stress is               before. To ensure that simulations at the lower rate remain statically\par
+applied in the twinning (T) direction (corresponding to a MRSSP angle             representative of bulk crystal plasticity, crystals used in the MD simulations\par
+\u967? = \u8722? 30o), screw velocity reveals a well-de\u64257?ned threshold stress                 were enlarged by a factor of four to ~140 millions atoms with a corre-\par
+behavior characteristic of thermally-activated motion controlled by               sponding increase in the size of DDD simulation box to 470b. Stress-strain\par
+kink-pair mechanisms, with very low velocity at stresses below an                 curves extracted from MD and DDD simulations are plotted side by side\par
+activation threshold (\u64257?nite temperature Peierls stress) followed by a             in Fig. 4. Although our GNN dislocation mobility function was trained only\par
+transition to a drag-controlled regime at higher stresses. In contrast,           on MD simulations performed under high deformation rate of 2 \u215? 108/s, the\par
+when stress is applied in the anti-twinning (AT) direction (corre-                plastic \u64258?ow response predicted in the DDD+ML also agrees quantitatively\par
+sponding to a MRSSP angle \u967? = + 30o), the same screw dislocation is               with the MD simulation performed at the previously unseen lower rate of\par
+predicted to move at barely discernible velocities which is again fully           deformation.\par
+consistent with theoretical models41 and earlier large-scale MD                         This important observation is consistent with our earlier simula-\par
+simulations10. Considering that a screw dislocation in a BCC crystal has          tions based on a simpli\u64257?ed DDD system25 in which we similarly\par
+a choice of three \{112\} glide\par
+                            p\u64259?\u64259?planes\par
+                               \u64259?       at least one of which seeing resolved      observed that a GNN model trained only at some deformation rate\par
+shear stress no less than 3=2 of shear stress resolved in the MRSSP,              performs well in simulations performed at lower strain rates not seen in\par
+Fig. 2b indicates that, under conditions of our MD simulations and for            training. To rationalize this observed transferability of GNN mobility\par
+the IAP used in this work, glide of screw dislocations on \{112\} planes in         function to DDD simulations at lower deformation rates we note that,\par
+the AT directions is essentially prohibited.                                      although the external/average \u64258?ow stress stays nearly constant in our\par
+\par
+\par
+npj Computational Materials | (2024)10:192                                                                                                                    4\par
+https://doi.org/10.1038/s41524-024-01378-4                                                                                                                           Article\par
+\par
+Fig. 3 | Large-scale DDD+ML predictions versus\par
+ground-truth MD results. a Comparison of stress-\par
+strain response predicted in MD and DDD simula-\par
+tions of [001] tension and compression deformation\par
+of BCC tungsten: the GNN dislocation mobility\par
+function employed in the DDD simulation was\par
+trained on the MD trajectories. MD and DDD\par
+simulations are performed in simulation volumes of\par
+the same size deformed under the same uniaxial\par
+straining conditions at rate 2 \u215? 108/s. b Comparison\par
+of dislocation density evolution in the same MD and\par
+DDD simulations. Lines colors are the same as in the\par
+legend in (a).\par
+\par
+\par
+\par
+\par
+                                                                                            Discussion\par
+                                                                                            Results presented in the preceding sections demonstrate the feasibility and\par
+                                                                                            accuracy of our proposed DDD+ML approach. The same results are all the\par
+                                                                                            more signi\u64257?cant in comparison to traditional \u8220?hand-crafted\u8221? mobility\par
+                                                                                            functions, including the ones previously developed in our group, that often\par
+                                                                                            fail to satisfactorily capture salient characteristics of crystal plasticity such as\par
+                                                                                            the tension/compression asymmetry or the peculiar slip crystallography in\par
+                                                                                            BCC crystals. Not commonly noted in the literature, such failures come in\par
+                                                                                            full display when comparing DDD predictions to predictions of MD\par
+                                                                                            simulations performed under identical conditions, which is precisely the\par
+                                                                                            essence of a cross-scale matching approach24 we presently pursue. Here we\par
+                                                                                            take advantage of a large number of instances of dislocation motion\par
+                                                                                            encountered in large-scale MD simulations of crystal plasticity to train a\par
+                                                                                            machine learner to advance dislocations forward in time in a DDD simu-\par
+                                                                                            lation in the same manner they move in MD. While fully accounting for\par
+                                                                                            known physics in a data-driven fashion, the GNN learns on local network\par
+                                                                                            con\u64257?gurations to predict corrections to dislocation motion that are other-\par
+Fig. 4 | Comparison of stress-strain response predicted in MD and DDD simu-                 wise dif\u64257?cult if not impossible to evaluate. Once incorporated in a DDD\par
+lations of [001] compression at rates 2 \u215? 108/s and 2 \u215? 107/s. Although the GNN             model, our learned mobility function accurately describes complex motion\par
+mobility function was trained only on 2 \u215? 108/s trajectories (red), it correctly predicts   of dislocations in a variety of local con\u64257?gurations and stress states resulting\par
+the \u64258?ow stress at the lower straining rate of 2 \u215? 107/s (green). Evolution of dislocation   in strongly anisotropic plasticity response of BCC metals33,34,43,44. Through\par
+densities predicted at the lower straining rate is shown in the inset.                      observing a large number of examples during training, the GNN also learns\par
+                                                                                            to predict motion of isolated dislocations for which it predicts smooth stress-\par
+                                                                                            velocity relations in close agreement with existing theory, e.g., see Fig. 2b.\par
+                                                                                                   Of particular interest is that, once trained, our GNN mobility function\par
+ground-truth training MD simulations, in the course of the same                             encodes information about slip crystallography without any prior\par
+simulations dislocations experience a much wider range of stress                            assumption about planes in which dislocations should prefer to glide, a still\par
+conditions. Indeed, additional analysis of stress variations in simula-                     contentious issue in BCC metal plasticity37. This is in contrast to previous\par
+tion volumes of our MD training set shows that local stress (sum of                         work in which a \u64257?xed set of glide planes and a certain functional form of the\par
+average external stress and internal stress due to elastic interactions                     dislocation mobility function are assumed a priori14,16. At present when\par
+among dislocations) varies widely, from well above to well below the                        physics of dislocation motion is not yet fully understood, imposing any such\par
+average stress. Accordingly, mechanical forces seen at any given time by                    a priori constraints may prove detrimental to \u64257?delity of DDD simulations.\par
+many dislocations in the network can be low, as manifested in our                                  In our \u64257?rst application of the DDD+ML approach, we nevertheless\par
+previously documented observation that a large faction of dislocation                       observe discrepancies in DDD predictions compared to the ground-truth\par
+segments move little or not at all from one DXA snapshot to the next10.                     MD simulations. While under compression DDD and MD predictions for\par
+Instances when mechanical driving force on a dislocation is low become                      \u64258?ow stress agree within statistical uncertainty, \u64258?ow stress under tension is\par
+increasingly common with decreasing deformation rates, but even at                          slightly under-predicted in DDD. Yet the most notable discrepancy is found\par
+the high rates of our training MD simulations they occur suf\u64257?ciently                        in the evolution of dislocation densities that are under-predicted in DDD by\par
+frequently for the GNN to learn on. We leave it to future work to further                   about 50% both under tension and under compression. Additional work is\par
+examine accuracy and transferability of our ML-learned dislocation                          required to establish what causes these discrepancies, but several sources\par
+mobility function across a wider range of deformation conditions.                           appear plausible and worth further examination.\par
+\par
+\par
+npj Computational Materials | (2024)10:192                                                                                                                                    5\par
+https://doi.org/10.1038/s41524-024-01378-4                                                                                                                    Article\par
+\par
+      One plausible source of discrepancies in dislocation multiplication is            In summary, we propose a data centered approach to constructing\par
+that in DDD dislocation networks evolve not only via the motion of dis-            DDD mobility functions in which a GNN model is trained on large-scale\par
+location nodes or segments, but also through a sequence of topological             MD data. Training is achieved by minimizing DDD prediction loss for the\par
+transformations, e.g., dislocation collisions, junction zipping and unzipping      next state of dislocation network conditioned on mechanical forces com-\par
+and such. Although taking place both in MD and DDD, DDD models are                 puted for the previous state using standard DDD equations. To circumvent\par
+never really informed how such topological events take place in MD but rely        uncertainties in comparing generally non-isomorphic graphs, dislocation\par
+instead on plausible and yet to be validated theoretical arguments such as         networks are mapped on a regular grid using a continuous Nye\u8217?s tensor \u64257?eld\par
+maximum power dissipation7. Furthermore, in mapping dislocation line               representation. To test our new approach on a complex case of crystal\par
+networks on a regular grid and comparing them on the basis of their con-           plasticity in BCC tungsten, we ran DDD simulations using a GNN dis-\par
+tinuous Nye\u8217?s \u64257?eld representations, as was done in training the GNN                location mobility function trained on ground-truth MD simulations. The\par
+mobility function, any topological events taking place between two con-            resulting DDD predictions match MD simulation used in training as well as\par
+secutive DXA snapshots are integrated over and lost. Thus, strictly speaking,      MD simulations performed under previously unseen deformation condi-\par
+the GNN only learns how to advance the Nye\u8217?s \u64257?eld on the grid while never          tions. We believe our data-driven approach to constructing dislocation\par
+learning to perform topological transformations in the dislocation line            mobility functions is a promising avenue for improving prediction \u64257?delity of\par
+network the way they take place in MD. We suspect that, in not matching            the DDD method.\par
+MD on topological events, DDD can not match MD on dislocation mul-\par
+tiplication. Exactly where and how dislocations multiply in a massive MD           Methods\par
+simulation remains an important open question for future studies.                  GNN mobility law\par
+      We also note that the resulting dislocation behaviors captured in our        We model the mobility law in Eq. (4) with a message-passing GNN47, which\par
+trained GNN mobility is naturally tied to the choice of IAP used to generate       has proved very powerful for predicting force \u64257?elds48\u8211?51, defect-properties\par
+the ground-truth MD data. For instance, Finnis-Sinclair style potentials           linkage52, fracture mechanics53, polycrystal properties54,55, and for simulating\par
+such as that used to model W in this work38 are known to predict degenerate        complex physics56.\par
+screw core structures44, which may affect predictions of slip crystallography           Following our recent work on applying GNN to a simpli\u64257?ed model of\par
+in the ground-truth MD trajectories. Yet, we emphasize that our primary            DDD simulations25, a dislocation con\u64257?guration is represented by a graph\par
+objective here is to develop a generic framework capable of accurately             G \u188? \u240?V; E\u222?, where V \u188? fN i g is a collection of dislocation node/vertex fea-\par
+capturing details of dislocation motion as seen in the ground-truth data,          tures (attributes), and E \u188? fEij g is a collection of dislocation segment/edge\par
+agnostic to the quality of the ground-truth data itself. Should a more             features. We de\u64257?ne the input features for each node i as\par
+accurate IAP be employed for generating training data, our DDD+ML                                                                       \par
+work\u64258?ow should be able to learn the resulting dislocation motion equally                                     N i \u188? ni ; F DDD ; k F DDD k                         \u240?7\u222?\par
+well. It is also possible that advanced techniques of transfer-learning may be\par
+used in the future to \u64257?ne-tune GNN mobilities initially trained on \u8221?cheap\u8221?         where ni is a \u64258?ag used to specify whether node i is a discretization or physical\par
+IAPs to learn dislocation behaviors from higher-\u64257?delity IAPs, requiring only       (junction) node. The input edge features on edge ij are\par
+minimal additional training data. Furthermore, coupling of the model with a\par
+physics-informed neural networks (PINN)45 approach may provide a path                                Eij \u188? \u240?eij ; bij ; k bij k; r j  r i ; k r j  r i k\u222?       \u240?8\u222?\par
+to improve the accuracy and generalizability of the proposed approach in\par
+the future.                                                                        where eij is a \u64258?ag used to specify whether segment ij is a glissile or junction\par
+      As a coarse-grained model, DDD simulations are typically orders of           segment, and rj \u8722? ri are the local segments line vectors, naturally compatible\par
+magnitude faster to perform than MD simulations under identical condi-             with the use of periodic boundary conditions. To satisfy Burgers vector\par
+tions. Although requiring more calculations than the traditional hand-             conservation, we use a directed graph, i.e. if ij is an edge with Burgers vector\par
+crafted mobility functions, our trained GNN mobility function still comes at       bij, then ji is also an edge but with opposite Burgers vector \u8722? bij.\par
+a negligible computational cost compared to force calculations. Considering               Our GNN architecture follows57 and is \u64257?rst composed of vertex and\par
+simulations reported in Fig. 3 (at 2 \u215? 108/s), an MD simulation requires           edge encoders ENCV, ENCE transforming concatenated input features into a\par
+~ 10, 000 CPU-hours (using a cheap EAM IAP), compared to ~ 10 \u8722? 20                 latent space\par
+CPU-hours needed to complete a DDD simulation performed under\par
+identical conditions. The speedup of DDD over MD is only going to grow                                 v\u240?0\u222?              \u240?0\u222?\par
+                                                                                                        i \u188? ENC \u240?N i \u222?; eij \u188? ENC \u240?E ij \u222?;\par
+                                                                                                               V                 E\par
+                                                                                                                                                                  \u240?9\u222?\par
+larger with more sophisticated IAPs and decreasing deformation rates\par
+where, in addition to its considerably longer time steps, DDD remains              followed by K stacked message passing layersf E(k), f V(k) (1 \u8804? k \u8804? K) sequen-\par
+ef\u64257?cient in much larger simulation volumes (e.g. several \u956?m) that are pre-         tially updating the latent vertex and edge variables\par
+sently out-of-reach for MD simulations.\par
+      Finally, as a \u64257?rst application here we demonstrate our ML-DDD fra-                                  e\u240?k\u222?\par
+                                                                                                           ij \u188? f\par
+                                                                                                                  E\u240?k\u222? \u240?k1\u222? \u240?k1\u222? \u240?k1\u222?\par
+                                                                                                                      \u240?eij ; vi   ; vj   \u222?;                      \u240?10\u222?\par
+mework on BCC crystals in which dislocation cores are compact. To extend\par
+our approach to FCC and HCP crystals where dislocations dissociate into                                                                             !\par
+                                                                                                                                         X\par
+partials, we envision two possible paths depending on the material. For                                    v\u240?k\u222?\par
+                                                                                                            i     \u188?f   V\u240?k\u222?\par
+                                                                                                                              v\u240?k1\u222?\par
+                                                                                                                               i     ;       e\u240?k\u222?\par
+                                                                                                                                              ij    ;            \u240?11\u222?\par
+crystals with high stacking-fault energy (SFE), a possible approach would be                                                             j\par
+to constrain DXA to extract only the complete dislocations, learn a mobility\par
+function on the resulting DXA snapshots and use it in subsequent DDD               and \u64257?nally a node decoder DEC that translates the latent node variables v (K)\par
+simulations of the same material. For low SFE crystals in which two partials       into the desired output properties, i.e. nodal velocity vectors:\par
+may move far apart, pairing the partials into complete dislocations may not                                                 \par
+be physically justi\u64257?able or even possible. Here a more suitable approach                                          V i \u188? DEC vi\u240?K\u222? :                              \u240?12\u222?\par
+would be to learn mobility of the partial dislocations and use it in a DDD\par
+model resolving the partials46. Extension of the framework to more complex\par
+materials and material microstructures (e.g. irradiated materials, impurities,     Functions ENCV, ENCE, f V, f E, and DEC are neural network operators built\par
+etc.) should also be possible in the future, e.g., by conditioning the local GNN   from multi-layer perceptrons with two hidden layers, layer normalization58,\par
+mobility function on the presence of other types of crystal defects.               skip connections59, and GELU activation functions60.\par
+\par
+\par
+\par
+npj Computational Materials | (2024)10:192                                                                                                                          6\par
+https://doi.org/10.1038/s41524-024-01378-4                                                                                                                   Article\par
+\par
+MD simulations                                                                       4.    Schwarz, K. Simulation of dislocations on the mesoscopic scale. i.\par
+Large-scale MD simulations of BCC tungsten are performed with                              methods and examples. J. Appl. Phys. 85, 108\u8211?119 (1999).\par
+LAMMPS61 under the Kokkos GPU implementation62, using the EAM-style                  5.    Ghoniem, N. A. M., Tong, S.-H. & Sun, L. Parametric dislocation\par
+IAP developed in ref. 38. Simulations are performed following the protocol                 dynamics: a thermodynamics-based approach to investigations of\par
+introduced in ref. 8. Periodic, orthorombic BCC perfect crystals are initially             mesoscopic plastic deformation. Phys. Rev. B 61, 913 (2000).\par
+seeded with twelve 1/2\u9001?111\u9002?\{110\} prismatic loops of the vacancy type. The            6.    Weygand, D., Friedman, L., Van der Giessen, E. & Needleman, A.\par
+crystals are \u64257?rst equilibrated at the temperature of 300 K, after which they               Aspects of boundary-value problem solutions with three-dimensional\par
+are deformed at a constant true strain rate. Temperature and uniaxial                      dislocation dynamics. Model. Simul. Mater. Sci. Eng. 10, 437 (2002).\par
+loading conditions are maintained during deformation using the langevin              7.    Arsenlis, A. et al. Enabling strain hardening simulations with\par
+thermostat and the nph barostat. For the ~ 35 millions atoms simulations                   dislocation dynamics. Model. Simul. Mater. Sci. Eng. 15,\par
+deformed at a rate of 2 \u215? 108/s, DXA27 is executed every 1 ps to save the                  553\u8211?595 (2007).\par
+detailed evolution of the dislocation networks.                                      8.    Zepeda-Ruiz, L. A., Stukowski, A., Oppelstrup, T. & Bulatov, V. V.\par
+                                                                                           Probing the limits of metal plasticity with molecular dynamics\par
+Mobility work\u64258?ow and training                                                              simulations. Nature 550, 492\u8211?495 (2017).\par
+DXA con\u64257?gurations produced in the MD simulations are \u64257?rst converted to               9.    Zepeda-Ruiz, L. A. et al. Atomistic insights into metal hardening. Nat.\par
+the ParaDiS format7. For consistency, during this operation the line net-                  Mater. 20, 315\u8211?320 (2021).\par
+works are also remeshed with discretization size of ~ 10b, corresponding to          10.   Bertin, N., Zepeda-Ruiz, L. & Bulatov, V. Sweep-tracing algorithm: in\par
+the average segment size used in our DDD simulations.                                      silico slip crystallography and tension-compression asymmetry in bcc\par
+       The so-converted dislocation con\u64257?gurations fGts g are then fed to the               metals. Mater. Theory 6, 1\u8211?23 (2022).\par
+                                                                           app\par
+ParaDiS code to compute nodal forces, Eq. (2). Applied forces F i are                11.   Stimac, J. C., Bertin, N., Mason, J. K. & Bulatov, V. V. Energy storage\par
+computed by integrating the Peach-Koehler force \u240?\u963?  bij \u222? \u215? t ij along the\par
+                                                          ts\par
+                                                                                           under high-rate compression of single crystal tantalum. Acta\par
+dislocation segments ij with unit tangent tij, where \u963? ts is the instantaneous             Materialia 239, 118253 (2022).\par
+stress applied to network Gts at time ts as recorded during the MD runs.             12.   Monnet, G. & Terentyev, D. Structure and mobility of the 12\u9001?111\u9002?\{112\}\par
+Long-range interaction forces F lri are computed using DDD-FFT approach                    edge dislocation in bcc iron studied by molecular dynamics. Acta\par
+introduced in ref. 29 which can easily handle non-cubic, deforming simu-                   Materialia 57, 1416\u8211?1426 (2009).\par
+lation boxes as produced by MD simulations. Short-range interaction forces           13.   Kang, K., Bulatov, V. V. & Cai, W. Singular orientations and faceted\par
+F sri are computed using the non-singular isotropic analytical formulation63.              motion of dislocations in body-centered cubic crystals. Proc. Natl\par
+Core forces F core\par
+                 i  are computed from core energies extracted from the                     Acad. Sci. 109, 15174\u8211?15178 (2012).\par
+ground-truth IAP38 using the framework developed in ref. 42.                         14.   Po, G. et al. A phenomenological dislocation mobility law for bcc\par
+       The networks containing nodal forces are then used as inputs to                     metals. Acta Materialia 119, 123\u8211?135 (2016).\par
+our training procedure implemented within PyTorch30. To facilitate                   15.   Geslin, P.-A. & Rodney, D. Thermal \u64258?uctuations of dislocations reveal\par
+training, input forces are rescaled by a factor 109Pa \u8901? b2 so that their                   the interplay between their core energy and long-range elasticity.\par
+average magnitude is on the order of unity. The loss function, Eq. (5), is                 Phys. Rev. B 98, 174115 (2018).\par
+computed by evaluating the Nye\u8217?s tensor on a grid of 323 voxels using a              16.   Wang, Z. & Beyerlein, I. An atomistically-informed dislocation\par
+fully vectorized implementation of the discrete-to-continuous method                       dynamics model for the plastic anisotropy and tension\u8211?compression\par
+introduced in ref. 29.                                                                     asymmetry of bcc metals. Int. J. Plasticity 27, 1471\u8211?1484 (2011).\par
+       We trained different GNN models to explore different sets of hyper-           17.   Srivastava, K., Gr\u246?ger, R., Weygand, D. & Gumbsch, P. Dislocation\par
+parameters. We tested a combination of models with K = \{2, 3\} message-                     motion in tungsten: atomistic input to discrete dislocation\par
+passing layers each with latent space of size L = \{48, 96\}, leading to 4 different         simulations. Int. J. Plasticity 47, 126\u8211?142 (2013).\par
+trained models. The models were trained using the AdamW optimizer with               18.   Chang, J., Cai, W., Bulatov, V. V. & Yip, S. Dislocation motion in bcc\par
+weight decay of 1 \u215? 10\u8722?564. Training was performed for 12 hours with batch                 metals by molecular dynamics. Mater. Sci. Eng.: A 309,\par
+size of 4 on a single NVidia V100 GPU. We \u64257?nd that the GNN model with                      160\u8211?163 (2001).\par
+K = 3 and L = 48 offers the best trade-off between accuracy and complexity           19.   Olmsted, D. L., Hector, L. G., Curtin, W. & Clifton, R. Atomistic\par
+(78,768 total parameters) while showing no sign of ove\u64257?tting. We thus                      simulations of dislocation mobility in Al, Ni and Al/Mg alloys. Model.\par
+selected it as the best model for results presented in this work.                          Simul. Mater. Sci. Eng. 13, 371 (2005).\par
+                                                                                     20.   Queyreau, S., Marian, J., Gilbert, M. & Wirth, B. Edge dislocation\par
+Data availability                                                                          mobilities in bcc Fe obtained by molecular dynamics. Phys. Rev. B 84,\par
+The datasets used and analysed during the current study are available from                 064106 (2011).\par
+the corresponding author on reasonable request.                                      21.   Cereceda, D. et al. Assessment of interatomic potentials for atomistic\par
+                                                                                           analysis of static and dynamic properties of screw dislocations in W. J.\par
+Code availability                                                                          Phys.: Condens. Matter 25, 085702 (2013).\par
+The code used in the current study will be made available in an open-source          22.   Cho, J., Molinari, J.-F. & Anciaux, G. Mobility law of dislocations with\par
+repository.                                                                                several character angles and temperatures in fcc aluminum. Int. J.\par
+                                                                                           Plasticity 90, 66\u8211?75 (2017).\par
+Received: 25 March 2024; Accepted: 4 August 2024;                                    23.   Bertin, N., Sills, R. B. & Cai, W. Frontiers in the simulation of\par
+                                                                                           dislocations. Annu. Rev. Mater. Res. 50, 437\u8211?464 (2020).\par
+                                                                                     24.   Bertin, N., Cai, W., Aubry, S., Arsenlis, A. & Bulatov, V. V. Enhanced\par
+References                                                                                 mobility of dislocation network nodes and its effect on dislocation\par
+1.   Kubin, L. P. et al. Dislocation microstructures and plastic \u64258?ow: a 3D                 multiplication and strain hardening. Acta Materialia 271,\par
+     simulation. Solid state Phenom. 23, 455\u8211?472 (1992).                                   119884 (2024).\par
+2.   Zbib, H. M., Rhee, M. & Hirth, J. P. On plastic deformation and the             25.   Bertin, N. & Zhou, F. Accelerating discrete dislocation dynamics simulations\par
+     dynamics of 3D dislocations. Int. J. Mech. Sci. 40, 113\u8211?127 (1998).                   with graph neural networks. J. Comput. Phys. 487, 112180 (2023).\par
+3.   Bulatov, V., Abraham, F. F., Kubin, L., Devincre, B. & Yip, S.                  26.   Stukowski, A. & Albe, K. Extracting dislocations and non-dislocation\par
+     Connecting atomistic and mesoscale simulations of crystal plasticity.                 crystal defects from atomistic simulation data. Model. Simul. Mater.\par
+     Nature 391, 669\u8211?672 (1998).                                                           Sci. Eng. 18, 085001 (2010).\par
+\par
+\par
+npj Computational Materials | (2024)10:192                                                                                                                           7\par
+https://doi.org/10.1038/s41524-024-01378-4                                                                                                            Article\par
+\par
+27. Stukowski, A. A triangulation-based method to identify dislocations in       52. Yang, Z. & Buehler, M. J. Linking atomic structural defects to\par
+    atomistic models. J. Mech. Phys. Solids 70, 314\u8211?319 (2014).                      mesoscale properties in crystalline solids using graph neural\par
+28. Nye, J. Some geometrical relations in dislocated crystals. Acta Metall.          networks. Npj Comput. Mater. 8, 198 (2022).\par
+    1, 153\u8211?162 (1953).                                                           53. Perera, R., Guzzetti, D. & Agrawal, V. Graph neural networks for\par
+29. Bertin, N. Connecting discrete and continuum dislocation mechanics: A            simulating crack coalescence and propagation in brittle materials.\par
+    non-singular spectral framework. Int. J. Plasticity 122, 268\u8211?284 (2019).         Computer Methods Appl. Mech. Eng. 395, 115021 (2022).\par
+30. Paszke, A. et al. Pytorch: An imperative style, high-performance deep        54. Dai, M., Demirel, M. F., Liang, Y. & Hu, J.-M. Graph neural networks for\par
+    learning library, in: Advances in Neural Information Processing                  an accurate and interpretable prediction of the properties of\par
+    Systems 32, Curran Associates, Inc., 2019, pp. 8024\u8211?8035.                        polycrystalline materials. npj Comput. Mater. 7, 103 (2021).\par
+31. Cai, W. & Bulatov, V. V. Mobility laws in dislocation dynamics               55. Hestroffer, J. M., Charpagne, M.-A., Latypov, M. I. & Beyerlein, I. J.\par
+    simulations. Mater. Sci. Eng.: A 387, 277\u8211?281 (2004).                            Graph neural networks for ef\u64257?cient learning of mechanical properties\par
+32. Christian, J. Some surprising features of the plastic deformation of             of polycrystals. Comput. Mater. Sci. 217, 111894 (2023).\par
+    body-centered cubic metals and alloys. Metall. Trans. A 14,                  56. Sanchez-Gonzalez, A. et al. Learning to simulate complex physics\par
+    1237\u8211?1256 (1983).                                                                with graph networks, in: International Conference on Machine\par
+33. Duesbery, Ma-S. & Vitek, V. Plastic anisotropy in bcc transition                 Learning, PMLR, 2020, pp. 8459\u8211?8468.\par
+    metals. Acta Materialia 46, 1481\u8211?1492 (1998).                                57. Pfaff, T., Fortunato, M., Sanchez-Gonzalez, A., Battaglia, P. W.\par
+34. Dezerald, L., Rodney, D., Clouet, E., Ventelon, L. & Willaime, F. Plastic        Learning mesh-based simulation with graph networks. http://arxiv.\par
+    anisotropy and dislocation trajectory in bcc metals. Nat. Commun. 7,             org/abs/2010.03409 (2020).\par
+    11695 (2016).                                                                58. Ba, J. L., Kiros, J. R., Hinton, G. E. Layer normalization. http://arxiv.\par
+35. Sherwood, P., Guiu, F., Kim, H. C. & Pratt, P. L. Plastic anisotropy of          org/abs/1607.06450 (2016).\par
+    tantalum, niobium, and molybdenum. Can. J. Phys. 45, 1075\u8211?1089 (1967).       59. He, K., Zhang, X., Ren, S., Sun, J. Deep residual learning for image\par
+36. Webb, G. L., Gibala, R. & Mitchell, T. E. Effect of normal stress on yield       recognition. http://arxiv.org/abs/1512.03385 (2015).\par
+    asymmetry in high purity tantalum crystals. Metall. Trans. 5,                60. Hendrycks, D., Gimpel, K. Gaussian error linear units (GELUs). http://\par
+    1581\u8211?1584 (1974).                                                                arxiv.org/abs/1606.08415 (2016).\par
+37. Weinberger, C. R., Boyce, B. L. & Battaile, C. C. Slip planes in bcc         61. Thompson, A. P. et al. Lammps-a \u64258?exible simulation tool for particle-\par
+    transition metals. Int. Mater. Rev. 58, 296\u8211?314 (2013).                          based materials modeling at the atomic, meso, and, continuum\par
+38. Juslin, N. & Wirth, B. Interatomic potentials for simulation of he bubble        scales. Computer Phys. Commun. 271, 108171 (2022).\par
+    formation in W. J. Nucl. Mater. 432, 61\u8211?66 (2013).                           62. Edwards, H. C., Trott, C. R. & Sunderland, D. Kokkos: Enabling\par
+39. Bertin, N., Carson, R., Bulatov, V. V., Lind, J. & Nelms, M. Crystal             manycore performance portability through polymorphic memory\par
+    plasticity model of bcc metals from large-scale MD simulations. Acta             access patterns. J. Parallel Distrib. Comput. 74, 3202\u8211?3216 (2014).\par
+    Materialia 260, 119336 (2023).                                               63. Cai, W., Arsenlis, A., Weinberger, C. R. & Bulatov, V. V. A non-singular\par
+40. Osetsky, Y. N. & Bacon, D. J. An atomic-level model for studying the             continuum theory of dislocations. J. Mech. Phys. Solids 54, 561\u8211?587 (2006).\par
+    dynamics of edge dislocations in metals. Model. Simul. Mater. Sci.           64. Loshchilov, I., Hutter, F. Decoupled weight decay regularization.\par
+    Eng. 11, 427 (2003).                                                             http://arxiv.org/abs/1711.05101 (2017).\par
+41. Edagawa, K., Suzuki, T. & Takeuchi, S. Motion of a screw dislocation\par
+    in a two-dimensional Peierls potential. Phys. Rev. B 55, 6180 (1997).        Acknowledgements\par
+42. Bertin, N., Cai, W., Aubry, S. & Bulatov, V. Core energies of                NB and VB acknowledge support by the Laboratory Directed Research and\par
+    dislocations in bcc metals. Phys. Rev. Mater. 5, 025002 (2021).              Development (LDRD) program (22-ERD-016) and by the ASC PEM program at\par
+43. Ito, K. & Vitek, V. Atomistic study of non-Schmid effects in the plastic     Lawrence Livermore National Laboratory (LLNL). FZ was supported by the\par
+    yielding of bcc metals. Philos. Mag. A 81, 1387\u8211?1407 (2001).                 Critical Materials Innovation Hub, an Energy Innovation Hub funded by the\par
+44. Vitek, V. Core structure of screw dislocations in body-centred cubic         U.S. Department of Energy, Of\u64257?ce of Energy Ef\u64257?ciency and Renewable\par
+    metals: relation to symmetry and interatomic bonding. Philos. Mag.           Energy, and Advanced Materials and Manufacturing Technologies Of\u64257?ce.\par
+    84, 415\u8211?428 (2004).                                                          Computing support for this work came from LLNL Institutional Computing\par
+45. Raissi, M., Perdikaris, P. & Karniadakis, G. E. Physics-informed neural      Grand Challenge program. This work was performed under the auspices of the\par
+    networks: A deep learning framework for solving forward and inverse          U.S. Department of Energy by LLNL under contract DE-AC52-07NA27344.\par
+    problems involving nonlinear partial differential equations. J. Comput.\par
+    Phys. 378, 686\u8211?707 (2019).                                                   Author contributions\par
+46. Martinez, E., Marian, J., Arsenlis, A., Victoria, M. & Perlado, J. M.        N.B. developed the method, performed the simulations, and trained the\par
+    Atomistically informed dislocation dynamics in fcc crystals. J. Mech.        model. N.B. and F.Z. implemented the model. N.B. and V.B. analyzed the\par
+    Phys. Solids 56, 869\u8211?895 (2008).                                             results and wrote the manuscript. All authors read and approved the \u64257?nal\par
+47. Battaglia, P. W. et al. Relational inductive biases, deep learning, and      manuscript.\par
+    graph networks. http://arxiv.org/abs/1806.01261.(2018).\par
+48. Gilmer, J., Schoenholz, S. S., Riley., P. F., Vinyals, O., Dahl, G. E.       Competing interests\par
+    Neural message passing for quantum chemistry, in: International              The authors declare no competing interests.\par
+    conference on machine learning, PMLR, 2017, pp. 1263\u8211?1272.\par
+49. Chen, C., Ye, W., Zuo, Y., Zheng, C. & Ong, S. P. Graph Networks as a        Additional information\par
+    Universal Machine Learning Framework for Molecules and Crystals.             Correspondence and requests for materials should be addressed to\par
+    Chem. Mater. 31, 3564 (2018).                                                Nicolas Bertin.\par
+50. Park, C. W. et al. Accurate and scalable graph neural network force\par
+    \u64257?eld and molecular dynamics with direct force architecture. npj              Reprints and permissions information is available at\par
+    Comput. Mater. 7, 73 (2021).                                                 http://www.nature.com/reprints\par
+51. Batzner, S. et al. E(3)-equivariant graph neural networks for data-\par
+    ef\u64257?cient and accurate interatomic potentials. Nat. Commun. 13,               Publisher\u8217?s note Springer Nature remains neutral with regard to jurisdictional\par
+    2453 (2022).                                                                 claims in published maps and institutional af\u64257?liations.\par
+\par
+\par
+\par
+npj Computational Materials | (2024)10:192                                                                                                                    8\par
+https://doi.org/10.1038/s41524-024-01378-4                                          Article\par
+\par
+Open Access This article is licensed under a Creative Commons\par
+Attribution-NonCommercial-NoDerivatives 4.0 International License,\par
+which permits any non-commercial use, sharing, distribution and\par
+reproduction in any medium or format, as long as you give appropriate\par
+credit to the original author(s) and the source, provide a link to the Creative\par
+Commons licence, and indicate if you modi\u64257?ed the licensed material. You\par
+do not have permission under this licence to share adapted material\par
+derived from this article or parts of it. The images or other third party\par
+material in this article are included in the article\u8217?s Creative Commons\par
+licence, unless indicated otherwise in a credit line to the material. If material\par
+is not included in the article\u8217?s Creative Commons licence and your intended\par
+use is not permitted by statutory regulation or exceeds the permitted use,\par
+you will need to obtain permission directly from the copyright holder. To\par
+view a copy of this licence, visit http://creativecommons.org/licenses/by-\par
+nc-nd/4.0/.\par
+\par
+\u169? The Author(s) 2024\par
+\par
+\par
+\par
+\par
+npj Computational Materials | (2024)10:192                                                9\par
+
+}

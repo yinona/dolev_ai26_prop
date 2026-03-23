@@ -1,0 +1,986 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\froman Times New Roman;}}
+\f0\fs22
+Continuum Mech. Thermodyn. (2022) 34:763\u8211?780\par
+https://doi.org/10.1007/s00161-022-01088-6\par
+\par
+ O R I G I NA L A RT I C L E\par
+\par
+\par
+\par
+\par
+Yinguang Piao \u183? Khanh Chau Le\par
+\par
+Thermodynamic theory of dislocation/grain boundary\par
+interaction\par
+\par
+\par
+\par
+Received: 10 November 2021 / Accepted: 28 January 2022 / Published online: 25 February 2022\par
+\u169? The Author(s) 2022\par
+\par
+\par
+Abstract The thermodynamic theory of dislocation/grain boundary interaction, including dislocation pileup\par
+against, absorption by, and transfer through the grain boundary, is developed for non-uniform plastic deforma-\par
+tions in polycrystals. The case study is carried out on the boundary conditions affecting work hardening of a\par
+bicrystal subjected to plane constrained shear for three types of grain boundaries: (i) impermeable hard grain\par
+boundary, (ii) grain boundary that allows dislocation transfer without absorption, and (iii) grain boundary that\par
+absorbs dislocations and allows them to pass later.\par
+\par
+Keywords Thermodynamics \u183? Dislocations \u183? Grain boundary \u183? Polycrystals \u183? Work hardening\par
+\par
+\par
+1 Introduction\par
+\par
+The interaction between dislocations and grain boundaries plays an essential role in the mechanical response\par
+of polycrystalline materials to loading. Several outcomes of this interaction are possible. At low dislocation\par
+density, the grain boundary blocks the movement of dislocations and forces them to pileup against it, with the by-\par
+product of linearly increased kinematic work hardening. As the dislocation density exceeds some critical value,\par
+a certain amount of dislocations is absorbed by the grain boundary, causing an increase in the surface dislocation\par
+density and the misorientation between adjacent grains. Dislocations can also be emitted at a later stage of\par
+straining in the neighboring grain or transferred through the grain boundary. In the presence of grain boundaries,\par
+non-uniform plastic deformation occurs, leading to non-redundant (geometrically necessary) dislocations, so\par
+the need for continuum models that include the gradient of plastic deformation becomes evident. Berdichevsky\par
+and Sedov [1] were the first to introduce the curl of plastic deformation (Nye\u8211?Bilby\u8211?Kr\u246?ner\u8217?s tensor) into the\par
+continuum dislocation theory (CDT) and associate it with the density of non-redundant dislocations. They\par
+also proposed the thermodynamics of dislocations, using this density of non-redundant dislocations as a state\par
+variable in the free energy and giving the variational formulation of CDT (see the further developments in\par
+[2,3]). The main drawback of this thermodynamic approach is the absence of configurational entropy and\par
+its dual quantity, the effective temperature of dislocations, introduced a few decades later by Langer et al.\par
+[4]. Together with the density of redundant dislocations, this configurational entropy enables ones to build\par
+up the meaningful thermodynamics of dislocations satisfying two universal laws for plastic flows discovered\par
+in [5,6]. Recently, one of us extended CDT by introducing the density of redundant dislocations as well\par
+as the configurational entropy as additional state variables [7]. He has shown that the new theory, called\par
+thermodynamic dislocation theory (TDT), can predict both kinematic and isotropic work hardening. This TDT\par
+has been applied to model grain boundaries as hard obstacles that block dislocations, leading to dislocation\par
+Communicated by Andreas \u214?chsner.\par
+Y. Piao \u183? K. C. Le (B)\par
+Lehrstuhl f\u252?r Mechanik - Materialtheorie, Ruhr-Universit\u228?t Bochum, D-44780 Bochum, Germany\par
+E-mail: chau.le@rub.de\par
+764                                                                                                  Y. Piao, K. C. Le\par
+\par
+\par
+pileup, kinematic work hardening, and Bauschinger effect [8,9]. Piao and Le [10] further applied the theory to\par
+the problem of interaction between screw dislocations and permeable grain boundary based on the experiments\par
+performed by Kondo et al. [11]. There, an interfacial dissipation potential is proposed and additional boundary\par
+conditions for the grain boundary are derived to model screw dislocation/grain boundary interaction.\par
+     Alternative phenomenological models that include the interaction between dislocations and grain bound-\par
+aries have been proposed in the context of strain gradient plasticity by Fleck et al. [12]; Aifantis [13]; Gao et al.\par
+[14]; Gurtin [15], and a large number of investigations have been carried out within this approach. Fredriksson\par
+and Gudmundson [16] proposed an energetic model according to which the plastic work is stored as interfacial\par
+energy that depends on the jump of plastic slip at the grain boundary, while Fleck and Willis [17] argued that\par
+material hardening due to the grain boundary is mainly carried by energy dissipation. Note that both models\par
+allow for a discontinuity in the plastic slip at the grain boundary. Gurtin [18] introduced a Burgers\u8217? tensor\par
+at the grain boundary, analogous to the Nye\u8211?Bilby\u8211?Kr\u246?ner\u8217?s tensor for bulk crystals, to determine both the\par
+interfacial energy and dissipation. One merit of this tensorial measure is that it allows the theory to satisfy the\par
+slip transfer criteria. Van Beers et al. [19] proposed a similar theory that takes into account the criteria of slip\par
+transfer, but differs from the formulation of Gurtin [18]. Inter-grain interaction modules from two theories are\par
+compared by Gottschalk et al. [20]; Bayerschen et al. [21]. Erdle and B\u246?hlke [22] developed the continuum\par
+model of dislocation/grain boundary interaction based on the micromorphic strain gradient plasticity. We also\par
+mention the references [23\u8211?29] which use the same strain gradient plasticity. Similar to the CDT developed in\par
+[1\u8211?3], this standard strain gradient plasticity ignores completely configurational entropy, so none of the work\par
+done within this approach is consistent with thermodynamics of dislocations proposed in [4\u8211?6].\par
+     The aim of this work is to model the interaction of edge dislocations with the grain boundary in polycrystals\par
+within the framework of TDT. In contrast to the interaction between screw dislocations and grain boundaries\par
+studied in our previous paper [10], the processes of dislocation pileup against, absorption by, and transfer\par
+through the grain boundary may occur in this situation. Using the variational formulation together with the\par
+proposed surface energy and dissipation potential, we will derive the interface boundary conditions for these\par
+processes. The case study is carried out on the boundary conditions affecting work hardening of a bicrystal\par
+subjected to plane constrained shear for three types of grain boundaries: (i) impermeable hard grain boundary,\par
+(ii) grain boundary that allows dislocation transfer without absorption, and (iii) grain boundary that absorbs\par
+dislocations and allows them to pass later. Note that, according to various experimental observations reported,\par
+e.g., in [30,31], the grain boundary could be migrated during this dislocation absorption, but this possible\par
+migration is ignored in this continuum model. We show especially the effect of dislocation absorption on work\par
+hardening.\par
+     The paper is organized as follows. After this brief introduction, we lay down the kinematics and thermody-\par
+namic framework of TDT in Sect. 2. In Sect. 3, we analyze the effects of dissipation potential and interfacial\par
+energy on the work hardening of materials and derive the conditions at the grain boundary for various processes\par
+during plastic deformation. In Sect. 4, the application of the developed theory to the problem of a bicrystal\par
+subjected to plane constrained shear is illustrated and its numerical treatment is presented. Detailed numerical\par
+simulations are then performed and the results are discussed. We conclude the paper with a brief summary in\par
+Sect. 5.\par
+\par
+\par
+2 Formulation for bulk crystals\par
+\par
+2.1 Kinematics\par
+\par
+In the small strain theory, we ignore the differences between the Lagrangian and Eulerian coordinates and\par
+assume that the total displacement gradient (distortion) u\u8711? can be decomposed additively into elastic and\par
+plastic counterparts\par
+\par
+                                                 u\u8711? = \u946? e + \u946?,                                                    (1)\par
+\par
+where u(x) is a displacement field, x = (x1 , x2 , x3 ) a position vector of a material point of the body, and \u8711? the\par
+nabla operator. The incompatible plastic distortion of the crystal having n active slip systems takes the form\par
+\par
+                                                   \par
+                                                   n\par
+                                          \u946?(x) =         \u946? \u945? (x)s\u945? \u8855? m\u945? ,                                         (2)\par
+                                                   \u945?=1\par
+Thermodynamic theory                                                                                              765\par
+\par
+\par
+with s\u945? and m\u945? being the pair of unit vectors denoting the slip direction and the normal to the slip planes of the\par
+corresponding \u945?-th slip system. The plastic slip of the \u945?-th slip system, \u946? \u945? (x), is assumed to be continuously\par
+differentiable function except at the interfaces or grain boundaries. Since s\u945? and m\u945? are mutually orthogonal, the\par
+trace of the plastic distortion always vanishes, tr\u946? = 0, which indicates volume-preserving plastic deformation\par
+due to the conservative motion of dislocations. The total strain \u949? and the plastic strain \u949?p are the symmetric\par
+part of the displacement gradient and the plastic distortion, respectively, so that\par
+                                           1                 1\par
+                                     \u949?=      (\u8711?u + u\u8711?), \u949? p = (\u946? + \u946? T ).                                         (3)\par
+                                           2                 2\par
+Accordingly, the elastic strain equals\par
+                                                      \u949?e = \u949? \u8722? \u949?p .                                               (4)\par
+The net Burger\u8217?s vector B of non-redundant dislocations whose lines cross the area S bounded by the closed\par
+curve \u8706? S is given by\par
+                                                       \par
+                                     B=       \u946? \u183? dx =    \u945? \u183? nda,                                     (5)\par
+                                                  \u8706?S              S\par
+where \u945? is the Nye\u8211?Bilby\u8211?Kr\u246?ner\u8217?s dislocation tensor [32\u8211?34],\par
+                                        \u945? = \u8722?\u946? \u215? \u8711?, (\u945?i j =  jkl \u946?il,k ).                                        (6)\par
+In particular, if there is only one active slip system such that s and m lie in the (x1 , x2 )-plane, while the\par
+dislocation lines are parallel to the x3 -axis, then \u945? under the plane strain has only two nonzero components\par
+\u945?i3 = si (\u8706?s \u946?), where \u8706?s denotes the derivative in the s-direction. Consequently, the scalar density of the\par
+non-redundant dislocations is given by\par
+                                                       |dB|  1\par
+                                               \u961?g =         = |\u8706?s \u946?|,                                             (7)\par
+                                                       bda   b\par
+with b being the magnitude of Burger\u8217?s vector.\par
+\par
+\par
+2.2 Thermodynamic framework\par
+\par
+Suppose the material body in form of a slab of constant depth L occupies the 3-D domain V , and its boundary \u8706? V\par
+consists of two non-intersecting surfaces, \u8706?k and \u8706?s , on which the displacement field u(x) and the traction-free\par
+condition are specified, respectively. Assuming that no body force acts on the crystals, the energy functional\par
+reads\par
+                                              \par
+                                         I =     \u968?(\u949?e , \u961? g , \u961? r , \u967? )d3 x,                                  (8)\par
+                                                  V\par
+\par
+where  d3 x  = dx1 dx2 dx3 denotes the volume element and \u968? is the density of the Helmholtz free energy. The\par
+dislocation network is assumed to be two-dimensional, such that the dislocation lines are parallel to the x3 -axis\par
+and the Burgers\u8217? vector of edge dislocations lies in the (x1 , x2 )-plane. We let \u961? r denote the density of redundant\par
+dislocations whose resultant Burgers\u8217? vector vanishes, and \u961? g the density of non-redundant dislocations (see\par
+subsection 2.1 ). The sum of the two types of dislocation densities is the total dislocation density \u961? = \u961? r +\u961? g . In\par
+the spirit of the dislocation mediated plasticity [4], which decomposes the thermodynamic system of dislocated\par
+crystal into two subsystems and traces it back to statistical aspects of the defects, \u967? is the effective temperature\par
+characterizing the slow rearrangement of configuration of atoms during the motion of dislocations, while the\par
+ordinary temperature T characterizes the fast vibration of atoms of the kinetic vibrational subsystem. In some\par
+cases, such as thermal softening [35\u8211?37] or adiabatic shear banding [38], the ordinary temperature plays an\par
+important role. However, in the present study we set T to be constant and drop it from the list of arguments of\par
+the free energy density \u968?. The state variables \u949? e and \u961? g are dependent variables expressed by u and \u946?, while\par
+\u961? r and \u967? are independent state variables. We decompose \u968? into the part due to the elastic strain, \u968?e , and the\par
+remaining parts\par
+                         \u968?(\u949?e , \u961? g , \u961? r , \u967? ) = \u968?e (\u949? e ) + \u968?r (\u961? r ) + \u968?m (\u961? g ) + \u968?c (\u967? , \u961?),                 (9)\par
+766                                                                                                Y. Piao, K. C. Le\par
+\par
+\par
+where \u968?r is the self-energy density of redundant dislocations, \u968?m is the energy density of the non-redundant\par
+dislocations, while \u968?c is the configurational heat associated with the configurational entropy [7,35]. The\par
+additive decomposition of the energy of dislocations into two parts \u968?r and \u968?m is possible because the interaction\par
+between dislocation dipole and dislocation has a much shorter range compared to the interaction between\par
+dislocations of the same sign. These contributions are given below\par
+\par
+                                            1\par
+                               \u968?e (\u949?e ) =     \u955?(\u949?e )2 + \u956?\u949?e \u949?e , \u968?r (\u961? r ) = \u947?D \u961? r ,\par
+                                            2 kk \u9115? i j i j \u9118?\par
+                                                             1\par
+                               \u968?m (\u961? g ) = \u947?D \u961?ss ln \u9117?                 \u9120?,                                      (10)\par
+                                                  g\par
+                                                                 \u961?g\par
+                                                         1\u8722?       g\par
+                                                                 \u961?ss\par
+                               \u968?c (\u967? , \u961?) = \u8722?\u967?\u772?(\u8722?\u961? ln(a 2 \u961?) + \u961?),\par
+\par
+where \u955? and \u956? are Lame\u769? constants, and \u947?D the dislocation energy per unit length. Since \u8722?\u961? ln(a 2 \u961?) + \u961? is\par
+the entropy per unit area of the two-dimensional dislocation network (see the detailed derivation in [39]), the\par
+\u8220?two-dimensional\u8221? temperature \u967?\u772? = \u967? /L is introduced to get the configurational heat having the unit of energy\par
+density [7]. Note that a is a length scale of the order of atomic spacing. The defect energy \u968?m describing the\par
+interactions of non-redundant dislocations captures the kinematic hardening. The logarithmic term, originated\par
+from [40], ensures that the defect energy increases linearly for small dislocation density and tends to infinity\par
+                                                                              g                      g\par
+as \u961? g approaches the saturated density of non-redundant dislocations \u961?ss . We assume that \u961?ss = k0 \u961?ss is a\par
+fraction of \u961?ss by coefficient k0 , where \u961?ss = (1/a 2 )e\u8722?\u947?D /\u967?\u772? is the steady-state dislocation density determined\par
+by minimizing the free energy of the configurational subsystem [4]. Note that k0 is characterized by the\par
+interaction between dislocations of the same sign, which is similar to the interaction between charges [41]. We\par
+                                                g\par
+will see in the subsequent section the role of \u961?ss in the contribution of interfacial energy to the work hardening.\par
+    The applied loading can lead to nucleation, propagation and movement of dislocations, which result in\par
+plastic deformations in the crystal. In these processes, dislocations always experience resistance, which causes\par
+energy dissipation. The dissipation potential in the bulk has the form\par
+\par
+                                                              1         1\par
+                                    Db (\u946?\u775?, \u961?\u775?, \u967?\u775? ) = \u964?i \u946?\u775? + d\u961? \u961?\u775? 2 + d\u967? \u967?\u775? 2 .                             (11)\par
+                                                              2         2\par
+The first term is the plastic power, where \u964?i is the internal stress, while the last two terms represent the\par
+dissipation due to the multiplication of dislocations and the increase of the configurational temperature [7].\par
+Langer et al. [4] developed the kinetics of dislocation depinning that dominantly controls the plastic slip rate.\par
+Averaging this kinetic equation over the representative volume element, we have established in [42] that\par
+\par
+                               q(T, \u964?i , \u961? r )   b\u8730?\par
+                         \u946?\u772?\u729? =                 =    \u961? f P (T, \u964?i , \u961? r ) \u8722? f P (T, \u8722?\u964?i , \u961? r )                 (12)\par
+                                   t0            t0\par
+\par
+where t0 is a microscopic time scale of the order of the inverse Debye frequency, and\par
+                                                                             \par
+                                                        TP            \u964?i\par
+                               f P (T, \u964?i , \u961? ) = exp \u8722? exp \u8722?\par
+                                             r\par
+                                                                               .                               (13)\par
+                                                        T          \u964?T (\u961? r )\par
+                                                                                                       \u8730?\par
+Note that TP is the activation temperature of the potential well of a pinning site and \u964?T (\u961? r ) = \u956?T b \u961? r is the\par
+Taylor stress with \u956?T being proportional to the shear modulus \u956?. It was shown that this kinetic equation for \u946?\u772?\u729?\par
+can correctly describe the rate-reducing behavior of isotropic work hardening both when the crystal is loaded\par
+on one direction and in the load reversal process [10]. Provided there is only one slip system inclined at an\par
+angle \u966? to the x1 -axis, then, using similar arguments as in [8], we lay down one governing equation for \u964?\u775?i\par
+\par
+                                                 q0                q(T, \u964?i , \u961? r )\par
+                                       \u964?\u775?i = \u956?        cos 2\u966? \u8722?                                                 (14)\par
+                                                 t0                    q0\par
+\par
+where q0 /t0 denotes the total shear strain rate. This equation plays the role of the kinematic constraint for the\par
+internal stress \u964?i . The remaining equations in the bulk can be derived from the following variational principle:\par
+Thermodynamic theory                                                                                               767\par
+\par
+\par
+The true displacement field u\u780?(x), the true plastic slips \u946?\u780?(x), the true density of redundant dislocations \u961?\u780? r (x),\par
+and the true configurational temperature \u967?\u780? (x) obey the variational equation\par
+                                      \par
+                                                  \u8706? Db       \u8706? Db       \u8706? Db\par
+                               \u948?I +                     \u948?\u946? +       \u948?\u961? +       \u948?\u967? d3 x = 0                         (15)\par
+                                          V        \u8706? \u946?\u775?       \u8706? \u961?\u775?       \u8706? \u967?\u775?\par
+\par
+for all variations of admissible fields u(x), \u946?(x), \u961? r (x) and \u967? (x). Focusing on the contribution of the grain\par
+boundary to work hardening, we assume that the whole external boundary \u8706? V admit dislocation to reach it. In\par
+this case, the plastic slip can be varied arbitrarily at \u8706? V . The variational equation (15) allows one to derive the\par
+remaining governing equations. From the variation of I with respect to the displacement field u(x), we obtain\par
+the quasi-static equilibrium equation and the boundary condition [43]\par
+\par
+                                                       \u963?i j, j = 0 in V ,\par
+                                                                                                                  (16)\par
+                                                       \u963?i j n j = 0 on \u8706?s ,\par
+\par
+with \u963? = \u8706?\u968?e /\u8706?\u949? e being the Cauchy stress tensor and n the outward unit normal vector to the external boundary.\par
+In Eq. (15), the vanishing variation with respect to the plastic slip \u946?(x) yields the balance of microforces acting\par
+on dislocations [7] and the natural boundary condition at the entire external boundary as\par
+\par
+                                                    \u964? \u8722? \u964?b \u8722? \u964?i = 0 in V ,\par
+                                                    \u8706?\u968?m                                                           (17)\par
+                                                          = \u947?D on \u8706? V ,\par
+                                                     \u8706?\u961? g\par
+\par
+where \u964? = si \u963?i j m j is the resolved shear stress acting on the slip system, while the back stress is\par
+\par
+                                              1     \u8706?\u968?m                      1 \u8706? 2 \u968?m\par
+                                \u964?b = \u8722?                   sign\u946?,s        =\u8722?               \u946?,ss .                   (18)\par
+                                              b     \u8706?\u961? g           ,s        b2 \u8706?(\u961? g )2\par
+\par
+Note that (.),s = si \u8706?i (.) is the shorthand notation for \u8706?s (.). Following the suggestions by Le [7] for functions\par
+of d\u961? and d\u967? , the remaining equations obtained from Eq. (15) for \u967?\u775? and \u961?\u775? can be cast into the form\par
+\par
+                                        q(T, \u964?i , \u961? r )         \u967?\par
+                             \u967?\u775? = K\u967? eD \u964?i                1\u8722?            ,\par
+                                             t0                \u967?0\par
+                                                                                                                  (19)\par
+                                          \u964?i            q(T, \u964?i , \u961? r )         \u961?\par
+                             \u961?\u775? = K\u961? 2                                    1\u8722?          .\par
+                                    a \u957?(T, \u961? r , q0 )2      t0               \u961?ss (\u967? )\par
+\par
+Here, \u967?0 is a constant denoting the steady-state configurational temperature, while the steady-state dislocation\par
+density at a given effective temperature is \u961?ss (\u967? ) = (1/a 2 )e\u8722?\u947?D /\u967?\u772? . K\u967? is a factor inversely proportional to the\par
+effective specific heat and K\u961? is a energy conversion coefficient [44]. The function \u957?(T, \u961? r , q0 ) is defined as\par
+                                                                                  \u8730?   \par
+                                                             TP                  b \u961?r\par
+                                 \u957?(T, \u961? r , q0 ) = ln              \u8722? ln ln              .                         (20)\par
+                                                             T                    q0\par
+\par
+\par
+3 Interface boundary conditions\par
+\par
+As a prototype, we study a simple problem of plane deformation of a bicrystal whose single grain boundary,\par
+which is a plane perpendicular to the y-axis, lies at y = yg (see Fig. 1). The extension to the case of polycrystals\par
+with multiple grain boundaries can be done without complications. Since the tensorial index notation is no\par
+longer required, the coordinates (x1 , x2 , x3 ) are changed to (x, y, z) for simplicity. For the sake of definiteness,\par
+we assume that only edge dislocations move to and interact with the grain boundary. If the plastic slip \u946? depends\par
+only on y due to the sample geometry and specific boundary conditions, then the non-redundant dislocation\par
+density is proportional to \u946?,y , \u961? g = |\u946?,y |/b, where  depends on the slip system, as will be discussed in\par
+Sect. 4.\par
+768                                                                                                  Y. Piao, K. C. Le\par
+\par
+\par
+3.1 Interfacial energy and dissipation\par
+\par
+Dislocations are long-lived and well-defined defects and have various interactions with the grain boundary,\par
+e.g., dislocation pileup, absorption, and transmission. Within the continuum approach, it should be possible\par
+to mimic these interactions by the interfacial energy and dissipation that reflect the underlying physics at the\par
+nano-/submicron scale. The low-angle grain boundary itself can be regarded as an array of dislocations [45]\par
+whose interfacial energy depends on the surface dislocation density [46,47]. It also acts as an additional barrier\par
+to the movement of dislocations and can later absorb or release them. Therefore, in addition to bulk dissipation,\par
+interfacial dissipation must also be taken into account. In order to choose the appropriate argument for the\par
+interfacial energy, the state variables of the surface must first be recognized. Although the plastic distortion and\par
+the corresponding plastic slip are not the state variables in the bulk, the jump in the plastic slip representing the\par
+surface dislocation density is the state variable at the grain boundary (cf. with the Burgers tensor introduced\par
+in [18]). We propose the densities of interfacial energy and dissipation potential as follows\par
+                                                  \par
+                                            \u968?s (\u946?  y \u177?0 ) = \u968?s (|[[\u946?]]\u915? |),                                     (21)\par
+                                                       g\par
+\par
+\par
+and\par
+                                                            |\u946?\u775?\u915? | 1 ([[\u946?\u775?]]\u915? )2\par
+                                    Ds (\u946?\u775?  y   \u177?0\par
+                                                    ) = \u950?y             + \u950?a           .                          (22)\par
+                                             g                   b      2     b2\par
+Here, the vertical line followed by yg \u177? 0 indicates the limits of the preceding expression as y approaches the\par
+grain boundary position yg from above and below, while .\u915? and [[.]]\u915? denote the mean value and the jump\par
+of a variable at the interface \u915? , respectively. Thus, according to these definitions\par
+                                    1                                               \par
+                        \u946?\u775?\u915? =     (\u946?\u775? y +0 + \u946?\u775?  y \u8722?0 ), [[\u946?\u775?]]\u915? = (\u946?\u775?  y +0 \u8722? \u946?\u775?  y \u8722?0 ).                (23)\par
+                                    2      g           g                       g           g\par
+\par
+\par
+Eq. (21) requires that only the surface dislocation density |[[\u946?]]\u915? |/b, regarded as the state variable, can be\par
+the argument of \u968?s . The first term on the right-hand side of Eq. (22) is the dissipation by the rate of the\par
+mean plastic slip at the interface, where \u950?y plays a role of the yield surface tension. The second term in (22),\par
+quadratic in [[\u946?\u775?]]\u915? , describes rate-dependent dissipation due to the acoustic emission of waves generated during\par
+the absorption of dislocations by the grain boundary.\par
+    The boundary conditions involving interfacial energy and dissipation can be derived from the following\par
+variational equation\par
+                                                       \par
+                                                              \u8706? Db       \u8706? Db       \u8706? Db\par
+                        \u948? I+        \u968?s (|[[\u946?]]\u915? |)da +              \u948?\u946? +       \u948?\u961? +       \u948?\u967? d3 x\par
+                                 \u915?                        V    \u8706? \u946?\u775?       \u8706? \u961?\u775?       \u8706? \u967?\u775?\par
+                            \par
+                                    \u8706? Ds               \u8706? Ds\par
+                          +                \u948?[[\u946?]]\u915? +          \u948?\u946?\u915? da = 0,                                 (24)\par
+                              \u915?   \u8706?[[\u946?\u775?]]\u915?           \u8706?\u946?\u775?\u915?\par
+which extends Eq. (15) to the case involving the grain boundary, where da denotes the area element, while I\par
+and Db remain exactly the same as in (8) and (11), respectively. Edge dislocations may either penetrate the\par
+grain boundary or be absorbed by it through dissociation of the dislocations. The latter process requires the\par
+continuity of displacement field but causes a jump in plastic slip [[\u946?]]\u915? at the interface. This is revealed by the\par
+volume integral containing the variation of the non-redundant dislocation density \u948?\u961? g during the integration\par
+by parts, permitting the discontinuity to enter into the interface as\par
+                                                            \par
+                      \u8706?\u968?m      \u8706?\u968?\u967?      \u8706? Db                      \u8706?\u968?m\par
+                            +         +        \u948?\u961? g 3\par
+                                                   d  x = \u8722?                \u8722? \u947?D      sign\u946?,y \u948?\u946?d3 x\par
+                  V    \u8706?\u961? g    \u8706?\u961?  g    \u8706? \u961?\u775? g\par
+                                                               V b    \u8706?\u961? g        ,y\par
+                                                           \par
+                          \u8706?\u968?m                                    \u8706?\u968?m\par
+                  +                  \u8722? \u947?D sign\u946?,y \u948?\u946?da \u8722? [[                \u8722? \u947?D sign\u946?,y \u948?\u946?]]\u915? da.              (25)\par
+                      \u8706?s b    \u8706?\u961? g                           \u915? b      \u8706?\u961? g\par
+\par
+The governing equation with respect to \u961? r from Eq. (15), given as [7,48]\par
+\par
+                                           \u947?D + \u967? ln(a 2 \u961?)/L + d\u961? \u961?\u775? = 0,                                       (26)\par
+Thermodynamic theory                                                                                             769\par
+\par
+\par
+is utilized for \u947?D in the derivation of Eq. (25). Expanding the interface integral term on the right-hand side of\par
+Eq. (25) by means of the jump identity [49]\par
+\par
+                                        [[ p q]]\u915? = [[ p]]\u915? q\u915? + [[q]]\u915?  p\u915?                             (27)\par
+\par
+and substituting it into Eq. (24), we transform the latter to\par
+               \par
+                         \u8706?\u968?m                                    \u8706?\u968?m\par
+                    \u8722?           \u8722? \u947?D sign\u946?,y \u915? \u948?[[\u946?]]\u915? \u8722? [[            \u8722? \u947?D sign\u946?,y ]]\u915? \u948?\u946?\u915?\par
+               \u915?        b \u8706?\u961?   g                                b \u8706?\u961? g\par
+                                                                                  \par
+                     \u8706?\u968?s                1                        1\par
+                +          \u948?[[\u946?]]\u915? + \u950?y sign\u946?\u775?\u915? \u948?\u946?\u915? + \u950?a 2 [[\u946?\u775?]]\u915? \u948?[[\u946?]]\u915? da = 0.                      (28)\par
+                   \u8706?[[\u946?]]\u915?              b                        b\par
+To derive consequences from (28), we need to analyze the variations of plastic slip on both sides of the\par
+grain boundary, which may be subject to constraints depending on the accumulated dislocation densities. We\par
+therefore consider two different processes.\par
+     Pileup process: When dislocations move toward the grain boundary under the Peach\u8211?Koehler force, they\par
+first pile up against it. Since the dislocations cannot initially penetrate the grain boundary acting as an obstacle,\par
+the plastic slips on both sides of the grain boundary\par
+                                                        are subject to homogeneous Dirichlet boundary condition\par
+which fulfills Eq. (28) due to \u948?\u946?  y \u8722?0 = \u948?\u946?  y +0 = 0. So we have during the pileup process\par
+                                    g              g\par
+\par
+\par
+                                                   \u946?\u775?(yg \u177? 0, t) = 0.                                           (29)\par
+\par
+The time derivative in Eq. (29) ensures the continuity of plastic slip at the interface with respect to time in the\par
+reversal loading [10].\par
+    Absorption and transmission processes: As more dislocations of the same sign pile up against the\par
+interface, the back stress near the pileup sites is increased. When the accumulated non-redundant dislocation\par
+density and with it the back stress in the vicinity of the grain boundary exceeds a threshold, the latter can no\par
+longer block dislocations. When the grain boundary starts to absorb dislocations, the jump in plastic slip as\par
+well as the misorientation between two adjacent grains will increase. The plastic slip at the grain boundary\par
+as well as its jump [[\u946?]]\u915? may change during the process of dislocation absorption, and consequently, \u948?\u946?\u915?\par
+and \u948?[[\u946?]]\u915? can be chosen independently and arbitrarily. Eq. (28) then implies\par
+                                 \u8706?\u968?m                             \u8706?\u968?m        \par
+                                                                            \par
+                                     \u8722? \u947? D        +                 \u8722? \u947? D        = \u950?y ,                     (30)\par
+                                 \u8706?\u961? g         yg +0               \u8706?\u961? g         yg \u8722?0\par
+\par
+and\par
+                                                b2           \u8706?\u968?m           \u8706?\u968?s\par
+                                   [[\u946?\u775?]]\u915? =           [[           ]]\u915? \u8722?             ,                         (31)\par
+                                                \u950?a          2b \u8706?\u961? g       \u8706?[[\u946?]]\u915?\par
+\par
+provided sign\u946?,y | yg \u177?0 = \u177?1, sign\u946?\u775?\u915? = 1 and sign[[\u946?\u775?]]\u915? = 1.\par
+    For simplicity, let us assume the symmetry such that l = u = . Let \u961?y be the root of the equation\par
+\u8706?\u968?m /\u8706?\u961? g = \u950?y /2 + \u947?D which exists and is unique due to the monotonicity of function \u8706?\u968?m /\u8706?\u961? g . It turns\par
+out that this dislocation density plays the role of the first threshold. If the dislocation density on the one side\par
+of the grain boundary exceeds this threshold value, Eq. (30) can only be satisfied if\par
+                                   \par
+                                     \u961? g | yg +0 = |\u946?,y |/b| yg +0 = \u961?y + \u961?j ,\par
+                                                                                                               (32)\par
+                                     \u961? g | yg \u8722?0 = |\u946?,y |/b| yg \u8722?0 = \u961?y \u8722? \u961?j .\par
+\par
+Indeed, taking into account that \u961?j is much less than \u961?y , we can expand function \u8706?\u968?m /\u8706?\u961? g into the Taylor\par
+series near \u961?y and neglect terms of order higher than \u961?j . Then it is easy to see that (32) satisfies Eq. (30).\par
+    But there is another threshold that does not permit dislocations to reach the grain boundary even if the\par
+dislocation density on the one side exceeds \u961?y . The reason lies in the second term on the right-hand side of\par
+(31). Since \u968?s is a function of |[[\u946?]]\u915? |, its derivative is equal to\par
+                                              \u8706?\u968?s        \u8706?\u968?s\par
+                                                    =            sign[[\u946?]]\u915? .                                   (33)\par
+                                            \u8706?[[\u946?]]\u915?   \u8706?|[[\u946?]]\u915? |\par
+770                                                                                                 Y. Piao, K. C. Le\par
+\par
+\par
+\par
+\par
+Fig. 1 Plane constrained shear of bicrystal\par
+\par
+\par
+Because the largest absolute value of this derivative is achieved at [[\u946?]]\u915? = \u977?0 , with \u977?0 being the initial\par
+misalignment, as long as the first term in the bracket on the right-hand side is less than this value, [[\u946?]]\u915? cannot\par
+increase. To simplify (31), we take into account Eq. (32) and the smallness of \u961?j . Expanding \u8706?\u968?m /\u8706?\u961? g into\par
+the Taylor series near \u961?y , we transform (31) to\par
+                                           b2     \u8706? 2 \u968?m               \u8706?\u968?s\par
+                               [[\u946?\u775?]]\u915? =                   (\u961?y )\u961?j \u8722?            sign[[\u946?]]\u915?   .                  (34)\par
+                                           \u950?a    b \u8706?(\u961? )\par
+                                                       g 2           \u8706?|[[\u946?]]\u915? |\par
+   For the density of interfacial energy, we will consider the modified Read\u8211?Shockley\u8217?s interfacial energy\par
+[46],\par
+                                                           \u947?D           e\u977?m\par
+                                                \u968?s =              \u977? ln      ,                                   (35)\par
+                                                       4\u960?(1 \u8722? \u957?)b      \u977? +\u948?\par
+where \u977? = |[[\u946?]]\u915? |. A small number \u948? is added to the denominator of the logarithm to make the derivative of\par
+\u968?s finite at \u977? = 0. Finally, we need an equation for \u961?y which is similar to Eq. (14) for \u964?i . As such, we propose\par
+                                                   \u961?y = \u961?y0 + \u954?a |[[\u946?]]\u915? |.                                     (36)\par
+\par
+\par
+4 Application\par
+\par
+4.1 Plane constrained shear\par
+\par
+Suppose that a bicrystal slab is subjected to plane constrained shear by a given displacement u y (t) = \u947?\u775? t y\par
+specified at the upper and lower surfaces (see Fig. 1) and that the system is driven at a constant shear rate\par
+\u947?\u775? = q0 /t0 . Let the green colored plane \u915? be the plane of the grain boundary that is parallel to the (x, y)-plane\par
+and is located at y = yg . This grain boundary divides the bicrystal occupying V into two perfectly bonded single\par
+crystals occupying V \u8722? and V + , i.e., V = V \u8722? \u8746? V + \u8746? \u915? . Let the cross section of this bicrystal perpendicular to\par
+the z-axis be a rectangle of width c and height h, having the same shape and size over the entire length L. We\par
+assume h  c  L to neglect the end effect near x = 0 and x = c. Edge dislocations can occur during the\par
+plastic deformation, and we assume that only one slip system is activated in each single crystal, colored blue\par
+and red, respectively. The slip directions are perpendicular to the z-axis and inclined at angles \u966?u and \u966?l to the\par
+plane of the grain boundary. Given the geometry of the specimen as well as boundary conditions, we assume\par
+that the displacements (u x , u y ) as well as the plastic slip \u946? depends only on y: u x = u x (y), u y = u y (y),\par
+\u946? = \u946?(y). The displacement u z vanishes.\par
+    When the plastic deformation occurs, the edge dislocations move on the active slip system with the slip\par
+direction s = (cos \u966?, sin \u966?, 0)T and the normal to the slip plane m = (\u8722? sin \u966?, cos \u966?, 0)T . The plastic distortion\par
+tensor is given by\par
+                                                \u9115?                            \u9118?\par
+                                                  \u8722? sin \u966? cos \u966? cos2 \u966? 0\par
+                                   \u946? = \u946?(y, t) \u9117? \u8722? sin2 \u966? sin \u966? cos \u966? 0\u9120? .                                     (37)\par
+                                                        0            0     0\par
+Thermodynamic theory                                                                                                 771\par
+\par
+\par
+The plastic and elastic strain tensor becomes\par
+                                                   \u9115?                  \u9118?\par
+                                          1         \u8722? sin 2\u966? cos 2\u966? 0\par
+                                     \u949? p = \u946?(y, t) \u9117? cos 2\u966? sin 2\u966? 0\u9120? ,                                              (38)\par
+                                          2             0       0 0\par
+                                            \u9115?                                        \u9118?\par
+                                          1      \u946? sin 2\u966?     u x,y \u8722? \u946? cos 2\u966?     0\par
+                                     \u949? e = \u9117?u x,y \u8722? \u946? cos 2\u966? 2u y,y \u8722? \u946? sin 2\u966?     0\u9120? ,                              (39)\par
+                                          2          0                0            0\par
+where the displacement field u = (u x , u y , 0) is yet unknown. The nonzero components of Nye\u8211?Bilby\u8211?Kr\u246?ner\u8217?s\par
+tensor are \u945?x z = \u946?,y sin \u966? cos \u966? and \u945? yz = \u946?,y sin2 \u966?. Therefore, the density of the non-redundant dislocation\par
+per unit area perpendicular to the z-axis equals\par
+                                    1\par
+                                    \u961?g =\par
+                                      |\u945? \u183? e z | = |\u946?,y |/b, where  = | sin \u966?|.                                    (40)\par
+                                    b\par
+The total energy functional of a crystal becomes\par
+                                h\par
+                       I = cL      [\u968?e (\u949? e ) + \u947?D \u961? r + \u968?m (\u961? g ) + \u968?c ]dy + cL\u968?s | y=yg ,                          (41)\par
+                                         0\par
+where \u968?e is the energy density due to the elastic strain\par
+                                                                                                      2\par
+                   1 2   1                     1                        1\par
+            \u968?e =    \u955?u + \u956?(u x,y \u8722? \u946? cos 2\u966?)2 + \u956?\u946? 2 sin2 2\u966? + \u956? u y,y \u8722? \u946? sin 2\u966?                         .          (42)\par
+                   2 y,y 2                     4                        2\par
+Note that the angle \u966?(y) is piecewise constant:\par
+                                             \par
+                                                        \u966?l for 0 < y < yg ,\par
+                                              \u966?(y) =                                                                 (43)\par
+                                                        \u966?u for yg < y < h.\par
+\par
+Taking the variation of functional I with respect to u x and u y at fixed \u946?(y), we obtain the equilibrium equations\par
+which, after integration, lead to\par
+                                               u x,y = \u947? + (\u946? \u8722? \u946?) cos 2\u966?,\par
+                                                                                                                     (44)\par
+                                               u y,y = \u954?(\u946? \u8722? \u946?) sin 2\u966?,\par
+            \u956?                       h\par
+with \u954? =   \u955?+2\u956?   and \u946? =     1\par
+                                h    0   \u946?dy. Inserting Eq. (44) into Eq. (41), we reduce the energy functional to\par
+                        h1                     1                        1\par
+            I = cL          \u956?\u954?\u946?2 sin2 2\u966? + \u956?(\u946? cos 2\u966? \u8722? \u947? )2 + \u956?(1 \u8722? \u954?)\u946? 2 sin2 2\u966? + \u947?D \u961? r\par
+                     0    2                     2                        2\par
+                                                                             \par
+                                 1                                              \par
+              +\u947?D k0 \u961?ss ln                \u8722? \u967? (\u8722?\u961? ln(a 2\par
+                                                          \u961?) + \u961?)/L   dy + cL\u968? s      .                             (45)\par
+                              1 \u8722? k0\u961?\u961?ss\par
+                                     g\par
+                                                                                  y=yg\par
+\par
+Varying this functional with respect to \u946? and substituting into (24), we obtain the equilibrium equation\par
+                                                       \u964? \u8722? \u964?b \u8722? \u964?i = 0,                                              (46)\par
+with the resolved and back shear stresses being\par
+                    \u964? = \u8722?\u956?(\u954?\u946? sin2 2\u966? + (\u946? cos 2\u966? \u8722? \u947? ) cos 2\u966? + (1 \u8722? \u954?)\u946? sin2 2\u966?),                              (47)\par
+and\par
+                                  C1                         \u947?D                     1\par
+                  \u964?b = \u8722?                      \u946?,yy , C1 =           sin2 \u966?, C2 =          | sin \u966?|.                  (48)\par
+                             (1 \u8722? C2 |\u946?,y |)2             k0 \u961?ss b2              k0 \u961?ss b\par
+At the top and bottom surfaces of the sample, the boundary conditions \u8706?\u968?m /\u8706?\u961? g = \u947?D must be fulfilled. It is\par
+obvious that these imply the Neumann conditions \u946?,y (0, t) = \u946?,y (h, t) = 0. Besides, at y = yg , the boundary\par
+conditions (31) (or (34), alternatively), (32), and (36) must be fulfilled.\par
+772                                                                                                          Y. Piao, K. C. Le\par
+\par
+\par
+4.2 Rescaled boundary value problem\par
+\par
+To facilitate numerical integration, we introduce the following rescaled variables and quantities\par
+                               y\par
+                          y\u771? =   , \u961?\u771? = a 2 \u961?, \u961?\u771? r = a 2 \u961? r , \u961?\u771? g = b2 \u961? g = |\u946?, y\u771? |,\par
+                               b\par
+                                \u967?\u772?         T          \u964?             \u964?i         \u964?b                                        (49)\par
+                          \u967?\u771? =     , \u952?=       , \u964?\u771? = , \u964?\u771?i = , \u964?\u771?b = ,\par
+                               \u947?D          TP         \u956?             \u956?           \u956?\par
+\par
+where the variable y\u771? changes from zero to h\u771? = h/b. The plastic slip rate is rewritten in the form\par
+                                            q(T, \u964?i , \u961? r )   b q\u771?(\u952?, \u964?\u771?i , \u961?\u771? r )\par
+                                                            =                      .                                     (50)\par
+                                                t0            a      t0\par
+in which\par
+                                                    \par
+                             q\u771?(\u952?, \u964?\u771?i , \u961?\u771? r ) =    \u961?\u771? r ( f\u732?P (\u952?, \u964?\u771?i , \u961?\u771? r ) \u8722? f\u732?P (\u952?, \u8722?\u964?\u771?i , \u961?\u771? r )).               (51)\par
+We set \u956?\u771?T = (b/a)\u956?T = \u956?r and assume that r is independent of temperature and strain rate. Then\par
+                                                                   \par
+                                                       1        \u964?\u771?\par
+                             f\u732?P (\u952?, \u964?\u771?i , \u961?\u771? ) = exp \u8722? exp \u8722? \par
+                                                                  i\par
+                                             r\par
+                                                                        .                                                (52)\par
+                                                       \u952?      r \u961?\u771? r\par
+\par
+We define q\u771?0 = (a/b)q0 such that q/q0 = q\u771?/q\u771?0 , and function \u957?\u771? becomes\par
+                                                                \par
+                                                     1                 \u961?\u771? r\par
+                               \u957?\u771?(\u952?, \u961?\u771? , q\u771?0 ) = ln\par
+                                       r\par
+                                                        \u8722? ln ln             .                                            (53)\par
+                                                     \u952?               q\u771?0\par
+\par
+The dimensionless steady-state quantities are\par
+                                                                    1                    \u967?0\par
+                                        \u961?\u771?ss (\u967?\u771? ) = exp \u8722?                 , \u967?\u771?0 =          .                            (54)\par
+                                                                    \u967?\u771?                   eD\par
+Using q\u771? instead of q as the dimensionless measure of plastic strain rate means that we are effectively rescaling\par
+t0 by a factor b/a. We assume that (a/b)t0 = 10\u8722?12 s. Since the shear rate \u947?\u775? = q0 /t0 is constant, we can\par
+replace the time derivative by the derivative with respect to \u947? so that t0 \u8706?/\u8706?t \u8594? q0 \u8706?/\u8706?\u947? . Using the introduced\par
+dimensionless variables, the governing equations in the bulk, Eqs. (14), (19) and (46), are transformed to the\par
+following system of partial differential equations\par
+                                  \u964?\u771? \u8722? \u964?\u771?b \u8722? \u964?\u771?i = 0,\par
+                                   \u8706? \u964?\u771?i                q\u771?(\u952?, \u964?\u771?i , \u961?\u771? r )\par
+                                         = cos 2\u966? \u8722?                        ,\par
+                                   \u8706?\u947?                           q\u771?0\par
+                                   \u8706? \u967?\u771?           q\u771?(\u952?, \u964?\u771?i , \u961?\u771? r )           \u967?\u771?                                        (55)\par
+                                         = K\u967? \u964?\u771?i                       1\u8722?          ,\par
+                                   \u8706?\u947?                   q\u771?0                   \u967?\u771?0\par
+                                   \u8706? \u961?\u771?              q\u771?(\u952?, \u964?\u771?i , \u961?\u771? r )               \u961?\u771?\par
+                                         = K\u961? \u964?\u771?i                            1\u8722?              ,\par
+                                   \u8706?\u947?             \u957?\u771?(\u952?, \u961?\u771? r , q\u771?0 )2 q\u771?0         \u961?\u771?ss (\u967?\u771? )\par
+with the rescaled resolved shear stress and back stress being\par
+\par
+                    \u964?\u771? = \u8722?(\u954?\u946? sin2 2\u966? + (\u946? cos 2\u966? \u8722? \u947? ) cos 2\u966? + (1 \u8722? \u954?)\u946? sin2 2\u966?),\par
+                                  k1                                                                                     (56)\par
+                    \u964?\u771?b = \u8722?                    \u946?, y\u771? y\u771? ,\par
+                            (1 \u8722? k2 |\u946?, y\u771? |)2\par
+where\par
+                                    \u947?D                                      a2\par
+                            k1 =        k sin 2\par
+                                                \u966?, k 2 = k| sin \u966?|, k =            .                                     (57)\par
+                                    \u956?b2                                 k0 \u961?\u771?ss b2\par
+Thermodynamic theory                                                                                              773\par
+\par
+\par
+    During the absorption and transmission process, the density of non-redundant dislocation \u961? g near the grain\par
+                                               g\par
+boundary hardly reaches the saturated density \u961?ss . Therefore, using the Taylor expansion, we can approximate\par
+the defect energy \u968?m as follows\par
+                                                                            \par
+                                                       g   \u961?g      1 \u961?g 2\par
+                             \u968?m = \u947?D \u968?\u771?m , \u968?\u771?m = \u961?ss        g +         g      .                           (58)\par
+                                                           \u961?ss     2 \u961?ss\par
+\par
+By this approximation, the equilibrium equation for microforces (55)1 , a stiff second-order quasi-linear dif-\par
+ferential equation, can be transformed into an elliptic differential equation\par
+                                                  A\u946? + B\u946? + C = 0,                                               (59)\par
+which is numerically more stable than the first one when the jump condition is implemented. The prime denotes\par
+the derivative of a function with respect to y\u771?, and\par
+                                   \u947?D a 2 1\par
+                                A=                sin2 \u966?, B = (1 \u8722? \u954?) sin2 2\u966?,\par
+                                   \u956?b2 b2 k0 \u961?\u771?ss                                                                (60)\par
+                             C = \u8722?(\u954?\u946? sin2 2\u966? + (\u946? cos 2\u966? \u8722? \u947? ) cos 2\u966? + \u964?\u771?i ),\par
+   At the external boundaries, Eq. (55)1 is subjected to the boundary condition\par
+\par
+                                          \u946?, y\u771? (0, f\u732?) = 0, \u946?, y\u771? (h\u771?, f\u732?) = 0.                                 (61)\par
+From (31), we get the rescaled interface condition at the grain boundary as\par
+                                                                                    \par
+                       \u8706?[[\u946?]]\u915?      1  \u8706? \u968?\u771?m           sign[[\u946?]]\u915?          \u977?m\par
+                                =        [[     ]]\u915? \u8722?              log                 ,\par
+                         \u8706?\u947?        \u950?\u771?a 2 \u8706? \u961?\u771? g        4\u960?(1 \u8722? \u957?0 )     |[[\u946?]]\u915? | + \u948?\par
+                                                                                                                 (62)\par
+                                      2\par
+                         [[\u946?, y\u771? ]]\u915? = \u961?\u771?y .\par
+                                      \par
+where \u950?\u771?a = \u950?a t0 /(q0 b \u947? D ) and \u961?\u771?y = b2 \u961?y . The dimensionless form of Eq. (36) reads\par
+                                                 \u961?\u771?y = \u961?\u771?y0 + \u954?\u771?a |[[\u946?]]\u915? |,                                     (63)\par
+\par
+where \u954?\u771?a = b2 \u954?a .\par
+    We also need to pose the initial conditions for \u946?, \u964?\u771?i , \u961?\u771? and \u967?\u771? . For the internal shear stress, we assume that\par
+the specimen is not plastically pre-deformed, i.e., \u964?\u771?i ( y\u771?, 0) = 0. As for the plastic slip, two scenarios can be\par
+studied: (i) vanishing initial misalignment and (ii) nonzero initial misalignment. The numerical simulations\par
+will be performed for the first case where \u946?( y\u771?, 0) = 0. The rescaled dislocation density \u961?\u771?( y\u771?, 0) and the rescaled\par
+disorder temperature \u967?\u771? ( y\u771?, 0) are assigned reasonable initial values based on various numerical simulations. It\par
+should be noted that, from the physical point of view, these initial values depend on the sample preparation.\par
+\par
+\par
+4.3 Numerical implementation\par
+\par
+We discretize the boundary value problem formulated above by a finite difference method called the line\par
+method. The latter replaces the spatial derivatives by finite differences, which allow us to transform partial\par
+differential equations into a system of ordinary differential equations with respect to \u947? . We illustrate this\par
+method for the case y\u771?g = h\u771?/2. For the case y\u771?g = h\u771?/2, the discretization can be done in a similar way. Let\par
+the interval 0 < y\u771? < h\u771? be divided into 2n equal subintervals. Then the step in y\u771? along the grid becomes\par
+\u916? y\u771? = h\u771?/2n. Because of the jump in \u946? at the interface, we distinguish the left and right nodes located at the\par
+same point y\u771?g = n\u916? y\u771?. The coordinates of the nodes on the left interval 0 < y\u771? < h\u771?/2 are\par
+                                               y\u771?i = i\u916? y\u771?, i = 0, . . . , n,                                    (64)\par
+\par
+while those on the right interval h\u771?/2 < y\u771? < h\u771? are\par
+                                    y\u771?i = (i \u8722? 1)\u916? y\u771?, i = n + 1, . . . , 2n + 1.                                (65)\par
+774                                                                                                       Y. Piao, K. C. Le\par
+\par
+\par
+Thus, altogether we have 2(n + 1) nodes. The spatial derivatives of the plastic slip, \u946?, y\u771? and \u946?, y\u771? y\u771? , for all internal\par
+nodes not lying at the external boundaries or the interface, are approximated as\par
+                        \u8706?\u946?( y\u771?i , \u947? )   \u946?i+1 \u8722? \u946?i\u8722?1      \u8706? 2 \u946?( y\u771?i , \u947? )   \u946?i+1 \u8722? 2\u946?i + \u946?i\u8722?1\par
+                                      =             ,                     =                   ,                       (66)\par
+                           \u8706? y\u771?            2\u916? y\u771?              \u8706? y\u771? 2              \u916? y\u771? 2\par
+where \u946?i = \u946?( y\u771?i , \u947? ). We decompose the integral \u946? in the resolved shear stress into two integrals that are\par
+calculated using the trapezoidal rule. Thus,\par
+                            1    1                  1    1                     1\par
+                   \u946? =           \u946?0 + \u946?1 + \u183? \u183? \u183? + \u946?n + \u946?n+1 + \u946?n+2 + \u183? \u183? \u183? + \u946?2n+1 .                               (67)\par
+                           2n    2                  2    2                     2\par
+After these replacements, Eq. (55)1 becomes an ordinary differential equation in all internal nodes.\par
+   The first derivatives at the external nodes are replaced by\par
+                            \u8706?\u946?( y\u771?0 , \u947? )   \u946?1 \u8722? \u946?0      \u8706?\u946?( y\u771?2n+1 , \u947? )   \u946?2n+1 \u8722? \u946?2n\par
+                                          =         ,                     =             .                             (68)\par
+                               \u8706? y\u771?           \u916? y\u771?             \u8706? y\u771?             \u916? y\u771?\par
+Thus, the boundary conditions (61) become\par
+                                              \u946?0 = \u946?1 , \u946?2n+1 = \u946?2n .                                                 (69)\par
+The first left and right derivatives at the interface are replaced by\par
+                           \u8706?\u946?( y\u771?n , \u947? )   \u946?n \u8722? \u946?n\u8722?1       \u8706?\u946?( y\u771?n+1 , \u947? )   \u946?n+2 \u8722? \u946?n+1\par
+                                         =           ,                     =             .                            (70)\par
+                              \u8706? y\u771?            \u916? y\u771?               \u8706? y\u771?            \u916? y\u771?\par
+while the jump in \u946? is\par
+                                                 [[\u946?]]\u915? = \u946?n+1 \u8722? \u946?n .                                                 (71)\par
+These transform Eqs. (62) into two differential algebraic equations.\par
+   Since the three remaining equations of (55) do not contain derivatives, they are satisfied node by node.\par
+Besides, as the unknown functions are continuous at the interface, we have\par
+                                     \u964?\u771?in = \u964?\u771?in+1 , \u961?\u771?n = \u961?\u771?n+1 , \u967?\u771?n = \u967?\u771?n+1 .                                      (72)\par
+It is easy to see that the system of partial differential equations and boundary conditions becomes a system\par
+of 4(2n + 1) ordinary differential algebraic equations (DAE) for 4(2n + 1) unknowns, so the problem is well\par
+posed. For the numerical discretization we choose n = 200, while for the integration of DAEs with respect to\par
+the time-like variable \u947? a step size \u916?\u947? = 10\u8722?4 is chosen. The DAE system is then integrated by the MATLAB\par
+integrator ode15s.\par
+\par
+\par
+4.4 Numerical results\par
+\par
+In the numerical simulations, we keep the temperature and shear rate constant at T = 298 K and q\u771?0 = 10\u8722?13 .\par
+The parameters for the thermodynamic dislocation theory for copper are chosen as presented in [4]:\par
+                      r = 0.0323, \u952? = 0.0073, K\u967? = 350, K\u961? = 96.1, \u967?\u771?0 = 0.25.                                        (73)\par
+We choose the following parameters for the copper bicrystal\par
+                  h = 5.1 \u956?m, b = 0.255 nm, a = 10b, \u956? = 50 GPa, \u957?0 = 0.34, \u966? = 30\u9702? .                                 (74)\par
+The active slip systems of two grains in the bicrystal are constrained to symmetry. The initial conditions for\par
+dislocation density and configuration temperature are \u961?\u771?(0) = 6.25 \u215? 10\u8722?5 , \u967?\u771? (0) = 0.23 and we assume\par
+\u947?D = \u956?b2 . The critical density is set as \u961?\u771?y0 = 1.3 \u215? 10\u8722?5 and the other two interfacial dissipation parameters\par
+are given as \u950?\u771?a = 1.5 and \u954?\u771?a = 5\u215?10\u8722?4 . The parameters for the defect energy and interfacial energy are chosen\par
+as follows: k0 = 0.2, \u977?m = 0.192, \u948? = 1 \u215? 10\u8722?7 . Unless some parameters are changed for the parameter\par
+study, they are kept as default values.\par
+Thermodynamic theory                                                                                                  775\par
+\par
+\par
+\par
+\par
+Fig. 2 (a) Distribution of plastic slips at \u947? = 8 \u8727? 10\u8722?3 for k0 = 0.1, k0 = 0.2, and k0 = 0.5. (b) Corresponding hardening\par
+behaviors in the pileup process\par
+\par
+\par
+\par
+\par
+Fig. 3 (a) Plastic slips during the pileup process, (b) evolution of the misorientation at the grain boundary\par
+\par
+\par
+                                                                         g\par
+     The saturation density of the non-redundant dislocations \u961?ss as well as the defect energy \u968?m is characterized\par
+by the factor k0 , so that its value affects the distribution of plastic slip and work hardening. Figure 2a shows the\par
+distributions of plastic slip in the pileup process for three different values of k0 . When k0 is small, the plastic\par
+slip decreases gradually near the grain boundary, while it decreases more steeply to zero for a higher value\par
+of k0 . Since the slope of plastic slip is proportional to the accumulated dislocation density, these distributions\par
+imply that a smaller k0 leads to a larger dislocation accumulation zone and a lower accumulated density of non-\par
+                                                                                           g\par
+redundant dislocations near the grain boundary. This is because a small k0 makes \u961?ss small, so a lower density\par
+of non-redundant dislocations is required for the backstress to have an effect on the balance of microforces.\par
+The hardening behavior in the pileup process is shown in Fig. 2b. It can be seen that the hardening rate is larger\par
+for smaller k0 . The reason is that the wider dislocation accumulation zone and the slower gradient increase\par
+of plastic slip resulting from the small k0 lead to a higher resolved shear stress and consequently a larger\par
+hardening rate. A smaller value of k0 also leads to a longer length of the accumulation phase. This is because\par
+the accumulated \u961? g is relatively low for small k0 , and therefore, it takes longer to reach the required critical\par
+density \u961?y .\par
+     At different shear strains \u947? , the distribution of plastic slip in the processes of dislocation pileup is shown\par
+in Fig. 3a. The Neumann boundary conditions \u946?, y\u771? (0) = \u946?, y\u771? (h\u771?) = 0 cause the curve of plastic slip to remain\par
+flat on two sides, while a groove is formed at the position of the grain boundary due to the Dirichlet interface\par
+776                                                                                                  Y. Piao, K. C. Le\par
+\par
+\par
+\par
+\par
+Fig. 4 (a) Plastic slips for absorption process, (b) plastic slip omitting the jump\par
+\par
+\par
+\par
+condition. A dislocation pileup zone is located in the center and two dislocation-free zones are located at the\par
+boundary layers. In this process, the homogeneous Dirichlet interface condition is applied, and the dislocations\par
+cannot penetrate into the grain boundary. Therefore, the groove sinks with increasing strain, but the tip remains\par
+attached to the bottom (Fig. 3a). Figure 3b shows the evolution of the misalignment at the grain boundary,\par
+which is obtained from Eq. (31). When the non-redundant dislocation density \u961? g reaches the critical value \u961?y0\par
+at \u947? = 0.011, the evolution equation is activated. The grain boundary starts absorbing dislocations and the\par
+misorientation increases only when the strain exceeds the second threshold value at \u947? = 0.0151, up to which\par
+the accumulation process continues. The dislocation absorption process stops at \u947? = 0.0403 when the slope\par
+of the misorientation changes.\par
+     The distribution of plastic slip during the dislocation absorption process is shown in Fig. 4a. In this process,\par
+the grain boundary is no longer impenetrable but absorbs dislocations, increasing the misorientation and causing\par
+non-redundant dislocations to accumulate. These are two factors that cause the distribution of plastic slip to\par
+take a different form than in the pileup process, as shown in Fig. 4a. Here, it can be observed that the plastic\par
+slip on two sides of the grain boundary converges not to a single point, but to two points apart, and the distance\par
+between them increases, which means that the misorientation of the grain boundary increases. To see the effect\par
+of the additionally accumulated non-redundant dislocations, we omit the jump from the plastic slip distribution\par
+at \u947? = 0.02 and \u947? = 0.03 (solid lines) and compare it with that at the beginning of the absorption process\par
+(dashed lines) in Fig. 4b. It can be seen that the tip leaves the bottom, and as the shear stress increases, the\par
+discrepancy between the solid and dashed lines also increases, indicating that the groove does not stop sinking.\par
+     In the pileup process, the rate of accumulated dislocation density is the highest among the different processes\par
+because all dislocations are blocked by the grain boundary. When positive and negative dislocations enter the\par
+grain boundary and increase the misorientation in the absorption process, the ability of the grain boundary to\par
+block dislocations from transfer is enhanced, and no additional dislocations are accumulated after this process.\par
+This behavior is shown in Fig. 5a. In the pileup process, the positive and negative non-redundant dislocation\par
+densities are symmetrically distributed on both sides of the grain boundary, while in the absorption process, a\par
+jump in the non-redundant density occurs near the grain boundary, as shown in Fig. 5b. Under the interfacial\par
+condition Eq. (32), the same amount of dislocation density is shifted from one side to the other.\par
+     In Fig. 6a, the stress\u8211?strain curve of the present model (red curve) is shown, where P1 and P2 indicate the\par
+first and second thresholds and P3 the end of the absorption process. For comparison we plot also the stress\u8211?\par
+strain curves obtained by two other models. The blue curve represents the hardening behavior of bicrystals\par
+with impenetrable grain boundary, which blocks all non-redundant dislocations and therefore hardens the\par
+most. The black curve describes the hardening behavior of bicrystals without absorption process. When \u961? g\par
+reaches the critical density \u961?y0 , the pileup process ends at P1 and the traversal process follows. These two\par
+curves represent the limits above and below which the hardening with absorption can vary due to different\par
+interfacial dissipation. Figure 6b shows the partition of work hardening into isotropic and kinematic hardening.\par
+Isotropic work hardening results from the internal stress required by the dislocations to overcome the resistance\par
+due to pinning. Kinematic work hardening is caused by back stresses describing the interaction between non-\par
+Thermodynamic theory                                                                                                          777\par
+\par
+\par
+\par
+\par
+Fig. 5 (a) Evolution of the mean density of the non-redundant dislocations, (b) evolution of the non-redundant dislocation density\par
+at two sides of grain boundary\par
+\par
+\par
+\par
+\par
+Fig. 6 Rescaled stress\u8211?strain curves: (a) with impenetrable grain boundary (blue), with dislocation absorption process included\par
+(red), without dislocation absorption process (black), (b) partition of work hardening\par
+\par
+\par
+\par
+redundant dislocations. In the non-uniform plastic deformation of small size crystals, kinematic work hardening\par
+tends to contribute strongly, while in the present study the contribution is small because bicrystals have only\par
+one grain boundary where non-redundant dislocations accumulate. It is worth mentioning that for crystals with\par
+multiple grain boundaries, the kinematic work hardening rate is higher [10].\par
+    Among the interfacial dissipation parameters, \u961?y0 determines the first threshold and \u950?\u771?a the second, so they\par
+determine the onset of the dislocation absorption process. The size of the jump in the plastic slip and the\par
+length of the absorption process are controlled by \u950?\u771?a , as shown in Fig. 7a. Note that the jump exhibits a linear\par
+dependence on the shear strain. The kinematic strain hardening in the absorption process (Fig. 7b) is influenced\par
+by the additional accumulated non-redundant dislocations originating from the increased misorientation, so\par
+that \u954?\u771?a is the key controlling parameter.\par
+    Finally, we show the distribution of plastic slip at \u947? = 0.01 with \u954?a = 2 \u215? 10\u8722?4 for \u966? = 30\u9702? , \u966? = 35\u9702?\par
+and \u966? = 55\u9702? in Fig. 8a. It can be seen that for 0 < \u966? < 45\u9702? and 135\u9702? < \u966? < 180\u9702? the plastic slip is positively\par
+distributed, while for 45\u9702? < \u966? < 135\u9702? it is the reverse. The dashed curve is symmetrical to the black curve\par
+about the horizontal coordinate axis. We see that the blue and dashed curves coincide in the dislocation-free\par
+zone. This is because the resolved shear stress \u964? and the residual stress \u964?i for \u966? = 35\u9702? are identical in magnitude\par
+but opposite in sign to those for \u966? = 55\u9702? . The distributions of plastic slip are different near the grain boundary\par
+because the accumulation of non-redundant dislocation density is inconsistent due to the different slip systems.\par
+778                                                                                                                    Y. Piao, K. C. Le\par
+\par
+\par
+\par
+\par
+Fig. 7 (a) Influence of \u950?\u771?a to the evolution of jump in plastic slip, (b) influence of \u954?\u771?a to the hardening behavior\par
+\par
+\par
+\par
+\par
+Fig. 8 (a) Distribution of plastic slips in pileup process for \u966? = 30\u9702? , \u966? = 35\u9702? and \u966? = 55\u9702? , (b) corresponding hardening\par
+behaviors\par
+\par
+\par
+Figure 8b shows the strain hardening behavior for three different \u966?, where the asterisks indicate the beginning\par
+and end of the absorption processes. It can be seen that the slip system affects not only the hardening rate but\par
+also the length of the absorption process l\u947? , as indicated in the bar graph.\par
+\par
+\par
+5 Conclusion\par
+\par
+In the framework of thermodynamic dislocation theory for non-uniform plastic deformation, we have developed\par
+the interface conditions for various interactions of dislocations with the grain boundary, e.g., dislocation\par
+accumulation, absorption, and transfer. Interfacial dissipation in terms of rates for the mean and jump of\par
+plastic slip has been proposed. An evolution equation for grain boundary misorientation has been developed.\par
+The proposed interface dissipation yields two thresholds for the dislocation absorption process. The dislocation\par
+absorption leads to asymmetry in the distribution of plastic slip and non-redundant dislocation density on two\par
+sides of the grain boundary. It turns out that due to the additional accumulated density of non-redundant\par
+dislocations, kinematic work hardening also develops during the process of dislocation absorption. The extent\par
+of misorientation and the length of the dislocation absorption process are determined not only by the interfacial\par
+dissipation, but also by the slip system of the grains.\par
+Funding Open Access funding enabled and organized by Projekt DEAL.\par
+Thermodynamic theory                                                                                                            779\par
+\par
+\par
+\par
+\par
+Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use,\par
+sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original\par
+author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other\par
+third party material in this article are included in the article\u8217?s Creative Commons licence, unless indicated otherwise in a credit\par
+line to the material. If material is not included in the article\u8217?s Creative Commons licence and your intended use is not permitted\par
+by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To\par
+view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/.\par
+\par
+\par
+References\par
+\par
+ 1. Berdichevsky, V.L., Sedov, L.I.: Dynamic theory of continuously distributed dislocations. Its relation to plasticity theory. J.\par
+    Appl. Math. Mech. (PMM) 31, 989\u8211?1006 (1967)\par
+ 2. Berdichevsky, V.L.: Continuum theory of dislocations revisited. Contin. Mech. Therm. 18, 195\u8211?222 (2006a)\par
+ 3. Le, K.C., G\u252?nther, C.: Nonlinear continuum dislocation theory revisited. Int. J. Plasticity 53, 164\u8211?178 (2014)\par
+ 4. Langer, J.S., Bouchbinder, E., Lookman, T.: Thermodynamic theory of dislocation-mediated plasticity. Acta Mater. 53,\par
+    3718\u8211?3732 (2010)\par
+ 5. Langer, J.S., Le, K.C.: Scaling confirmation of the thermodynamic dislocation theory. Proc. Natl. Acad. Sci. U.S.A. 117,\par
+    29431\u8211?29434 (2020)\par
+ 6. Le, K.C.: Two universal laws for plastic flows and the consistent thermodynamic dislocation theory. Mech. Res. Commun.\par
+    109, 103597 (2020)\par
+ 7. Le, K.C.: Thermodynamic dislocation theory for non-uniform plastic deformations. J. Mech. Phys. Solids 111, 157\u8211?169\par
+    (2018)\par
+ 8. G\u252?nther, F., Le, K.C.: Plane constrained shear of single crystals. Arch. Appl. Mech. 91, 2109\u8211?2126 (2021)\par
+ 9. Le, K.C., Tran, T.M.: Thermodynamic dislocation theory: Bauschinger effect. Phys. Rev. E 97, 043002 (2018)\par
+10. Piao, Y., Le, K.C.: Dislocation impediment by the grain boundaries in polycrystals. Acta Mech. 232, 3193\u8211?3213 (2020)\par
+11. Kondo, S., Mitsuma, T., Shibata, N., Ikuhara, Y.: Direct observation of individual dislocation interaction processes with grain\par
+    boundaries. Sci. Adv. 2, 1501926 (2016)\par
+12. Fleck, N.A., Muller, G.M., Ashby, M.F., Hutchinson, J.W.: A mathematical basis for strain-gradient plasticity theory - Part\par
+    I: scalar plastic multiplier. J. Mech. Phys. Solids 57, 161\u8211?177 (1994)\par
+13. Aifantis, K.E.: Strain gradient interpretation of size effects. Int. J. Fract. 95, 299\u8211?314 (1999)\par
+14. Gao, H., Huang, Y., Nix, W.D., Hutchinson, J.W.: Mechanism-based strain gradient plasticity - I. J. Mech. Phys. Solids 47,\par
+    1239\u8211?1263 (1999)\par
+15. Gurtin, M.E.: On a framework for small-deformation viscoplasticity: free energy, microforces, strain gradients. Int. J. Plas-\par
+    ticity 19, 47\u8211?90 (2003)\par
+16. Fredriksson, P., Gudmundson, P.: Modelling of the interface between a thin film and a substrate within a strain gradient\par
+    plasticity framework. J. Mech. Phys. Solids 55, 939\u8211?955 (2007)\par
+17. Fleck, N.A., Willis, J.R.: Strain gradient plasticity: theory and experiment. Acta Metall. Mater. 42, 475\u8211?487 (2009)\par
+18. Gurtin, M.E.: A theory of grain boundaries that accounts automatically for grain misorientation and grain-boundary orien-\par
+    tation. J. Mech. Phys. Solids 56, 640\u8211?662 (2008)\par
+19. Van Beers, P.R.M., McShane, G.J., Kouznetsova, V.G., Geers, M.G.D.: Grain boundary interface mechanics in strain gradient\par
+    crystal plasticity. J. Mech. Phys. Solids 61, 2659\u8211?2679 (2013)\par
+20. Gottschalk, D., McBride, A., Reddy, B.D., Javili, A., Wriggers, P., Hirschberger, C.B.: Computational and theoretical aspects\par
+    of a grain-boundary model that accounts for grain misorientation and grain-boundary orientation. Comput. Mater. Sci. 111,\par
+    443\u8211?459 (2016)\par
+21. Bayerschen, E., McBride, A.T., Reddy, B.D., B\u246?hlke, T.: Review on slip transmission criteria in experiments and crystal\par
+    plasticity models. J. Mater. Sci. 51, 2243\u8211?2258 (2016)\par
+22. Erdle, H., B\u246?hlke, T.: A gradient crystal plasticity theory for large deformations with a discontinuous accumulated plastic\par
+    slip. Comp. Mech. 60, 923\u8211?942 (2017)\par
+23. Aifantis, K.E., Willis, J.R.: The role of interfaces in enhancing the yield strength of composites and polycrystals. J. Mech.\par
+    Phys. Solids 53, 1047\u8211?1070 (2005)\par
+24. Ekh, M., Bargmann, S., Grymer, M.: Influence of grain boundary conditions on modeling of size-dependence in polycrystals.\par
+    Acta Mech. 218, 103\u8211?113 (2011)\par
+25. Peng, X., Huang, G.: Modeling dislocation absorption by surfaces within the framework of strain gradient crystal plasticity.\par
+    Int. J. Solids Struct. 72, 98\u8211?107 (2015)\par
+26. Pouriayevali, H., Xu, B.X.: Decomposition of dislocation densities at grain boundary in a finite-deformation gradient crystal-\par
+    plasticity framework. Int. J. Plasticity 96, 36\u8211?55 (2017)\par
+27. Voyiadjis, G., Deliktas, B.: Formulation of strain gradient plasticity with interface energy in a consistent thermodynamic\par
+    framework. Int. J. Plasticity 25, 1997\u8211?2024 (2009)\par
+28. Voyiadjis, G., Faghihi, D., Zhang, Y.: A theory for grain boundaries with strain-gradient plasticity. Int. J. Solids Struct. 51,\par
+    1872\u8211?1889 (2014)\par
+29. Wulfinghoff, S., Bayerschen, E., B\u246?hlke, T.: A gradient plasticity grain boundary yield theory. Int. J. Plasticity 51, 33\u8211?46\par
+    (2013)\par
+30. Molodov, D.A., Gorkaya, T., Gottstein, G.: Dynamics of grain boundaries under applied mechanical stress. J. Mater. Sci. 46,\par
+    4318\u8211?4326 (2011)\par
+31. Rupert, T.J., Gianola, D.S., Gan, Y., Hemker, K.J.: Experimental observations of stress-driven grain boundary migration.\par
+    Science 326, 1686\u8211?1690 (2009)\par
+780                                                                                                                Y. Piao, K. C. Le\par
+\par
+\par
+32. Bilby, B.A.: Types of dislocation source. In: Report of Bristol conference on defects in crystalline solids, pp. 124\u8211?133. The\par
+    Physical Soc, Bristol 1954, London (1955)\par
+33. Kr\u246?ner, E.: Der fundamentale Zusammenhang zwischen Versetzungsdichte und Spannungsfunktionen. Z. Phys. 142, 463\u8211?475\par
+    (1955)\par
+34. Nye, J.F.: Some geometrical relations in dislocated crystals. Acta Metall. 1, 153\u8211?162 (1953)\par
+35. Langer, J.S.: Thermal effects in dislocation theory. Phys. Rev. E 94, 063004 (2016)\par
+36. Le, K.C., Piao, Y.: Thermal softening during high-temperature torsional deformation of aluminum bars. Int. J. Eng. Sci. 137,\par
+    1\u8211?7 (2019)\par
+37. Le, K.C., Tran, T.M., Langer, J.S.: Thermodynamic dislocation theory of of high-temperature deformation in aluminum and\par
+    steel. Phys. Rev. E 96, 013004 (2017)\par
+38. Le, K.C., Tran, T.M., Langer, J.S.: Thermodynamic dislocation theory of adiabatic shear banding in steel. Scripta Mater.\par
+    149, 62\u8211?65 (2018)\par
+39. Chowdhury, S.R., Roy, D., Reddy, J.N., Srinivasa, A.: Fluctuation relation based continuum model for thermoviscoplasticity\par
+    in metals. J. Mech. Phys. Solids 96, 353\u8211?368 (2016)\par
+40. Berdichevsky, V.L.: On thermodynamics of crystal plasticity. Scripta Mater. 54, 711\u8211?716 (2006b)\par
+41. Groma, I., Csikor, F.F., Zaiser, M.: Spatial correlations and higher-order gradient terms in a continuum description of\par
+    dislocation dynamics. Acta Mater. 51, 1271\u8211?1281 (2003)\par
+42. Le, K.C., Le, T.H., Tran, T.M.: Averaging in dislocation mediated plasticity. Int. J. Eng. Sci. 149, 103230 (2020)\par
+43. Le, K.C., Sembiring, P., Tran, T.N.: Continuum dislocation theory accounting for redundant dislocations and Taylor hardening.\par
+    Int. J. Eng. Sci. 106, 155\u8211?167 (2016)\par
+44. Langer, J.S.: Thermodynamic theory of dislocation-enabled plasticity. Phys. Rev. E 96, 053005 (2017)\par
+45. Burgers, J.M.: Some considerations on the fields of stress connected with dislocations in a regular crystal lattice I. Proc. Kon.\par
+    Ned. Akad. Wet. 42, 293 (1939)\par
+46. Read, W.T., Shockley, W.: Dislocation models of crystal grain boundaries. Phys. Rev. 78, 275\u8211?289 (1950)\par
+47. Vitek, V.: On the difference between the misorientation dependences of the energies of tilt and twist boundaries. Scripta\par
+    Metall. 21, 711\u8211?714 (1987)\par
+48. Le, K.C.: Thermodynamic dislocation theory: finite deformations. Int. J. Eng. Sci. 139, 1\u8211?10 (2019)\par
+49. Abeyaratne, R., Knowles, J.K.: On the driving traction acting on a surface of strain discontinuity in a continuum. J. Mech.\par
+    Phys. Solids 38, 345\u8211?360 (1990)\par
+\par
+Publisher\u8217?s Note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional\par
+affiliations.\par
+
+}
